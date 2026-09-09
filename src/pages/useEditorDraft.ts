@@ -22,6 +22,9 @@ export function useEditorDraft(initial: Recipe, persist: (r: Recipe) => void) {
   const historyTimer = useRef<number | undefined>(undefined)
   const saveTimer = useRef<number | undefined>(undefined)
   const skipHistory = useRef(false)
+  // Merely opening the editor must not create a local overlay copy: nothing is
+  // persisted until the author actually changes something.
+  const dirty = useRef(false)
   const [, forceRender] = useState(0)
 
   // Adopt a different recipe (navigating between editors) without dragging the old
@@ -33,10 +36,12 @@ export function useEditorDraft(initial: Recipe, persist: (r: Recipe) => void) {
     past.current = []
     future.current = []
     committed.current = initial
+    dirty.current = false
     setDraft(initial)
   }, [initial])
 
   const update = useCallback((fn: (r: Recipe) => Recipe) => {
+    dirty.current = true
     setDraft((prev) => {
       const next = fn(prev)
       if (next === prev) return prev
@@ -84,6 +89,7 @@ export function useEditorDraft(initial: Recipe, persist: (r: Recipe) => void) {
 
   // Autosave — no explicit Save button (§6.2).
   useEffect(() => {
+    if (!dirty.current) return
     window.clearTimeout(saveTimer.current)
     saveTimer.current = window.setTimeout(() => {
       persist(draft)

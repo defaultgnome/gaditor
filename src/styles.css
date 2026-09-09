@@ -682,10 +682,14 @@ td.done .cell-sub {
 
 /* ---- share canvas ------------------------------------------------------ */
 
-.share-stage {
+.share-holder {
   position: fixed;
   left: -20000px;
   top: 0;
+  z-index: -1;
+}
+
+.share-stage {
   padding: 32px;
   background: var(--bg);
   color: var(--ink);
@@ -727,4 +731,39 @@ td.done .cell-sub {
 
 .share-stage .diagram-scroll {
   overflow: visible;
+}
+
+/* React Flow ships light-only chrome; make its controls follow the theme. */
+.canvas-wrap .react-flow__controls {
+  box-shadow: var(--shadow);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.canvas-wrap .react-flow__controls-button {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  fill: var(--ink);
+  width: 26px;
+  height: 26px;
+}
+
+.canvas-wrap .react-flow__controls-button:hover {
+  background: var(--surface-2);
+}
+
+.canvas-wrap .react-flow__edge-path {
+  stroke: var(--line-strong);
+  stroke-width: 1.5;
+}
+
+.canvas-wrap .react-flow__handle {
+  background: var(--accent);
+  border: none;
+  width: 7px;
+  height: 7px;
+}
+
+.canvas-wrap .react-flow__background {
+  background: var(--bg);
 }

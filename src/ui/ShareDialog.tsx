@@ -174,33 +174,34 @@ export function ShareDialog({ recipe, multiplier, servings, orientation, onClose
         {url && <img className="preview-img" src={url} alt={recipe.title} />}
       </div>
 
-      {/* Offscreen full-size render. Not a screenshot of the viewport. */}
-      <div
-        ref={stage}
-        className={`share-stage theme-${shareTheme}`}
-        aria-hidden="true"
-        data-theme={shareTheme}
-      >
-        <div className="share-head">
-          <h1>{recipe.title}</h1>
-          <div className="time">
-            {t('recipe.prep', { prep: formatDuration(recipe.prepMinutes) })}
-            {' + '}
-            {t('recipe.wait', { wait: formatDuration(wait) })} ={' '}
-            <b>{formatDuration(recipe.prepMinutes + wait)}</b>
-            {' · '}
-            {t('recipe.serves', { n: formatServings(servings, lang) })}
+      {/* Offscreen full-size render. Not a screenshot of the viewport.
+          The holder does the offscreen positioning, never the captured node: the
+          rasteriser copies computed styles onto its clone, and a cloned
+          position:fixed/left:-20000px would push the whole render out of the
+          output image. */}
+      <div className="share-holder" aria-hidden="true">
+        <div ref={stage} className={`share-stage theme-${shareTheme}`} data-theme={shareTheme}>
+          <div className="share-head">
+            <h1>{recipe.title}</h1>
+            <div className="time">
+              {t('recipe.prep', { prep: formatDuration(recipe.prepMinutes) })}
+              {' + '}
+              {t('recipe.wait', { wait: formatDuration(wait) })} ={' '}
+              <b>{formatDuration(recipe.prepMinutes + wait)}</b>
+              {' · '}
+              {t('recipe.serves', { n: formatServings(servings, lang) })}
+            </div>
+            {recipe.note && <div className="note">{recipe.note}</div>}
           </div>
-          {recipe.note && <div className="note">{recipe.note}</div>}
+          <Diagram
+            recipe={recipe}
+            multiplier={multiplier}
+            lang={lang}
+            t={t}
+            orientation={shareOrientation}
+          />
+          <div className="brandmark">gaditor</div>
         </div>
-        <Diagram
-          recipe={recipe}
-          multiplier={multiplier}
-          lang={lang}
-          t={t}
-          orientation={shareOrientation}
-        />
-        <div className="brandmark">gaditor</div>
       </div>
     </div>
   )

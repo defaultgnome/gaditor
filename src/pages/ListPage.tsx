@@ -36,7 +36,9 @@ export function searchLibrary(index: Indexed[], query: string): Recipe[] {
 
   let survivors: Map<Recipe, number> | null = null
   for (const term of terms) {
-    const hits = fuzzysort.go(term, index, { key: 'prepared', threshold: -10000, limit: 500 })
+    // No score threshold: a subsequence match on junk scores no better than a real
+    // typo ('spagetti' scores below 'zzzz'), so ranking, not cutting, is the lever.
+    const hits = fuzzysort.go(term, index, { key: 'prepared', limit: 500 })
     const round = new Map<Recipe, number>()
     for (const hit of hits) round.set(hit.obj.recipe, hit.score)
     if (survivors === null) {

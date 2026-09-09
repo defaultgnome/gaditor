@@ -129,6 +129,9 @@ export function GraphCanvas({
         edges={edges}
         nodeTypes={nodeTypes}
         fitView
+        fitViewOptions={{ maxZoom: 1, padding: 0.15 }}
+        minZoom={0.3}
+        maxZoom={2}
         proOptions={{ hideAttribution: true }}
         onConnect={onConnect}
         onNodeClick={(_, n) => onSelect(n.id)}

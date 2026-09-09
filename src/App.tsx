@@ -28,11 +28,13 @@ export function App() {
           </p>
         )}
         {route.name === 'list' && <ListPage route={route} />}
-        {route.name === 'recipe' && <RecipePage id={route.id} />}
+        {/* Keyed by id: the multiplier and done marks are per cooking session, so
+            moving to another recipe must start them fresh rather than inherit. */}
+        {route.name === 'recipe' && <RecipePage key={route.id} id={route.id} />}
         {route.name === 'settings' && <SettingsPage />}
         {route.name === 'editor' && (
           <Suspense fallback={<div className="empty">{t('app.loading')}</div>}>
-            <EditorPage id={route.id} />
+            <EditorPage key={route.id} id={route.id} />
           </Suspense>
         )}
       </div>

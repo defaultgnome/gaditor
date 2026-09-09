@@ -93,9 +93,11 @@ export function EditorPage({ id }: { id: string }) {
     <>
       <TopBar back={`/recipe/${draft.id}`}>
         <LangThemeControls />
-        <span className="saved-chip">
-          {saveState === 'saved' ? `✓ ${t('editor.saved')}` : t('editor.saving')}
-        </span>
+        {saveState !== 'idle' && (
+          <span className="saved-chip">
+            {saveState === 'saved' ? `✓ ${t('editor.saved')}` : t('editor.saving')}
+          </span>
+        )}
         <button className="btn small" disabled={!canUndo} onClick={undo}>
           ↶ {t('editor.undo')}
         </button>
