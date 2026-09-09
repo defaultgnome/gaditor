@@ -186,13 +186,7 @@ describe('row ordering', () => {
 
   it('keeps merged rows adjacent even when the override splits them', () => {
     // ab merges a and b; the override asks for a, c, b — impossible to honour exactly.
-    const nodes = [
-      ing('a'),
-      ing('b'),
-      ing('c'),
-      act('ab', ['a', 'b']),
-      act('end', ['ab', 'c']),
-    ]
+    const nodes = [ing('a'), ing('b'), ing('c'), act('ab', ['a', 'b']), act('end', ['ab', 'c'])]
     const layout = solveLayout(recipe(nodes, ['a', 'c', 'b']))
     const idx = new Map(layout.rows.map((r, i) => [r.id, i]))
     expect(Math.abs(idx.get('a')! - idx.get('b')!)).toBe(1)
@@ -237,13 +231,7 @@ describe('row ordering', () => {
   })
 
   it('always renders — every grid position is covered by exactly one cell', () => {
-    const nodes = [
-      ing('a'),
-      ing('b'),
-      ing('c'),
-      act('ab', ['a', 'b']),
-      act('all', ['ab', 'c']),
-    ]
+    const nodes = [ing('a'), ing('b'), ing('c'), act('ab', ['a', 'b']), act('all', ['ab', 'c'])]
     const layout = solveLayout(recipe(nodes))
     const grid = new Set<string>()
     for (const cell of layout.cells) {

@@ -82,16 +82,16 @@ row, which any later node may consume.
 
 ```ts
 type Recipe = {
-  version: number          // format version, migrated on load
-  id: string               // human-readable slug, stable forever
+  version: number // format version, migrated on load
+  id: string // human-readable slug, stable forever
   title: string
-  lang: 'en' | 'fr'        // language the content is authored in
-  servings: number         // baseline for the multiplier
-  prepMinutes: number      // manual estimate of active time
-  note?: string            // free text: tools, provenance, anything
+  lang: 'en' | 'fr' // language the content is authored in
+  servings: number // baseline for the multiplier
+  prepMinutes: number // manual estimate of active time
+  note?: string // free text: tools, provenance, anything
   tags: string[]
   nodes: Node[]
-  rowOrder: string[]       // presentation override, see 3.2
+  rowOrder: string[] // presentation override, see 3.2
 }
 ```
 
@@ -102,14 +102,14 @@ type Recipe = {
 All nodes share `{ id, type, inputs: string[] }`. `inputs` holds node ids. Type changes
 appearance and validation only — the renderer and solver treat nodes uniformly.
 
-| type | params | rules |
-|---|---|---|
-| `ingredient` | `name`, `qty?`, `unit?`, `ref?` | Source: `inputs` is always empty. `unit` is free text, not an enum. `ref` is another recipe's id. |
-| `action` | `label` | Free text. N inputs → 1 output. |
-| `split` | `portions: { percent, label }[]` | 1 input → N outputs. |
-| `wait` | `minutes`, `label` | 1 input → 1 output. |
+| type         | params                           | rules                                                                                             |
+| ------------ | -------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `ingredient` | `name`, `qty?`, `unit?`, `ref?`  | Source: `inputs` is always empty. `unit` is free text, not an enum. `ref` is another recipe's id. |
+| `action`     | `label`                          | Free text. N inputs → 1 output.                                                                   |
+| `split`      | `portions: { percent, label }[]` | 1 input → N outputs.                                                                              |
+| `wait`       | `minutes`, `label`               | 1 input → 1 output.                                                                               |
 
-**There is no merge node.** Any node with two or more inputs *is* a merge, rendered as a
+**There is no merge node.** Any node with two or more inputs _is_ a merge, rendered as a
 cell spanning those rows.
 
 **`ingredient.ref`** marks a subrecipe. It renders as a normal ingredient row plus a

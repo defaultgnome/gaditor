@@ -1,0 +1,125 @@
+{
+  "version": 1,
+  "recipes": [
+    {
+      "version": 1,
+      "id": "carbonara",
+      "title": "Carbonara",
+      "lang": "en",
+      "servings": 4,
+      "prepMinutes": 20,
+      "note": "No cream. The sauce is egg, cheese and pasta water, emulsified off the heat.\nA metal bowl over the drained pot gives you the gentlest possible heat if it looks like scrambling.",
+      "tags": ["pasta", "eggs", "quick"],
+      "nodes": [
+        { "id": "i-pasta", "type": "ingredient", "inputs": [], "name": "spaghetti", "qty": 400, "unit": "g" },
+        { "id": "i-guanciale", "type": "ingredient", "inputs": [], "name": "guanciale, cubed", "qty": 150, "unit": "g" },
+        { "id": "i-eggs", "type": "ingredient", "inputs": [], "name": "egg yolks", "qty": 4 },
+        { "id": "i-pecorino", "type": "ingredient", "inputs": [], "name": "pecorino, grated", "qty": 80, "unit": "g" },
+        { "id": "i-pepper", "type": "ingredient", "inputs": [], "name": "black pepper" },
+        { "id": "a-render", "type": "action", "inputs": ["i-guanciale"], "label": "render slowly until crisp" },
+        { "id": "a-whisk", "type": "action", "inputs": ["i-eggs", "i-pecorino", "i-pepper"], "label": "whisk to a paste" },
+        { "id": "a-boil", "type": "action", "inputs": ["i-pasta"], "label": "boil in salted water, al dente" },
+        { "id": "a-toss", "type": "action", "inputs": ["a-boil", "a-render"], "label": "toss in the fat, off the heat" },
+        { "id": "a-emulsify", "type": "action", "inputs": ["a-toss", "a-whisk"], "label": "stir in, loosen with pasta water" }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "pizza-dough",
+      "title": "Pizza dough",
+      "lang": "en",
+      "servings": 4,
+      "prepMinutes": 25,
+      "note": "Makes four 250 g balls. Half goes in the freezer — take it out the night before.\nBaker's percentages: 65% water, 2% salt, 0.6% fresh yeast.",
+      "tags": ["dough", "bread", "make-ahead"],
+      "nodes": [
+        { "id": "i-flour", "type": "ingredient", "inputs": [], "name": "00 flour", "qty": 600, "unit": "g" },
+        { "id": "i-water", "type": "ingredient", "inputs": [], "name": "cold water", "qty": 390, "unit": "g" },
+        { "id": "i-salt", "type": "ingredient", "inputs": [], "name": "fine salt", "qty": 12, "unit": "g" },
+        { "id": "i-yeast", "type": "ingredient", "inputs": [], "name": "fresh yeast", "qty": 3.6, "unit": "g" },
+        { "id": "a-shaggy", "type": "action", "inputs": ["i-flour", "i-water"], "label": "mix to a shaggy mass" },
+        { "id": "w-autolyse", "type": "wait", "inputs": ["a-shaggy"], "minutes": 30, "label": "autolyse" },
+        { "id": "a-knead", "type": "action", "inputs": ["w-autolyse", "i-salt", "i-yeast"], "label": "knead 10 min, smooth" },
+        { "id": "w-bulk", "type": "wait", "inputs": ["a-knead"], "minutes": 240, "label": "bulk ferment, room temp" },
+        { "id": "a-ball", "type": "action", "inputs": ["w-bulk"], "label": "divide into 4, ball" },
+        { "id": "s-half", "type": "split", "inputs": ["a-ball"], "portions": [{ "percent": 50, "label": "" }, { "percent": 50, "label": "" }] },
+        { "id": "w-proof", "type": "wait", "inputs": ["s-half"], "minutes": 120, "label": "final proof, covered" },
+        { "id": "a-freeze", "type": "action", "inputs": ["s-half"], "label": "oil, bag and freeze" }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "pizza-margherita",
+      "title": "Pizza margherita",
+      "lang": "en",
+      "servings": 2,
+      "prepMinutes": 15,
+      "note": "Hottest oven you own, a steel or stone preheated for a full hour.\nThe basil goes on after the bake or it turns black.",
+      "tags": ["pizza", "tomato", "cheese"],
+      "nodes": [
+        { "id": "i-dough", "type": "ingredient", "inputs": [], "name": "pizza dough", "qty": 2, "unit": "balls", "ref": "pizza-dough" },
+        { "id": "i-tomato", "type": "ingredient", "inputs": [], "name": "San Marzano tomatoes", "qty": 400, "unit": "g" },
+        { "id": "i-mozz", "type": "ingredient", "inputs": [], "name": "fior di latte, torn", "qty": 250, "unit": "g" },
+        { "id": "i-basil", "type": "ingredient", "inputs": [], "name": "basil leaves" },
+        { "id": "i-oil", "type": "ingredient", "inputs": [], "name": "olive oil" },
+        { "id": "a-crush", "type": "action", "inputs": ["i-tomato"], "label": "crush by hand, salt" },
+        { "id": "a-stretch", "type": "action", "inputs": ["i-dough"], "label": "stretch to 30 cm" },
+        { "id": "a-top", "type": "action", "inputs": ["a-stretch", "a-crush", "i-mozz"], "label": "sauce, then cheese" },
+        { "id": "w-bake", "type": "wait", "inputs": ["a-top"], "minutes": 8, "label": "bake, max heat" },
+        { "id": "a-finish", "type": "action", "inputs": ["w-bake", "i-basil", "i-oil"], "label": "basil and oil, off the heat" }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "poulet-roti-citron",
+      "title": "Poulet rôti au citron",
+      "lang": "fr",
+      "servings": 4,
+      "prepMinutes": 25,
+      "note": "Le salage la veille change tout : la peau sèche et croustille.\nSortir le poulet du froid une heure avant d'enfourner.",
+      "tags": ["poulet", "citron", "four"],
+      "nodes": [
+        { "id": "i-poulet", "type": "ingredient", "inputs": [], "name": "poulet fermier", "qty": 1.5, "unit": "kg" },
+        { "id": "i-sel", "type": "ingredient", "inputs": [], "name": "gros sel" },
+        { "id": "i-citron", "type": "ingredient", "inputs": [], "name": "citrons", "qty": 2 },
+        { "id": "i-thym", "type": "ingredient", "inputs": [], "name": "thym" },
+        { "id": "i-ail", "type": "ingredient", "inputs": [], "name": "tête d'ail", "qty": 1 },
+        { "id": "i-beurre", "type": "ingredient", "inputs": [], "name": "beurre mou", "qty": 40, "unit": "g" },
+        { "id": "a-saler", "type": "action", "inputs": ["i-poulet", "i-sel"], "label": "saler partout" },
+        { "id": "w-repos", "type": "wait", "inputs": ["a-saler"], "minutes": 720, "label": "repos au frais, à découvert" },
+        { "id": "a-piquer", "type": "action", "inputs": ["i-citron"], "label": "piquer à la fourchette" },
+        { "id": "a-farcir", "type": "action", "inputs": ["w-repos", "a-piquer", "i-ail", "i-thym"], "label": "farcir la cavité" },
+        { "id": "a-beurrer", "type": "action", "inputs": ["a-farcir", "i-beurre"], "label": "beurrer la peau" },
+        { "id": "w-rotir", "type": "wait", "inputs": ["a-beurrer"], "minutes": 75, "label": "rôtir à 200 °C" },
+        { "id": "w-detendre", "type": "wait", "inputs": ["w-rotir"], "minutes": 15, "label": "laisser reposer" },
+        { "id": "a-decouper", "type": "action", "inputs": ["w-detendre"], "label": "découper, arroser du jus" }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "sauteed-spinach",
+      "title": "Sautéed spinach",
+      "lang": "en",
+      "servings": 2,
+      "prepMinutes": 10,
+      "note": "The garlic goes into cold oil, not hot — it should turn translucent, never brown.\nDrain the spinach hard; water in the pan steams instead of sautés.",
+      "tags": ["vegetable", "side", "quick"],
+      "nodes": [
+        { "id": "i-spinach", "type": "ingredient", "inputs": [], "name": "spinach", "qty": 225, "unit": "g" },
+        { "id": "i-garlic", "type": "ingredient", "inputs": [], "name": "garlic", "qty": 1, "unit": "clove" },
+        { "id": "i-oil", "type": "ingredient", "inputs": [], "name": "canola oil", "qty": 1, "unit": "Tbs" },
+        { "id": "i-salt", "type": "ingredient", "inputs": [], "name": "salt" },
+        { "id": "a-wash", "type": "action", "inputs": ["i-spinach"], "label": "wash & drain" },
+        { "id": "a-mince", "type": "action", "inputs": ["i-garlic"], "label": "mince" },
+        { "id": "a-heat", "type": "action", "inputs": ["a-mince", "i-oil"], "label": "heat until translucent" },
+        { "id": "a-saute", "type": "action", "inputs": ["a-wash", "a-heat"], "label": "sauté" },
+        { "id": "a-season", "type": "action", "inputs": ["a-saute", "i-salt"], "label": "season to taste" }
+      ],
+      "rowOrder": []
+    }
+  ]
+}
