@@ -176,7 +176,10 @@ export function solveLayout(recipe: Recipe): Layout {
     if (cached) return cached
     const n = byId.get(nodeId)
     if (!n || grouping.has(nodeId)) return []
-    if (n.type === 'ingredient') {
+    // A node that opens a row of its own — an ingredient, or an orphan whose inputs
+    // resolve to nothing — is a leaf of the merge tree. Without this an orphan drops
+    // out of the tree entirely and rowOrder can never position it.
+    if (rowExists.has(nodeId)) {
       groupMemo.set(nodeId, [nodeId])
       return [nodeId]
     }

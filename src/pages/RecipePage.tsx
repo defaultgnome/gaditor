@@ -27,7 +27,13 @@ export function RecipePage({ id }: { id: string }) {
   const [sharing, setSharing] = useState(false)
   const wakeLock = useWakeLock()
 
-  const knownIds = useMemo(() => new Set(library.map((r) => r.id)), [library])
+  // A recipe may not reference itself (§2.2). Excluding its own id makes a self
+  // reference render as the visible 'missing recipe' marker rather than a link that
+  // goes nowhere.
+  const knownIds = useMemo(
+    () => new Set(library.map((r) => r.id).filter((rid) => rid !== id)),
+    [library, id],
+  )
 
   if (!recipe) {
     return (

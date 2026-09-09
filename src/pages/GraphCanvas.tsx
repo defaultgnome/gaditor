@@ -23,7 +23,6 @@ type Props = {
   onConnectNodes: (from: string, to: string) => void
   onDisconnect: (from: string, to: string) => void
   onDeleteNodes: (ids: string[]) => void
-  cycleMessage: string
   onCycleBlocked: () => void
 }
 

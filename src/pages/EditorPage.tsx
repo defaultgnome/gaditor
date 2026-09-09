@@ -15,6 +15,7 @@ export function EditorPage({ id }: { id: string }) {
   const stored = library.find((r) => r.id === id)
   const [selected, setSelected] = useState<string | null>(null)
   const [cycleWarning, setCycleWarning] = useState(false)
+  const [dragRow, setDragRow] = useState<number | null>(null)
 
   const persist = useCallback(
     (r: Recipe) => dispatch({ type: 'upsert', recipe: r }),
@@ -89,6 +90,16 @@ export function EditorPage({ id }: { id: string }) {
     update((r) => ({ ...r, rowOrder: next }))
   }
 
+  const dropRow = (target: number) => {
+    const from = dragRow
+    setDragRow(null)
+    if (from === null || from === target) return
+    const next = layout.rows.map((r) => r.id)
+    const [moved] = next.splice(from, 1)
+    next.splice(target, 0, moved)
+    update((r) => ({ ...r, rowOrder: next }))
+  }
+
   return (
     <>
       <TopBar back={`/recipe/${draft.id}`}>
@@ -154,7 +165,6 @@ export function EditorPage({ id }: { id: string }) {
             }}
             onDisconnect={disconnect}
             onDeleteNodes={deleteNodes}
-            cycleMessage={t('editor.cycleBlocked')}
             onCycleBlocked={() => setCycleWarning(true)}
           />
 
@@ -174,7 +184,21 @@ export function EditorPage({ id }: { id: string }) {
                       ? node.name
                       : row.sourceNodeId
                 return (
-                  <li key={row.id}>
+                  <li
+                    key={row.id}
+                    draggable
+                    onDragStart={() => setDragRow(i)}
+                    onDragEnd={() => setDragRow(null)}
+                    onDragOver={(e) => e.preventDefault()}
+                    onDrop={(e) => {
+                      e.preventDefault()
+                      dropRow(i)
+                    }}
+                    className={dragRow === i ? 'dragging' : undefined}
+                  >
+                    <span className="grip" aria-hidden="true">
+                      ⠿
+                    </span>
                     <span>{name}</span>
                     <button
                       className="btn small ghost"

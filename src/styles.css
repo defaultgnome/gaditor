@@ -767,3 +767,18 @@ td.done .cell-sub {
 .canvas-wrap .react-flow__background {
   background: var(--bg);
 }
+
+.roworder li[draggable='true'] {
+  cursor: grab;
+}
+
+.roworder li.dragging {
+  opacity: 0.45;
+}
+
+.roworder .grip {
+  flex: none;
+  color: var(--ink-faint);
+  font-size: 12px;
+  letter-spacing: -2px;
+}

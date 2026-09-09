@@ -9,7 +9,9 @@ export function SettingsPage() {
   const [message, setMessage] = useState<string | null>(null)
   const fileInput = useRef<HTMLInputElement>(null)
 
-  const localCount = Object.keys(state.overlay.recipes).length
+  // A deletion is a local change too, so tombstones count — otherwise deleting a
+  // published recipe leaves 'revert all' disabled and the deletion unrecoverable here.
+  const localCount = Object.keys(state.overlay.recipes).length + state.overlay.tombstones.length
 
   const runImport = (raw: string) => {
     const recipes = parseImport(raw)

@@ -307,3 +307,20 @@ describe('cycle guard', () => {
     expect(wouldCycle(nodes, 'b', 'x')).toBe(false)
   })
 })
+
+describe('orphan rows participate in ordering', () => {
+  const nodes = [ing('a'), ing('b'), act('orph', []), act('end', ['a', 'b', 'orph'])]
+
+  it('is placed by the merge tree, not appended as a leftover', () => {
+    // An orphan opens a row of its own, so it must be a leaf of the merge tree —
+    // otherwise rowOrder can never move it.
+    const layout = solveLayout(recipe(nodes, ['b', 'orph', 'a']))
+    expect(layout.rows.map((r) => r.id)).toEqual(['b', 'orph', 'a'])
+  })
+
+  it('still renders when it is the only node', () => {
+    const layout = solveLayout(recipe([act('lonely', [])]))
+    expect(layout.rows.map((r) => r.id)).toEqual(['lonely'])
+    expect(layout.cells).toHaveLength(1)
+  })
+})
