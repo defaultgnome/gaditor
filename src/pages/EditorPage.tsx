@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { Lang, Recipe, RecipeNode } from '../model/types'
 import { useApp } from '../store/app'
 import { navigate } from '../store/router'
@@ -340,22 +340,11 @@ export function EditorPage({ id }: { id: string }) {
                 <option value="fr">Français</option>
               </select>
             </label>
-            <label className="field">
-              <span>{t('editor.tags')}</span>
-              <input
-                type="text"
-                value={draft.tags.join(', ')}
-                onChange={(e) =>
-                  update((r) => ({
-                    ...r,
-                    tags: e.target.value
-                      .split(',')
-                      .map((s) => s.trim())
-                      .filter(Boolean),
-                  }))
-                }
-              />
-            </label>
+            <TagsField
+              label={t('editor.tags')}
+              tags={draft.tags}
+              onChange={(tags) => update((r) => ({ ...r, tags }))}
+            />
             <label className="field">
               <span>{t('editor.noteField')}</span>
               <textarea
@@ -382,6 +371,57 @@ export function EditorPage({ id }: { id: string }) {
         </aside>
       </div>
     </>
+  )
+}
+
+/** A tag is any text; only the comma separates one from the next. */
+function parseTags(text: string): string[] {
+  return text
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean)
+}
+
+/**
+ * The box holds raw text, not the parsed list. Rendering `tags.join(', ')` back into a
+ * controlled input made the field unusable: the comma and the space you type are not
+ * part of any tag, so the next render deleted them again — which read as "the field
+ * refuses every character except letters".
+ */
+function TagsField({
+  label,
+  tags,
+  onChange,
+}: {
+  label: string
+  tags: string[]
+  onChange: (tags: string[]) => void
+}) {
+  const [text, setText] = useState(() => tags.join(', '))
+
+  // Adopt a change that came from somewhere else (undo, a different recipe) without
+  // rewriting the box — and so without moving the caret — while it merely disagrees
+  // about trailing punctuation.
+  useEffect(() => {
+    const mine = parseTags(text)
+    if (mine.length !== tags.length || mine.some((tag, i) => tag !== tags[i])) {
+      setText(tags.join(', '))
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- `text` is the thing being reconciled
+  }, [tags])
+
+  return (
+    <label className="field">
+      <span>{label}</span>
+      <input
+        type="text"
+        value={text}
+        onChange={(e) => {
+          setText(e.target.value)
+          onChange(parseTags(e.target.value))
+        }}
+      />
+    </label>
   )
 }
 
