@@ -149,11 +149,20 @@ function FlowNode({ id, selected }: NodeProps) {
         <span className="type">
           {t(`editor.add${node.type[0].toUpperCase()}${node.type.slice(1)}`)}
         </span>
+        {/*
+         * The click must stop here. React Flow's `onNodeClick` sits on the node
+         * wrapper, so a bubbling click selects *this* node right after the button
+         * has selected the copy — the duplicate would be created and immediately
+         * deselected again.
+         */}
         <button
           className="nf-icon nodrag"
           aria-label={t('editor.duplicateNode')}
           title={t('editor.duplicateNode')}
-          onClick={() => api.duplicate(id)}
+          onClick={(e) => {
+            e.stopPropagation()
+            api.duplicate(id)
+          }}
         >
           ⧉
         </button>
@@ -161,7 +170,10 @@ function FlowNode({ id, selected }: NodeProps) {
           className="nf-icon nf-x nodrag"
           aria-label={t('editor.deleteNode')}
           title={t('editor.deleteNode')}
-          onClick={() => api.remove(id)}
+          onClick={(e) => {
+            e.stopPropagation()
+            api.remove(id)
+          }}
         >
           ×
         </button>
