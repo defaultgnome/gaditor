@@ -445,6 +445,9 @@ table.diagram td.done {
 table.diagram td.done .cell-main {
   text-decoration: line-through;
   text-decoration-thickness: 1px;
+  /* The qty runs in a smaller mono face, so the default per-descender gaps break the
+     rule into pieces; skipping none keeps it one line across the whole cell. */
+  text-decoration-skip-ink: none;
   opacity: 0.8;
 }
 
@@ -456,12 +459,22 @@ table.diagram td.done .cell-main {
   font-family: var(--mono);
   font-size: 12px;
   color: var(--ink-soft);
-  margin-right: 5px;
+  /* Padding, not margin: a strikethrough is painted across an inline box's padding but
+     stops at its margin, which would leave a notch before the ingredient name. */
+  padding-right: 5px;
   white-space: nowrap;
 }
 
+/*
+ * A done cell flattens: the qty already drops its own colour, and it drops its own
+ * face and size too. Chrome positions a propagated line-through per descendant font,
+ * so leaving the qty in 12px mono under 13px sans puts a visible step in the middle
+ * of the rule. One font, one unbroken line.
+ */
 td.done .cell-qty {
   color: inherit;
+  font-family: inherit;
+  font-size: inherit;
 }
 
 .cell-sub {
@@ -907,7 +920,7 @@ td.done .cell-sub {
   color: var(--ink-soft);
 }
 
-.card .matched span {
+.card .matched .hit {
   background: var(--surface-2);
   border-radius: 999px;
   padding: 2px 8px;

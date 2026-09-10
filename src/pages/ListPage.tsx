@@ -17,7 +17,9 @@ export function Highlight({ text, marks }: { text: string; marks?: Set<number> }
     let j = i + 1
     while (j < text.length && marks.has(j) === on) j++
     const chunk = text.slice(i, j)
-    out.push(on ? <mark key={i}>{chunk}</mark> : <span key={i}>{chunk}</span>)
+    // Unmatched runs go in as bare strings: a <span> here would inherit whatever the
+    // surrounding pill styles at that depth, which is not this component's business.
+    out.push(on ? <mark key={i}>{chunk}</mark> : chunk)
     i = j
   }
   return <>{out}</>
@@ -101,7 +103,7 @@ function RecipeCard({ hit }: { hit: SearchHit }) {
       {matchedIngredients.length > 0 && (
         <div className="matched">
           {matchedIngredients.map((name) => (
-            <span key={name}>
+            <span className="hit" key={name}>
               <Highlight text={name} marks={marks.get(markKey('ingredient', name))} />
             </span>
           ))}

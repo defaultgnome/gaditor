@@ -75,8 +75,8 @@ function CellView({
   onOpenRef,
   knownRecipeIds,
 }: Props & { cell: Cell; node?: RecipeNode }) {
-  const isDone = !!(cell.nodeId && done?.has(cell.nodeId))
-  const clickable = !!(cell.nodeId && onToggleDone)
+  const isDone = !!done?.has(cell.doneKey)
+  const clickable = !!onToggleDone
 
   return (
     <td
@@ -84,7 +84,7 @@ function CellView({
       rowSpan={cell.rowSpan}
       colSpan={cell.colSpan}
       // §4.3 — tap any node to mark it done. Applies to every node type.
-      onClick={clickable ? () => onToggleDone!(cell.nodeId!) : undefined}
+      onClick={clickable ? () => onToggleDone!(cell.doneKey) : undefined}
       tabIndex={clickable ? 0 : undefined}
       role={clickable ? 'button' : undefined}
       aria-pressed={clickable ? isDone : undefined}
@@ -93,7 +93,7 @@ function CellView({
           ? (e) => {
               if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault()
-                onToggleDone!(cell.nodeId!)
+                onToggleDone!(cell.doneKey)
               }
             }
           : undefined

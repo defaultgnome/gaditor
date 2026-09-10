@@ -267,6 +267,30 @@ describe('row ordering', () => {
     expect(splitCell.refOut.some((r) => r.includes('25%'))).toBe(true)
   })
 
+  it('gives every cell a done key, spawned-row markers included', () => {
+    const nodes: RecipeNode[] = [
+      ing('dough'),
+      {
+        id: 'sp',
+        type: 'split',
+        inputs: ['dough'],
+        portions: [
+          { percent: 75, label: '' },
+          { percent: 25, label: '' },
+        ],
+      },
+      act('bake', ['sp']),
+      act('freeze', ['sp']),
+    ]
+    const layout = solveLayout(recipe(nodes))
+    const marker = layout.cells.find((c) => c.kind === 'marker')!
+    // §4.3 — the marker has no node behind it but is still a step to tick off, and its
+    // key must not collide with any node's.
+    expect(marker.doneKey).toBeTruthy()
+    expect(layout.cells.every((c) => !!c.doneKey)).toBe(true)
+    expect(new Set(layout.cells.map((c) => c.doneKey)).size).toBe(layout.cells.length)
+  })
+
   it('renders an orphan node as its own visible row rather than dropping it', () => {
     const nodes = [ing('a'), act('lonely', [])]
     const layout = solveLayout(recipe(nodes))

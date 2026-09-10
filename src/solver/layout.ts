@@ -26,6 +26,12 @@ export type Cell = {
   kind: CellKind
   /** undefined for spawned-row markers */
   nodeId?: string
+  /**
+   * §4.3 — the identity a done mark hangs off. Every cell has one, including the
+   * spawned-row markers that have no node behind them: a marker is a step the cook
+   * works through like any other, so it has to be tickable.
+   */
+  doneKey: string
   text: string
   /** streams this cell emits by reference */
   refOut: string[]
@@ -377,6 +383,7 @@ export function solveLayout(recipe: Recipe): Layout {
         rowSpan,
         colSpan,
         kind: 'marker',
+        doneKey: id,
         text: rowsById.get(rowId)?.label ?? '?',
         refOut: [],
         refIn: [],
@@ -391,6 +398,7 @@ export function solveLayout(recipe: Recipe): Layout {
       colSpan,
       kind: n.type,
       nodeId: n.id,
+      doneKey: n.id,
       text: cellText(n),
       refOut: refOut.get(n.id) ?? [],
       refIn: refIn.get(n.id) ?? [],
