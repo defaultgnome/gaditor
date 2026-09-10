@@ -40,7 +40,7 @@ export type Cell = {
 }
 
 export type Warning = {
-  kind: 'cycle' | 'multiple-terminals' | 'orphan' | 'missing-qty' | 'empty-label'
+  kind: 'cycle' | 'multiple-terminals' | 'orphan' | 'missing-qty' | 'empty-label' | 'detached'
   nodeIds: string[]
 }
 
@@ -49,6 +49,14 @@ export type Layout = {
   colCount: number
   cells: Cell[]
   columns: Map<string, number>
+  /**
+   * Every row a node draws on, ignoring whether they ended up adjacent — the node's
+   * branch. §3.2: this is the unit the author reorders, because moving a merge's
+   * inputs one at a time can only ever pass through arrangements it would reject.
+   */
+  nodeRows: Map<string, string[]>
+  /** True when {@link Recipe.rowOrder} placed the rows, rather than the solver. */
+  authored: boolean
   warnings: Warning[]
 }
 
@@ -94,6 +102,7 @@ export function solveLayout(recipe: Recipe): Layout {
   const consumersOf = consumers(nodes)
   const binding = splitBindings(nodes, columns, consumersOf)
   const nextLabel = makeLabeller()
+  const authored = recipe.rowOrder.length > 0
 
   // ---- 1. Streams -------------------------------------------------------
   const rows: StreamRow[] = []
@@ -222,17 +231,24 @@ export function solveLayout(recipe: Recipe): Layout {
       }
     }
   }
-  const terminals = nodes
-    .filter((n) => (consumersOf.get(n.id) ?? []).length === 0)
-    .sort(
-      (a, b) =>
-        meanOf(groupOf(a.id).map((r) => desired.get(r) ?? 0)) -
-        meanOf(groupOf(b.id).map((r) => desired.get(r) ?? 0)),
-    )
-  for (const t of terminals) push(groupOf(t.id))
-  // Sweep anything a terminal could not reach (e.g. a split whose only consumer takes
-  // a spawned portion), deepest first, then any leftover row in preference order.
-  for (const n of [...byColumnThenOrder].reverse()) push(groupOf(n.id))
+  // §3.2 — an authored order is taken literally. The merge tree is a good guess at an
+  // order nobody has expressed an opinion about, but once someone has dragged a row it
+  // must stay where they put it: silently correcting the order reads as the drag having
+  // failed. A merge the order pulls apart degrades to a reference marker in step 5 and
+  // is reported as a `detached` warning, so the render still never fails.
+  if (!authored) {
+    const terminals = nodes
+      .filter((n) => (consumersOf.get(n.id) ?? []).length === 0)
+      .sort(
+        (a, b) =>
+          meanOf(groupOf(a.id).map((r) => desired.get(r) ?? 0)) -
+          meanOf(groupOf(b.id).map((r) => desired.get(r) ?? 0)),
+      )
+    for (const t of terminals) push(groupOf(t.id))
+    // Sweep anything a terminal could not reach (e.g. a split whose only consumer takes
+    // a spawned portion), deepest first.
+    for (const n of [...byColumnThenOrder].reverse()) push(groupOf(n.id))
+  }
   push(preferred.map((r) => r.id))
 
   const rowsById = new Map(rows.map((r) => [r.id, r]))
@@ -243,6 +259,8 @@ export function solveLayout(recipe: Recipe): Layout {
   // When no contiguous order exists the solver never fails: the odd stream out keeps
   // its own rows and is pulled in by reference instead of merged into a taller cell.
   const effRows = new Map<string, string[]>()
+  /** Nodes that had to pull an input in by reference rather than merge with it. */
+  const detached: string[] = []
   const refOut = new Map<string, string[]>()
   const refIn = new Map<string, string[]>()
   const addRef = (m: Map<string, string[]>, id: string, v: string) => {
@@ -313,6 +331,7 @@ export function solveLayout(recipe: Recipe): Layout {
         const label = g.label ?? nextLabel()
         addRef(refOut, g.inputId, label)
         addRef(refIn, n.id, label)
+        detached.push(n.id)
       }
     })
     effRows.set(n.id, merged.length ? merged : (idealRows.get(n.id) ?? []))
@@ -429,12 +448,19 @@ export function solveLayout(recipe: Recipe): Layout {
     }
   }
 
+  const warnings = collectWarnings(nodes, consumersOf)
+  if (detached.length) warnings.push({ kind: 'detached', nodeIds: [...new Set(detached)] })
+
   return {
     rows: finalRows,
     colCount,
     cells,
     columns,
-    warnings: collectWarnings(nodes, consumersOf),
+    nodeRows: new Map(
+      [...idealRows].map(([id, rowIds]) => [id, rowIds.filter((r) => rowExists.has(r))]),
+    ),
+    authored,
+    warnings,
   }
 }
 

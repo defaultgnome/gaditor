@@ -3,7 +3,7 @@ import type { Lang, Recipe, RecipeNode } from '../model/types'
 import { useApp } from '../store/app'
 import { navigate } from '../store/router'
 import { cloneNode, newMixNode, newNode, nodeId } from '../model/factory'
-import { cellText, solveLayout } from '../solver/layout'
+import { cellText, solveLayout, type Layout } from '../solver/layout'
 import { Diagram } from '../ui/Diagram'
 import { LangThemeControls, TopBar } from '../ui/TopBar'
 import { GraphCanvas, type Direction } from './GraphCanvas'
@@ -15,7 +15,8 @@ export function EditorPage({ id }: { id: string }) {
   const stored = library.find((r) => r.id === id)
   const [selected, setSelected] = useState<string | null>(null)
   const [cycleWarning, setCycleWarning] = useState(false)
-  const [dragRow, setDragRow] = useState<number | null>(null)
+  /** Set when a drop was refused, so the table can shake and say which steps broke. */
+  const [refused, setRefused] = useState<{ at: number; steps: string[] } | null>(null)
 
   const persist = useCallback(
     (r: Recipe) => dispatch({ type: 'upsert', recipe: r }),
@@ -134,25 +135,50 @@ export function EditorPage({ id }: { id: string }) {
       ),
     }))
 
-  /** §3.2 — row reordering happens in the solved-render pane and writes to rowOrder. */
-  const moveRow = (index: number, delta: number) => {
-    const current = layout.rows.map((r) => r.id)
-    const target = index + delta
-    if (target < 0 || target >= current.length) return
-    const next = [...current]
-    ;[next[index], next[target]] = [next[target], next[index]]
+  /**
+   * §3.2 — rows are dragged on the render itself and written straight to rowOrder,
+   * which the solver then takes literally. A drag that would tear a merge apart is
+   * refused rather than applied: the alternative is a row that visibly snaps back, or
+   * a diagram that quietly falls apart into reference markers. Only a drag that makes
+   * things *worse* is refused — a recipe whose merges already cannot all be contiguous
+   * must still be rearrangeable.
+   */
+  const moveRows = (rowIds: string[], toIndex: number) => {
+    const order = layout.rows.map((r) => r.id)
+    const moving = new Set(rowIds)
+    const rest = order.filter((id) => !moving.has(id))
+    if (rowIds.length === 0) return
+
+    const targetId = order[toIndex]
+    let at = rest.indexOf(targetId)
+    if (at === -1) {
+      at = rest.length // dropped on a row of the block being moved
+    } else if (toIndex > order.indexOf(rowIds[0])) {
+      at += 1 // dropped below where the block came from — land under the target
+    }
+    const next = [...rest.slice(0, at), ...rowIds, ...rest.slice(at)]
+    if (next.every((id, i) => id === order[i])) return
+
+    const before = detachedIn(layout)
+    const after = detachedIn(solveLayout({ ...draft, rowOrder: next }))
+    if (after.length > before.length) {
+      const broken = after.filter((id) => !before.includes(id))
+      setRefused({
+        at: Date.now(),
+        // Quoted, because a step's own label routinely contains a comma — an
+        // unquoted list of them reads as one long sentence.
+        steps: broken.map((id) => {
+          const node = draft.nodes.find((n) => n.id === id)
+          return `“${node ? cellText(node) : id}”`
+        }),
+      })
+      return
+    }
+    setRefused(null)
     update((r) => ({ ...r, rowOrder: next }))
   }
 
-  const dropRow = (target: number) => {
-    const from = dragRow
-    setDragRow(null)
-    if (from === null || from === target) return
-    const next = layout.rows.map((r) => r.id)
-    const [moved] = next.splice(from, 1)
-    next.splice(target, 0, moved)
-    update((r) => ({ ...r, rowOrder: next }))
-  }
+  const branchRows = new Set(selected ? (layout.nodeRows.get(selected) ?? []) : [])
 
   return (
     <>
@@ -227,61 +253,38 @@ export function EditorPage({ id }: { id: string }) {
 
           <div className="panel" style={{ marginTop: 14 }}>
             <h2>{t('editor.preview')}</h2>
-            <Diagram recipe={draft} multiplier={1} lang={lang} t={t} orientation="horizontal" />
-            <p className="hint" style={{ marginTop: 10 }}>
-              {t('editor.rowOrderHint')}
+            <Diagram
+              recipe={draft}
+              multiplier={1}
+              lang={lang}
+              t={t}
+              orientation="horizontal"
+              edit={{
+                rowIds: layout.rows.map((r) => r.id),
+                selectedRows: branchRows,
+                selectedNodeId: selected,
+                onSelectNode: (id) => setSelected((s) => (s === id ? null : id)),
+                onMoveRows: moveRows,
+                rejectedAt: refused?.at ?? 0,
+              }}
+            />
+            <p
+              className="hint"
+              style={{ marginTop: 10, color: refused ? 'var(--warn)' : undefined }}
+              role={refused ? 'alert' : undefined}
+            >
+              {refused
+                ? t('editor.orderRefused', { steps: refused.steps.join(', ') })
+                : t('editor.rowOrderHint')}
             </p>
-            <ul className="roworder">
-              {layout.rows.map((row, i) => {
-                const node = draft.nodes.find((n) => n.id === row.sourceNodeId)
-                const name =
-                  row.kind === 'portion'
-                    ? `${row.label} — ${node ? cellText(node) : 'split'}`
-                    : node && node.type === 'ingredient'
-                      ? node.name
-                      : row.sourceNodeId
-                return (
-                  <li
-                    key={row.id}
-                    draggable
-                    onDragStart={() => setDragRow(i)}
-                    onDragEnd={() => setDragRow(null)}
-                    onDragOver={(e) => e.preventDefault()}
-                    onDrop={(e) => {
-                      e.preventDefault()
-                      dropRow(i)
-                    }}
-                    className={dragRow === i ? 'dragging' : undefined}
-                  >
-                    <span className="grip" aria-hidden="true">
-                      ⠿
-                    </span>
-                    <span>{name}</span>
-                    <button
-                      className="btn small ghost"
-                      aria-label={t('editor.rowUp')}
-                      disabled={i === 0}
-                      onClick={() => moveRow(i, -1)}
-                    >
-                      ↑
-                    </button>
-                    <button
-                      className="btn small ghost"
-                      aria-label={t('editor.rowDown')}
-                      disabled={i === layout.rows.length - 1}
-                      onClick={() => moveRow(i, 1)}
-                    >
-                      ↓
-                    </button>
-                  </li>
-                )
-              })}
-            </ul>
             {draft.rowOrder.length > 0 && (
               <button
                 className="btn small"
                 style={{ marginTop: 8 }}
-                onClick={() => update((r) => ({ ...r, rowOrder: [] }))}
+                onClick={() => {
+                  setRefused(null)
+                  update((r) => ({ ...r, rowOrder: [] }))
+                }}
               >
                 {t('editor.resetRowOrder')}
               </button>
@@ -372,6 +375,11 @@ export function EditorPage({ id }: { id: string }) {
       </div>
     </>
   )
+}
+
+/** Steps that had to pull an input in by reference instead of merging with it. */
+function detachedIn(layout: Layout): string[] {
+  return layout.warnings.find((w) => w.kind === 'detached')?.nodeIds ?? []
 }
 
 /** A tag is any text; only the comma separates one from the next. */

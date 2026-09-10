@@ -184,15 +184,18 @@ describe('row ordering', () => {
     expect(rowIds(recipe(nodes, ['quick', 'slow']))).toEqual(['quick', 'slow'])
   })
 
-  it('keeps merged rows adjacent even when the override splits them', () => {
-    // ab merges a and b; the override asks for a, c, b — impossible to honour exactly.
+  it('takes an override literally, even where it splits a merge', () => {
+    // ab merges a and b; the override asks for a, c, b. §3.2 — the author's order wins
+    // and the merge degrades to a reference marker, rather than the order being
+    // silently corrected under them.
     const nodes = [ing('a'), ing('b'), ing('c'), act('ab', ['a', 'b']), act('end', ['ab', 'c'])]
     const layout = solveLayout(recipe(nodes, ['a', 'c', 'b']))
-    const idx = new Map(layout.rows.map((r, i) => [r.id, i]))
-    expect(Math.abs(idx.get('a')! - idx.get('b')!)).toBe(1)
+    expect(layout.rows.map((r) => r.id)).toEqual(['a', 'c', 'b'])
+    expect(layout.authored).toBe(true)
+    expect(layout.warnings.find((w) => w.kind === 'detached')?.nodeIds).toEqual(['ab'])
   })
 
-  it('satisfies contiguity for every merge in a nested graph', () => {
+  it('reports no detached merge when the override keeps them contiguous', () => {
     const nodes = [
       ing('a'),
       ing('b'),
@@ -202,15 +205,38 @@ describe('row ordering', () => {
       act('cd', ['c', 'd']),
       act('all', ['ab', 'cd']),
     ]
-    const layout = solveLayout(recipe(nodes, ['a', 'c', 'b', 'd']))
+    const layout = solveLayout(recipe(nodes, ['c', 'd', 'a', 'b']))
+    expect(layout.rows.map((r) => r.id)).toEqual(['c', 'd', 'a', 'b'])
+    expect(layout.warnings.some((w) => w.kind === 'detached')).toBe(false)
+  })
+
+  it('solves contiguity itself while no order has been authored', () => {
+    const nodes = [
+      ing('a'),
+      ing('b'),
+      ing('c'),
+      ing('d'),
+      act('ac', ['a', 'c']),
+      act('bd', ['b', 'd']),
+      act('all', ['ac', 'bd']),
+    ]
+    const layout = solveLayout(recipe(nodes))
+    expect(layout.authored).toBe(false)
     const idx = new Map(layout.rows.map((r, i) => [r.id, i]))
     for (const pair of [
-      ['a', 'b'],
-      ['c', 'd'],
+      ['a', 'c'],
+      ['b', 'd'],
     ]) {
       expect(Math.abs(idx.get(pair[0])! - idx.get(pair[1])!)).toBe(1)
     }
-    expect(layout.rows).toHaveLength(4)
+  })
+
+  it('reports the whole branch feeding a node, so it can be dragged as one', () => {
+    const nodes = [ing('a'), ing('b'), ing('c'), act('ab', ['a', 'b']), act('end', ['ab', 'c'])]
+    const layout = solveLayout(recipe(nodes))
+    expect(layout.nodeRows.get('ab')).toEqual(['a', 'b'])
+    expect(new Set(layout.nodeRows.get('end'))).toEqual(new Set(['a', 'b', 'c']))
+    expect(layout.nodeRows.get('a')).toEqual(['a'])
   })
 
   it('emits a reference marker instead of failing when contiguity is impossible', () => {

@@ -154,12 +154,18 @@ ahead of it floats to the top, because that is the one you must start first. Ran
 stream's own waits alone would miss a stream that waits little itself but feeds a long
 rest later.
 
-**Override**: `rowOrder` is applied as a preference on top of the default. It is edited in
-the editor's solved-render pane (§6.2), and it is part of the recipe — display is data.
+**Override**: once `rowOrder` is set it is **taken literally** — the solver places the
+rows exactly as written and does not re-derive them. It is edited in the editor's
+solved-render pane (§6.2), and it is part of the recipe — display is data. Correcting an
+author's order under them reads as the drag having failed.
 
-**Contiguity constraint**: a node with N inputs must span **adjacent** rows. The solver
-finds the valid order closest to the requested one. Implementation: build the merge tree,
-order children by the mean position of their subtree, emit rows depth-first.
+**Contiguity constraint**: a node with N inputs must span **adjacent** rows. While no
+order has been authored the solver satisfies this itself: build the merge tree, order
+children by the mean position of their subtree, emit rows depth-first. Under an authored
+order it instead *reports* the breakage, as a `detached` warning naming the steps that
+had to fall back to a reference marker. The editor refuses a drag that would raise that
+count, and shakes the table (§6.2) — so the constraint is enforced at the one place an
+author can act on it, rather than by silently rewriting their work.
 
 **Fallback**: when no valid contiguous order exists, the solver emits a **reference
 marker** (`25 -> A` on the producing cell, `A` as a separate row) rather than failing.
@@ -282,8 +288,16 @@ Two coupled views:
   - **Dropping a connection on empty canvas** spawns a `mix` action already wired to the
     origin, at the drop point. A half-drawn connection nearly always means "and then
     these come together".
-- **Solved render pane** — the live table. **Row reordering happens here**, writing to
-  `rowOrder`.
+- **Solved render pane** — the live table. **Row reordering happens here**, on the render
+  itself, writing to `rowOrder`:
+  - **Drag a row by its handle** to move it. The order is taken literally and autosaved.
+  - **Tap a step** to pick out its whole **branch** — every row feeding it — and drag
+    those rows as one block. Reordering a merge's inputs one at a time can only pass
+    through arrangements that break contiguity, so the branch is the unit that moves.
+  - A drag that would **break a merge apart** is refused: the table shakes and names the
+    steps. Only a drag that makes things worse is refused, so a recipe whose merges
+    already cannot all be contiguous stays rearrangeable.
+  - **Reset row order** drops `rowOrder` and hands the rows back to the solver.
 
 Also:
 
