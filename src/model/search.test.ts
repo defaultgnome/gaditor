@@ -2,12 +2,7 @@ import { describe, expect, it } from 'vitest'
 import type { Recipe } from './types'
 import { buildIndex, markKey, searchLibrary } from './search'
 
-const recipe = (
-  id: string,
-  title: string,
-  tags: string[],
-  ingredients: string[],
-): Recipe => ({
+const recipe = (id: string, title: string, tags: string[], ingredients: string[]): Recipe => ({
   version: 1,
   id,
   title,
