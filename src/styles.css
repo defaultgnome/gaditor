@@ -159,6 +159,64 @@ a {
   flex: 1;
 }
 
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn.topbar-menu-trigger {
+  display: none;
+}
+
+.topbar-menu-panel {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .topbar-actions {
+    display: none;
+  }
+
+  .topbar-menu {
+    position: relative;
+  }
+
+  .btn.topbar-menu-trigger {
+    display: inline-flex;
+    font-size: 18px;
+    line-height: 1;
+    padding: 6px 10px;
+  }
+
+  .topbar-menu-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    min-width: 200px;
+    padding: 10px;
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    z-index: 30;
+  }
+
+  .topbar-menu-panel .seg,
+  .topbar-menu-panel .btn {
+    width: 100%;
+  }
+
+  .topbar-menu-panel .seg {
+    justify-content: center;
+  }
+}
+
 /* ---- controls -------------------------------------------------------- */
 
 .btn {

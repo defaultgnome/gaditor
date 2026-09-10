@@ -4,6 +4,7 @@ import { navigate } from '../store/router'
 import { criticalPath, formatDuration } from '../solver/time'
 import { Diagram, type Orientation } from '../ui/Diagram'
 import { LangThemeControls, TopBar } from '../ui/TopBar'
+import { useIsMobile } from '../ui/useIsMobile'
 import { useWakeLock } from '../ui/useWakeLock'
 import { isModifiedLocally } from '../store/storage'
 import { formatServings } from '../store/format'
@@ -21,9 +22,15 @@ export function RecipePage({ id }: { id: string }) {
 
   // §4.3 / §4.4 — done marks and the multiplier are in memory only. A refresh clears
   // them; they are about this cooking session, not about the recipe.
+  const isMobile = useIsMobile()
   const [done, setDone] = useState<Set<string>>(() => new Set())
   const [servings, setServings] = useState<number | null>(null)
-  const [orientation, setOrientation] = useState<Orientation>('horizontal')
+  // Defaults to vertical on mobile (a narrow screen reads a tall single column far
+  // better than a wide horizontal table), but only as the initial value — once the
+  // cook picks an orientation, resizing must not override their choice.
+  const [orientation, setOrientation] = useState<Orientation>(() =>
+    isMobile ? 'vertical' : 'horizontal',
+  )
   const [sharing, setSharing] = useState(false)
   const wakeLock = useWakeLock()
 

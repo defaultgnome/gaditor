@@ -16,6 +16,7 @@
   "app.theme.system": "System",
   "app.theme": "Theme",
   "app.language": "Language",
+  "app.menu": "Menu",
 
   "list.search": "Search title, tags, ingredients",
   "list.searchHint": "Terms are combined: “chicken lemon” finds recipes with both.",

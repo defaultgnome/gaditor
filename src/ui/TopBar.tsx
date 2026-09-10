@@ -1,9 +1,30 @@
-import type { ReactNode } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useApp } from '../store/app'
 import { navigate } from '../store/router'
 
 export function TopBar({ back, children }: { back?: string; children?: ReactNode }) {
   const { t } = useApp()
+  const [menuOpen, setMenuOpen] = useState(false)
+  const menuRef = useRef<HTMLDivElement>(null)
+
+  // Mobile collapses `children` into a popover behind a "⋮" trigger — closes on
+  // outside click or Escape so it behaves like a normal menu, not a sticky panel.
+  useEffect(() => {
+    if (!menuOpen) return
+    const onPointerDown = (e: PointerEvent) => {
+      if (!menuRef.current?.contains(e.target as Node)) setMenuOpen(false)
+    }
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMenuOpen(false)
+    }
+    document.addEventListener('pointerdown', onPointerDown)
+    document.addEventListener('keydown', onKeyDown)
+    return () => {
+      document.removeEventListener('pointerdown', onPointerDown)
+      document.removeEventListener('keydown', onKeyDown)
+    }
+  }, [menuOpen])
+
   return (
     <header className="topbar">
       {back ? (
@@ -26,7 +47,28 @@ export function TopBar({ back, children }: { back?: string; children?: ReactNode
         </button>
       )}
       <div className="spacer" />
-      {children}
+      {children && (
+        <>
+          <div className="topbar-actions">{children}</div>
+          <div className="topbar-menu" ref={menuRef}>
+            <button
+              type="button"
+              className="btn ghost topbar-menu-trigger"
+              aria-label={t('app.menu')}
+              aria-haspopup="true"
+              aria-expanded={menuOpen}
+              onClick={() => setMenuOpen((v) => !v)}
+            >
+              ⋮
+            </button>
+            {menuOpen && (
+              <div className="topbar-menu-panel" role="menu">
+                {children}
+              </div>
+            )}
+          </div>
+        </>
+      )}
     </header>
   )
 }

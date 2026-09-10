@@ -16,6 +16,7 @@
   "app.theme.system": "Système",
   "app.theme": "Thème",
   "app.language": "Langue",
+  "app.menu": "Menu",
 
   "list.search": "Chercher titre, tags, ingrédients",
   "list.searchHint": "Les termes se cumulent : « poulet citron » trouve les deux.",
