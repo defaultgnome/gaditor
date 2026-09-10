@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import type { Lang, Recipe, RecipeNode } from '../model/types'
-import { formatQty } from '../store/format'
+import { qtyText } from '../store/format'
 import { solveLayout, transpose, type Cell, type Layout } from '../solver/layout'
 import { formatDuration } from '../solver/time'
 import type { Translate } from '../i18n'
@@ -100,11 +100,8 @@ function CellView({
       }
     >
       <span className="cell-main">
-        {node?.type === 'ingredient' && node.qty !== undefined && (
-          <span className="cell-qty">
-            {formatQty(node.qty * multiplier, lang)}
-            {node.unit ? ` ${node.unit}` : ''}
-          </span>
+        {node?.type === 'ingredient' && qtyText(node, multiplier, lang) && (
+          <span className="cell-qty">{qtyText(node, multiplier, lang)}</span>
         )}
         {cell.text}
       </span>

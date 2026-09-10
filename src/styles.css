@@ -636,7 +636,7 @@ td.done .cell-sub {
   color: var(--ink-soft);
 }
 
-.flow-node .nf-x {
+.flow-node .nf-icon {
   flex: none;
   border: 0;
   background: transparent;
@@ -646,6 +646,11 @@ td.done .cell-sub {
   padding: 1px 5px;
   border-radius: 5px;
   cursor: pointer;
+}
+
+.flow-node .nf-icon:hover {
+  color: var(--ink);
+  background: var(--surface-2);
 }
 
 .flow-node .nf-x:hover {
@@ -718,6 +723,40 @@ td.done .cell-sub {
 .flow-node .btn.small {
   font-size: 11px;
   padding: 3px 7px;
+}
+
+/* The default 6px socket is unhittable with a finger, and only barely with a mouse. */
+.flow-node .react-flow__handle {
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--line-strong);
+  background: var(--surface);
+}
+
+/*
+ * The whole node body doubles as an input socket, so a connection only has to land on
+ * the node — not on the dot. It is inert until a connection is actually in flight;
+ * always live, it would eat every click meant for the fields underneath it.
+ */
+.flow-node .react-flow__handle.handle-body {
+  inset: 0;
+  width: auto;
+  height: auto;
+  min-width: 0;
+  min-height: 0;
+  transform: none;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  pointer-events: none;
+}
+
+.canvas-wrap.connecting .flow-node .react-flow__handle.handle-body {
+  pointer-events: all;
+}
+
+.canvas-wrap.connecting .flow-node .react-flow__handle.handle-body.connectingto {
+  background: var(--accent-soft);
 }
 
 .warnings {

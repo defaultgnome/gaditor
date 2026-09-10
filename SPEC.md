@@ -102,12 +102,12 @@ type Recipe = {
 All nodes share `{ id, type, inputs: string[] }`. `inputs` holds node ids. Type changes
 appearance and validation only — the renderer and solver treat nodes uniformly.
 
-| type         | params                           | rules                                                                                             |
-| ------------ | -------------------------------- | ------------------------------------------------------------------------------------------------- |
-| `ingredient` | `name`, `qty?`, `unit?`, `ref?`  | Source: `inputs` is always empty. `unit` is free text, not an enum. `ref` is another recipe's id. |
-| `action`     | `label`                          | Free text. N inputs → 1 output.                                                                   |
-| `split`      | `portions: { percent, label }[]` | 1 input → N outputs.                                                                              |
-| `wait`       | `minutes`, `label`               | 1 input → 1 output.                                                                               |
+| type         | params                                                 | rules                                                                                             |
+| ------------ | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------- |
+| `ingredient` | `name`, `qty?`, `unit?`, `altQty?`, `altUnit?`, `ref?` | Source: `inputs` is always empty. `unit` is free text, not an enum. `ref` is another recipe's id. |
+| `action`     | `label`                                                | Free text. N inputs → 1 output.                                                                   |
+| `split`      | `portions: { percent, label }[]`                       | 1 input → N outputs.                                                                              |
+| `wait`       | `minutes`, `label`                                     | 1 input → 1 output.                                                                               |
 
 **There is no merge node.** Any node with two or more inputs _is_ a merge, rendered as a
 cell spanning those rows.
@@ -119,6 +119,12 @@ itself. A reference to a missing recipe renders as a visible "missing recipe" ma
 
 **`ingredient.qty` / `unit` empty ⇒ the ingredient does not scale.** There is no explicit
 toggle. This is what makes `1 pinch salt` and `oil for frying` behave.
+
+**`ingredient.altQty` / `altUnit`** are an optional _second measure of the same amount_,
+rendered `1 packet / 10 g`. They are not a conversion table the app knows about — the
+author states both, and both take the same multiplier, so the pair stays true at any
+serving count (`2 packets / 20 g`). Either measure alone satisfies the missing-quantity
+warning.
 
 **`split`**: the first portion continues on the current row. Every other portion spawns a
 new row, auto-labelled `A`, `B`, `C`, … A single split node may emit several portions.
@@ -266,6 +272,16 @@ rendered PNG so it can be long-pressed and saved.
 Two coupled views:
 
 - **Node canvas** — React Flow. Add nodes, drag, connect, edit params inline.
+  - **Duplicate** a node from its title bar. The copy keeps the original's inputs, so it
+    lands in the same column fed by the same streams, offset so it is visibly a copy.
+  - **Double-tap a connection** to delete it — on a phone there is no Delete key, and a
+    wrong connection has to be undoable with a finger.
+  - **Connecting is forgiving**: sockets snap from a distance, and while a connection is
+    in flight the whole node body is a drop target. Landing on a 6px dot is not a skill
+    an author should need.
+  - **Dropping a connection on empty canvas** spawns a `mix` action already wired to the
+    origin, at the drop point. A half-drawn connection nearly always means "and then
+    these come together".
 - **Solved render pane** — the live table. **Row reordering happens here**, writing to
   `rowOrder`.
 

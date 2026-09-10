@@ -20,6 +20,13 @@ export type IngredientNode = BaseNode & {
   /** empty qty/unit ⇒ the ingredient does not scale (§2.2) */
   qty?: number
   unit?: string
+  /**
+   * §2.2 — an optional second measure of the *same* amount, rendered `1 packet / 10 g`.
+   * It is not a conversion factor the app applies: both measures scale by the same
+   * multiplier, so the pair stays true at any serving count.
+   */
+  altQty?: number
+  altUnit?: string
   /** id of another recipe — a subrecipe reference */
   ref?: string
 }

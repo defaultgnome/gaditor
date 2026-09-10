@@ -470,7 +470,7 @@ function collectWarnings(nodes: RecipeNode[], consumersOf: Map<string, string[]>
   if (orphans.length) out.push({ kind: 'orphan', nodeIds: orphans.map((n) => n.id) })
 
   const missingQty = nodes.filter(
-    (n) => n.type === 'ingredient' && !n.ref && n.qty === undefined,
+    (n) => n.type === 'ingredient' && !n.ref && n.qty === undefined && n.altQty === undefined,
   )
   if (missingQty.length) out.push({ kind: 'missing-qty', nodeIds: missingQty.map((n) => n.id) })
 

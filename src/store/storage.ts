@@ -65,6 +65,10 @@ export function migrateRecipe(input: Recipe): Recipe {
   return r
 }
 
+function numberOrUndefined(value: unknown): number | undefined {
+  return value === undefined || value === null || value === '' ? undefined : Number(value)
+}
+
 function migrateNode(n: RecipeNode): RecipeNode {
   const base = { ...n, inputs: n.inputs ?? [] }
   switch (base.type) {
@@ -73,8 +77,10 @@ function migrateNode(n: RecipeNode): RecipeNode {
         ...base,
         inputs: [],
         name: base.name ?? '',
-        qty: base.qty === undefined || base.qty === null ? undefined : Number(base.qty),
+        qty: numberOrUndefined(base.qty),
         unit: base.unit || undefined,
+        altQty: numberOrUndefined(base.altQty),
+        altUnit: base.altUnit || undefined,
         ref: base.ref || undefined,
       }
     case 'wait':

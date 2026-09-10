@@ -1,12 +1,12 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import type { Lang, Recipe, RecipeNode } from '../model/types'
 import { useApp } from '../store/app'
 import { navigate } from '../store/router'
-import { newNode } from '../model/factory'
+import { cloneNode, newMixNode, newNode, nodeId } from '../model/factory'
 import { cellText, solveLayout } from '../solver/layout'
 import { Diagram } from '../ui/Diagram'
 import { LangThemeControls, TopBar } from '../ui/TopBar'
-import { GraphCanvas } from './GraphCanvas'
+import { GraphCanvas, type Direction } from './GraphCanvas'
 import { useEditorDraft } from './useEditorDraft'
 import { downloadText, exportRecipe } from '../store/storage'
 
@@ -42,6 +42,55 @@ export function EditorPage({ id }: { id: string }) {
     update((r) => ({ ...r, nodes: [...r.nodes, node] }))
     setSelected(node.id)
   }
+
+  // Callbacks handed to the canvas must keep a stable identity — they sit in the node
+  // context, so a new one on every keystroke re-renders every node on the canvas. A ref
+  // gives them the current draft without taking it as a dependency.
+  const draftRef = useRef(draft)
+  draftRef.current = draft
+
+  /**
+   * The copy's id is minted outside `update`: React invokes a state updater twice under
+   * StrictMode, and an id generated in there would differ between the two runs.
+   */
+  const duplicateNode = useCallback(
+    (id: string): string | null => {
+      const source = draftRef.current.nodes.find((n) => n.id === id)
+      if (!source) return null
+      const copy = cloneNode(source, nodeId(id.slice(0, 1)))
+      update((r) => ({ ...r, nodes: [...r.nodes, copy] }))
+      setSelected(copy.id)
+      return copy.id
+    },
+    [update],
+  )
+
+  /** §6.2 — a connection dropped on empty canvas lands as a `mix` wired to its origin. */
+  const spawnConnected = useCallback(
+    (anchorId: string, direction: Direction): string | null => {
+      const anchor = draftRef.current.nodes.find((n) => n.id === anchorId)
+      if (!anchor) return null
+      // Feeding an ingredient is meaningless — it is a source by definition (§2.2).
+      if (direction === 'upstream' && anchor.type === 'ingredient') return null
+      const spawned = newMixNode()
+      update((r) =>
+        direction === 'downstream'
+          ? { ...r, nodes: [...r.nodes, { ...spawned, inputs: [anchorId] }] }
+          : {
+              ...r,
+              nodes: [
+                ...r.nodes.map((n) =>
+                  n.id === anchorId ? { ...n, inputs: [...n.inputs, spawned.id] } : n,
+                ),
+                spawned,
+              ],
+            },
+      )
+      setSelected(spawned.id)
+      return spawned.id
+    },
+    [update],
+  )
 
   const deleteNodes = useCallback(
     (ids: string[]) => {
@@ -170,6 +219,8 @@ export function EditorPage({ id }: { id: string }) {
             }}
             onDisconnect={disconnect}
             onDeleteNodes={deleteNodes}
+            onDuplicateNode={duplicateNode}
+            onSpawnConnected={spawnConnected}
             onPatchNode={patchNode}
             onCycleBlocked={() => setCycleWarning(true)}
           />

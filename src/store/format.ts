@@ -20,13 +20,36 @@ export function scaledQty(node: IngredientNode, multiplier: number): number | un
   return node.qty * multiplier
 }
 
+/** A unit with no quantity is not a measure — `oil for frying` renders as bare text. */
+function measure(
+  qty: number | undefined,
+  unit: string | undefined,
+  multiplier: number,
+  lang: Lang,
+): string {
+  if (qty === undefined) return ''
+  return unit
+    ? `${formatQty(qty * multiplier, lang)} ${unit}`
+    : formatQty(qty * multiplier, lang)
+}
+
+/**
+ * §2.2 — the measure shown ahead of the ingredient name: `10 g`, or `1 packet / 10 g`
+ * when a second unit is given. Both halves take the same multiplier, so a doubled
+ * recipe reads `2 packets / 20 g` and neither half drifts from the other.
+ */
+export function qtyText(node: IngredientNode, multiplier: number, lang: Lang): string {
+  return [
+    measure(node.qty, node.unit, multiplier, lang),
+    measure(node.altQty, node.altUnit, multiplier, lang),
+  ]
+    .filter(Boolean)
+    .join(' / ')
+}
+
 export function ingredientLabel(node: IngredientNode, multiplier: number, lang: Lang): string {
-  const qty = scaledQty(node, multiplier)
-  const parts: string[] = []
-  if (qty !== undefined) parts.push(formatQty(qty, lang))
-  if (node.unit) parts.push(node.unit)
-  parts.push(node.name)
-  return parts.join(' ')
+  const qty = qtyText(node, multiplier, lang)
+  return qty ? `${qty} ${node.name}` : node.name
 }
 
 export function formatServings(n: number, lang: Lang): string {
