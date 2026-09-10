@@ -405,6 +405,11 @@ function Canvas({
   onCycleBlocked,
 }: Props) {
   const positions = useRef(new Map<string, { x: number; y: number }>())
+  const wrap = useRef<HTMLDivElement>(null)
+  /** Flow coordinates of the last thing the author touched — where the next node lands. */
+  const lastPoint = useRef<{ x: number; y: number } | null>(null)
+  /** False until the first mirror pass has laid the stored graph out by column. */
+  const hydrated = useRef(false)
   // React Flow owns node positions while a drag is in flight, and it can only do that
   // if it gets its changes back. Without this state (and the onNodesChange feeding it)
   // a drag lands only on mouse-up, which reads as "the node never moves".
@@ -418,8 +423,24 @@ function Canvas({
 
   /** Park a not-yet-rendered node at a chosen spot, ahead of the effect that places it. */
   const seedPosition = useCallback((id: string | null, x: number, y: number) => {
+    lastPoint.current = { x, y }
     if (id) positions.current.set(id, { x, y })
   }, [])
+
+  /**
+   * Where a node added from the toolbar appears: the last place the author touched,
+   * or the middle of what they are looking at if they have touched nothing yet.
+   * Dropping every new node on the graph's origin means panning off to hunt for it.
+   */
+  const spawnPoint = useCallback(() => {
+    if (lastPoint.current) return lastPoint.current
+    const box = wrap.current?.getBoundingClientRect()
+    if (!box) return { x: 0, y: 0 }
+    return screenToFlowPosition({
+      x: box.left + box.width / 2,
+      y: box.top + box.height / 2,
+    })
+  }, [screenToFlowPosition])
 
   const api = useMemo<NodeApi>(
     () => ({
@@ -448,12 +469,16 @@ function Canvas({
       const next = recipe.nodes.map((n) => {
         const existing = prevById.get(n.id)
         let pos = existing?.position ?? positions.current.get(n.id)
-        if (!pos) {
+        if (!pos && !hydrated.current) {
+          // First pass over a stored graph: lay the whole thing out by column.
           const col = layout.get(n.id) ?? 0
           const y = columnBottom.get(col) ?? 0
           columnBottom.set(col, y + estimateHeight(n) + 26)
           pos = { x: col * 290, y }
         }
+        // A node added once the graph is on screen goes where the author last was,
+        // nudged clear of whatever is already sitting there.
+        if (!pos) pos = freeSpot(positions.current.values(), spawnPoint())
         positions.current.set(n.id, pos)
         const isSelected = n.id === selected
         if (existing && existing.selected === isSelected) return existing
@@ -473,7 +498,8 @@ function Canvas({
       const unchanged = next.length === prev.length && next.every((n, i) => n === prev[i])
       return unchanged ? prev : next
     })
-  }, [recipe.nodes, layout, selected, setNodes])
+    hydrated.current = true
+  }, [recipe.nodes, layout, selected, setNodes, spawnPoint])
 
   const edges: Edge[] = useMemo(
     () =>
@@ -553,7 +579,7 @@ function Canvas({
   )
 
   return (
-    <div className={`canvas-wrap${connecting ? ' connecting' : ''}`}>
+    <div className={`canvas-wrap${connecting ? ' connecting' : ''}`} ref={wrap}>
       <NodeApiContext.Provider value={api}>
         <ReactFlow
           nodes={nodes}
@@ -568,9 +594,18 @@ function Canvas({
           onNodesChange={onNodesChange}
           onConnect={onConnect}
           onConnectEnd={onConnectEnd}
-          onNodeClick={(_, n) => onSelect(n.id)}
-          onPaneClick={() => onSelect(null)}
-          onNodeDragStop={(_, n) => positions.current.set(n.id, n.position)}
+          onNodeClick={(_, n) => {
+            lastPoint.current = n.position
+            onSelect(n.id)
+          }}
+          onPaneClick={(e) => {
+            lastPoint.current = screenToFlowPosition({ x: e.clientX, y: e.clientY })
+            onSelect(null)
+          }}
+          onNodeDragStop={(_, n) => {
+            lastPoint.current = n.position
+            positions.current.set(n.id, n.position)
+          }}
           onNodesDelete={(deleted) => onDeleteNodes(deleted.map((n) => n.id))}
           onEdgeClick={onEdgeClick}
           onEdgesDelete={(deleted) => {
@@ -584,6 +619,26 @@ function Canvas({
       </NodeApiContext.Provider>
     </div>
   )
+}
+
+/** How far a new node steps aside when its intended spot is already occupied. */
+const SPAWN_CASCADE = 34
+
+function freeSpot(
+  taken: Iterable<{ x: number; y: number }>,
+  at: { x: number; y: number },
+): { x: number; y: number } {
+  const others = [...taken]
+  const spot = { ...at }
+  while (
+    others.some(
+      (o) => Math.abs(o.x - spot.x) < SPAWN_CASCADE && Math.abs(o.y - spot.y) < SPAWN_CASCADE,
+    )
+  ) {
+    spot.x += SPAWN_CASCADE
+    spot.y += SPAWN_CASCADE
+  }
+  return spot
 }
 
 /** Screen coordinates of a drop, from either pointer family. */
