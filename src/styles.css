@@ -539,7 +539,7 @@ td.done .cell-sub {
 }
 
 .canvas-wrap {
-  height: 460px;
+  height: 560px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   overflow: hidden;
@@ -547,29 +547,51 @@ td.done .cell-sub {
 }
 
 .flow-node {
-  padding: 7px 10px;
-  border-radius: 8px;
+  width: 228px;
+  border-radius: 9px;
   border: 1px solid var(--line-strong);
-  background: var(--action);
+  background: var(--surface);
+  box-shadow: var(--shadow);
   font-size: 12px;
-  min-width: 108px;
-  max-width: 190px;
   color: var(--ink);
+  overflow: hidden;
+}
+
+/* Blender-style: a type-coloured title bar, the config living in the node body. */
+.flow-node .nf-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px 4px 9px;
+  background: var(--action);
+  border-bottom: 1px solid var(--line);
 }
 
 .flow-node.k-ingredient {
-  background: var(--ingredient);
   border-color: var(--ingredient-line);
 }
 
+.flow-node.k-ingredient .nf-head {
+  background: var(--ingredient);
+  border-bottom-color: var(--ingredient-line);
+}
+
 .flow-node.k-wait {
-  background: var(--wait);
   border-color: var(--wait-line);
 }
 
+.flow-node.k-wait .nf-head {
+  background: var(--wait);
+  border-bottom-color: var(--wait-line);
+}
+
 .flow-node.k-split {
-  background: var(--split);
   border-color: var(--split-line);
+}
+
+.flow-node.k-split .nf-head {
+  background: var(--split);
+  border-bottom-color: var(--split-line);
 }
 
 .flow-node.selected {
@@ -577,12 +599,96 @@ td.done .cell-sub {
 }
 
 .flow-node .type {
-  display: block;
+  flex: 1;
   font-family: var(--mono);
   font-size: 9px;
   text-transform: uppercase;
   letter-spacing: 0.08em;
+  color: var(--ink-soft);
+}
+
+.flow-node .nf-x {
+  flex: none;
+  border: 0;
+  background: transparent;
   color: var(--ink-faint);
+  font-size: 15px;
+  line-height: 1;
+  padding: 1px 5px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.flow-node .nf-x:hover {
+  color: var(--warn);
+  background: var(--surface-2);
+}
+
+.flow-node .nf-body {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 8px 9px 9px;
+}
+
+.flow-node .nf-row {
+  display: flex;
+  gap: 6px;
+}
+
+.flow-node .nf-field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+  margin: 0;
+}
+
+.flow-node .nf-field > span {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--ink-faint);
+}
+
+.flow-node input,
+.flow-node select {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  font: inherit;
+  padding: 3px 6px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: var(--surface-2);
+  color: var(--ink);
+}
+
+.flow-node .nf-portion {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.flow-node .nf-pct {
+  width: 58px;
+  flex: none;
+}
+
+.flow-node .nf-portion .grow {
+  flex: 1;
+  min-width: 0;
+}
+
+.flow-node .nf-hint {
+  font-size: 10px;
+  color: var(--ink-faint);
+}
+
+.flow-node .btn.small {
+  font-size: 11px;
+  padding: 3px 7px;
 }
 
 .warnings {
@@ -781,4 +887,29 @@ td.done .cell-sub {
   color: var(--ink-faint);
   font-size: 12px;
   letter-spacing: -2px;
+}
+
+/* ---- search highlighting ---------------------------------------------- */
+
+.card mark {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-radius: 3px;
+  font-weight: 700;
+}
+
+.card .matched {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+.card .matched span {
+  background: var(--surface-2);
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-size: 11px;
 }

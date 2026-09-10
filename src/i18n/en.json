@@ -88,8 +88,10 @@
   "editor.minutes": "Minutes",
   "editor.portions": "Portions %",
   "editor.addPortion": "Add portion",
+  "editor.portionStays": "stays on this row",
+  "editor.rowName": "New row name",
+  "editor.removePortion": "Remove portion",
   "editor.cycleBlocked": "That connection would create a loop.",
-  "editor.selectNode": "Select a node to edit it.",
   "editor.rowOrderHint": "Drag or use the arrows to set row order. It is saved with the recipe.",
 
   "warn.cycle": "Loop in the graph",

@@ -1,6 +1,5 @@
-import { useMemo } from 'react'
-import fuzzysort from 'fuzzysort'
-import type { Recipe } from '../model/types'
+import { useMemo, type ReactNode } from 'react'
+import { buildIndex, markKey, searchLibrary, type SearchHit } from '../model/search'
 import { useApp } from '../store/app'
 import { navigate, useQueryParam, type Route } from '../store/router'
 import { criticalPath, formatDuration } from '../solver/time'
@@ -8,52 +7,20 @@ import { isModifiedLocally, uniqueId } from '../store/storage'
 import { LangThemeControls, TopBar } from '../ui/TopBar'
 import { newRecipe } from '../model/factory'
 
-type Indexed = {
-  recipe: Recipe
-  haystack: string
-  prepared: Fuzzysort.Prepared
-}
-
-/** §6.1 — the index covers title + tags + ingredient names. */
-function buildIndex(library: Recipe[]): Indexed[] {
-  return library.map((recipe) => {
-    const ingredients = recipe.nodes
-      .filter((n) => n.type === 'ingredient')
-      .map((n) => (n.type === 'ingredient' ? n.name : ''))
-    const haystack = [recipe.title, ...recipe.tags, ...ingredients].join(' ')
-    return { recipe, haystack, prepared: fuzzysort.prepare(haystack) }
-  })
-}
-
-/**
- * Space-separated terms are ANDed. fuzzysort matches a query as a subsequence, so a
- * single "chicken lemon" query would demand that literal order; splitting the terms and
- * intersecting the per-term result sets gives the "what's in my fridge" query for free.
- */
-export function searchLibrary(index: Indexed[], query: string): Recipe[] {
-  const terms = query.trim().split(/\s+/).filter(Boolean)
-  if (terms.length === 0) return index.map((i) => i.recipe)
-
-  let survivors: Map<Recipe, number> | null = null
-  for (const term of terms) {
-    // No score threshold: a subsequence match on junk scores no better than a real
-    // typo ('spagetti' scores below 'zzzz'), so ranking, not cutting, is the lever.
-    const hits = fuzzysort.go(term, index, { key: 'prepared', limit: 500 })
-    const round = new Map<Recipe, number>()
-    for (const hit of hits) round.set(hit.obj.recipe, hit.score)
-    if (survivors === null) {
-      survivors = round
-    } else {
-      const next = new Map<Recipe, number>()
-      for (const [recipe, score] of survivors) {
-        const other = round.get(recipe)
-        if (other !== undefined) next.set(recipe, score + other)
-      }
-      survivors = next
-    }
-    if (survivors.size === 0) break
+/** Renders `text` with the matched runs wrapped in <mark>. */
+export function Highlight({ text, marks }: { text: string; marks?: Set<number> }) {
+  if (!marks || marks.size === 0) return <>{text}</>
+  const out: ReactNode[] = []
+  let i = 0
+  while (i < text.length) {
+    const on = marks.has(i)
+    let j = i + 1
+    while (j < text.length && marks.has(j) === on) j++
+    const chunk = text.slice(i, j)
+    out.push(on ? <mark key={i}>{chunk}</mark> : <span key={i}>{chunk}</span>)
+    i = j
   }
-  return [...(survivors ?? new Map())].sort((a, b) => b[1] - a[1]).map(([recipe]) => recipe)
+  return <>{out}</>
 }
 
 export function ListPage({ route }: { route: Route }) {
@@ -100,8 +67,8 @@ export function ListPage({ route }: { route: Route }) {
         <p className="empty">{t('list.empty')}</p>
       ) : (
         <div className="cards">
-          {results.map((recipe) => (
-            <RecipeCard key={recipe.id} recipe={recipe} />
+          {results.map((hit) => (
+            <RecipeCard key={hit.recipe.id} hit={hit} />
           ))}
         </div>
       )}
@@ -109,24 +76,43 @@ export function ListPage({ route }: { route: Route }) {
   )
 }
 
-function RecipeCard({ recipe }: { recipe: Recipe }) {
+function RecipeCard({ hit }: { hit: SearchHit }) {
   const { t, state } = useApp()
+  const { recipe, marks } = hit
   const wait = criticalPath(recipe.nodes)
   const total = recipe.prepMinutes + wait
   const modified = isModifiedLocally(recipe.id, state.overlay)
 
+  // The ingredient list is not on the card, so a match there is invisible unless the
+  // matched ingredients are pulled up. This is the whole "why am I seeing this" answer.
+  const matchedIngredients = recipe.nodes
+    .filter((n) => n.type === 'ingredient' && marks.has(markKey('ingredient', n.name)))
+    .map((n) => (n.type === 'ingredient' ? n.name : ''))
+    .filter((name, i, all) => all.indexOf(name) === i)
+
   return (
     <button className="card" onClick={() => navigate(`/recipe/${recipe.id}`)}>
-      <h3>{recipe.title}</h3>
+      <h3>
+        <Highlight text={recipe.title} marks={marks.get(markKey('title', recipe.title))} />
+      </h3>
       <div className="meta">
         {formatDuration(total)} · {t('recipe.serves', { n: recipe.servings })}
       </div>
+      {matchedIngredients.length > 0 && (
+        <div className="matched">
+          {matchedIngredients.map((name) => (
+            <span key={name}>
+              <Highlight text={name} marks={marks.get(markKey('ingredient', name))} />
+            </span>
+          ))}
+        </div>
+      )}
       <div className="tags">
         <span className="badge lang">{recipe.lang.toUpperCase()}</span>
         {modified && <span className="badge">{t('list.modified')}</span>}
         {recipe.tags.map((tag) => (
           <span className="tag" key={tag}>
-            {tag}
+            <Highlight text={tag} marks={marks.get(markKey('tag', tag))} />
           </span>
         ))}
       </div>

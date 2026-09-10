@@ -88,8 +88,10 @@
   "editor.minutes": "Minutes",
   "editor.portions": "Portions %",
   "editor.addPortion": "Ajouter une portion",
+  "editor.portionStays": "reste sur cette ligne",
+  "editor.rowName": "Nom de la nouvelle ligne",
+  "editor.removePortion": "Retirer la portion",
   "editor.cycleBlocked": "Cette liaison créerait une boucle.",
-  "editor.selectNode": "Sélectionnez un nœud pour le modifier.",
   "editor.rowOrderHint": "Réordonnez les lignes ici. L'ordre est enregistré avec la recette.",
 
   "warn.cycle": "Boucle dans le graphe",

@@ -3,7 +3,7 @@ import type { Lang, Recipe, RecipeNode } from '../model/types'
 import { useApp } from '../store/app'
 import { navigate } from '../store/router'
 import { newNode } from '../model/factory'
-import { solveLayout } from '../solver/layout'
+import { cellText, solveLayout } from '../solver/layout'
 import { Diagram } from '../ui/Diagram'
 import { LangThemeControls, TopBar } from '../ui/TopBar'
 import { GraphCanvas } from './GraphCanvas'
@@ -27,7 +27,36 @@ export function EditorPage({ id }: { id: string }) {
   )
 
   const layout = useMemo(() => solveLayout(draft), [draft])
-  const selectedNode = draft.nodes.find((n) => n.id === selected) ?? null
+
+  const patchNode = useCallback(
+    (nodeId: string, patch: Partial<RecipeNode>) =>
+      update((r) => ({
+        ...r,
+        nodes: r.nodes.map((n) => (n.id === nodeId ? ({ ...n, ...patch } as RecipeNode) : n)),
+      })),
+    [update],
+  )
+
+  const addNode = (type: RecipeNode['type']) => {
+    const node = newNode(type)
+    update((r) => ({ ...r, nodes: [...r.nodes, node] }))
+    setSelected(node.id)
+  }
+
+  const deleteNodes = useCallback(
+    (ids: string[]) => {
+      const gone = new Set(ids)
+      update((r) => ({
+        ...r,
+        nodes: r.nodes
+          .filter((n) => !gone.has(n.id))
+          .map((n) => ({ ...n, inputs: n.inputs.filter((i) => !gone.has(i)) })),
+        rowOrder: r.rowOrder.filter((rowId) => !gone.has(rowId.split('#')[0])),
+      }))
+      setSelected((s) => (s && gone.has(s) ? null : s))
+    },
+    [update],
+  )
 
   if (!stored) {
     return (
@@ -36,30 +65,6 @@ export function EditorPage({ id }: { id: string }) {
         <p className="empty">{t('recipe.notFound')}</p>
       </>
     )
-  }
-
-  const patchNode = (nodeId: string, patch: Partial<RecipeNode>) =>
-    update((r) => ({
-      ...r,
-      nodes: r.nodes.map((n) => (n.id === nodeId ? ({ ...n, ...patch } as RecipeNode) : n)),
-    }))
-
-  const addNode = (type: RecipeNode['type']) => {
-    const node = newNode(type)
-    update((r) => ({ ...r, nodes: [...r.nodes, node] }))
-    setSelected(node.id)
-  }
-
-  const deleteNodes = (ids: string[]) => {
-    const gone = new Set(ids)
-    update((r) => ({
-      ...r,
-      nodes: r.nodes
-        .filter((n) => !gone.has(n.id))
-        .map((n) => ({ ...n, inputs: n.inputs.filter((i) => !gone.has(i)) })),
-      rowOrder: r.rowOrder.filter((rowId) => !gone.has(rowId.split('#')[0])),
-    }))
-    setSelected((s) => (s && gone.has(s) ? null : s))
   }
 
   const connect = (from: string, to: string) =>
@@ -165,6 +170,7 @@ export function EditorPage({ id }: { id: string }) {
             }}
             onDisconnect={disconnect}
             onDeleteNodes={deleteNodes}
+            onPatchNode={patchNode}
             onCycleBlocked={() => setCycleWarning(true)}
           />
 
@@ -179,7 +185,7 @@ export function EditorPage({ id }: { id: string }) {
                 const node = draft.nodes.find((n) => n.id === row.sourceNodeId)
                 const name =
                   row.kind === 'portion'
-                    ? `${row.label} — ${node && node.type === 'split' ? 'split' : ''}`
+                    ? `${row.label} — ${node ? cellText(node) : 'split'}`
                     : node && node.type === 'ingredient'
                       ? node.name
                       : row.sourceNodeId
@@ -308,17 +314,6 @@ export function EditorPage({ id }: { id: string }) {
             </label>
           </div>
 
-          <div className="panel" style={{ marginBottom: 14 }}>
-            <h2>{selectedNode ? selectedNode.type : t('editor.selectNode')}</h2>
-            {selectedNode && (
-              <NodeInspector
-                node={selectedNode}
-                onChange={(patch) => patchNode(selectedNode.id, patch)}
-                onDelete={() => deleteNodes([selectedNode.id])}
-              />
-            )}
-          </div>
-
           <div className="panel">
             <h2>
               {layout.warnings.length
@@ -335,158 +330,6 @@ export function EditorPage({ id }: { id: string }) {
           </div>
         </aside>
       </div>
-    </>
-  )
-}
-
-function NodeInspector({
-  node,
-  onChange,
-  onDelete,
-}: {
-  node: RecipeNode
-  onChange: (patch: Partial<RecipeNode>) => void
-  onDelete: () => void
-}) {
-  const { t } = useApp()
-  return (
-    <>
-      {node.type === 'ingredient' && (
-        <>
-          <label className="field">
-            <span>{t('editor.name')}</span>
-            <input
-              type="text"
-              value={node.name}
-              onChange={(e) => onChange({ name: e.target.value } as Partial<RecipeNode>)}
-            />
-          </label>
-          <div className="row">
-            <label className="field" style={{ flex: 1 }}>
-              <span>{t('editor.qty')}</span>
-              <input
-                type="number"
-                step="any"
-                value={node.qty ?? ''}
-                onChange={(e) =>
-                  onChange({
-                    qty: e.target.value === '' ? undefined : Number(e.target.value),
-                  } as Partial<RecipeNode>)
-                }
-              />
-            </label>
-            <label className="field" style={{ flex: 1 }}>
-              <span>{t('editor.unit')}</span>
-              <input
-                type="text"
-                value={node.unit ?? ''}
-                onChange={(e) => onChange({ unit: e.target.value } as Partial<RecipeNode>)}
-              />
-            </label>
-          </div>
-          <p className="hint">
-            Leave quantity empty for things that do not scale — a pinch of salt, oil for frying.
-          </p>
-          <label className="field">
-            <span>{t('editor.ref')}</span>
-            <input
-              type="text"
-              value={node.ref ?? ''}
-              onChange={(e) =>
-                onChange({ ref: e.target.value || undefined } as Partial<RecipeNode>)
-              }
-            />
-          </label>
-        </>
-      )}
-
-      {node.type === 'action' && (
-        <label className="field">
-          <span>{t('editor.label')}</span>
-          <input
-            type="text"
-            value={node.label}
-            onChange={(e) => onChange({ label: e.target.value } as Partial<RecipeNode>)}
-          />
-        </label>
-      )}
-
-      {node.type === 'wait' && (
-        <>
-          <label className="field">
-            <span>{t('editor.label')}</span>
-            <input
-              type="text"
-              value={node.label}
-              onChange={(e) => onChange({ label: e.target.value } as Partial<RecipeNode>)}
-            />
-          </label>
-          <label className="field">
-            <span>{t('editor.minutes')}</span>
-            <input
-              type="number"
-              min={0}
-              value={node.minutes}
-              onChange={(e) =>
-                onChange({
-                  minutes: Math.max(0, Number(e.target.value) || 0),
-                } as Partial<RecipeNode>)
-              }
-            />
-          </label>
-        </>
-      )}
-
-      {node.type === 'split' && (
-        <>
-          <span className="hint">{t('editor.portions')}</span>
-          {node.portions.map((p, i) => (
-            <div className="row" key={i} style={{ marginTop: 6 }}>
-              <input
-                type="number"
-                min={0}
-                max={100}
-                style={{ width: 90 }}
-                value={p.percent}
-                onChange={(e) => {
-                  const portions = node.portions.map((q, j) =>
-                    j === i ? { ...q, percent: Number(e.target.value) || 0 } : q,
-                  )
-                  onChange({ portions } as Partial<RecipeNode>)
-                }}
-              />
-              <span className="hint">{i === 0 ? 'stays on row' : `→ new row`}</span>
-              {node.portions.length > 2 && (
-                <button
-                  className="btn small ghost"
-                  onClick={() =>
-                    onChange({
-                      portions: node.portions.filter((_, j) => j !== i),
-                    } as Partial<RecipeNode>)
-                  }
-                >
-                  ×
-                </button>
-              )}
-            </div>
-          ))}
-          <button
-            className="btn small"
-            style={{ marginTop: 8 }}
-            onClick={() =>
-              onChange({
-                portions: [...node.portions, { percent: 0, label: '' }],
-              } as Partial<RecipeNode>)
-            }
-          >
-            {t('editor.addPortion')}
-          </button>
-        </>
-      )}
-
-      <button className="btn small" style={{ marginTop: 12 }} onClick={onDelete}>
-        {t('editor.deleteNode')}
-      </button>
     </>
   )
 }
