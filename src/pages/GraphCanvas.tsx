@@ -463,13 +463,18 @@ function Canvas({
   // are carried over so an edit elsewhere never yanks a node back to its
   // solver-derived slot.
   useEffect(() => {
+    // Decided out here, not inside the updater: the updater runs later (and twice
+    // under StrictMode), so a flag flipped in there would already read as "hydrated"
+    // on the very pass that is supposed to lay the stored graph out.
+    const firstPass = !hydrated.current
+    hydrated.current = true
     setNodes((prev) => {
       const prevById = new Map(prev.map((n) => [n.id, n]))
       const columnBottom = new Map<number, number>()
       const next = recipe.nodes.map((n) => {
         const existing = prevById.get(n.id)
         let pos = existing?.position ?? positions.current.get(n.id)
-        if (!pos && !hydrated.current) {
+        if (!pos && firstPass) {
           // First pass over a stored graph: lay the whole thing out by column.
           const col = layout.get(n.id) ?? 0
           const y = columnBottom.get(col) ?? 0
@@ -498,7 +503,6 @@ function Canvas({
       const unchanged = next.length === prev.length && next.every((n, i) => n === prev[i])
       return unchanged ? prev : next
     })
-    hydrated.current = true
   }, [recipe.nodes, layout, selected, setNodes, spawnPoint])
 
   const edges: Edge[] = useMemo(
