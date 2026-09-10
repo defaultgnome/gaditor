@@ -35,7 +35,7 @@ import type {
   WaitNode,
 } from '../model/types'
 import type { Translate } from '../i18n'
-import { wouldCycle } from '../solver/layout'
+import { wouldCycle, type Warning } from '../solver/layout'
 import { layerColumns } from '../solver/columns'
 import { streamLabel } from '../solver/labels'
 import { useApp } from '../store/app'
@@ -52,6 +52,8 @@ type Props = {
   onSpawnConnected: (nodeId: string, direction: Direction) => string | null
   onPatchNode: (id: string, patch: Partial<RecipeNode>) => void
   onCycleBlocked: () => void
+  /** Solver warnings, so each node can flag the ones that are about it (§6.2). */
+  warnings: Warning[]
 }
 
 /** Which side of the existing node a spawned node lands on. */
@@ -93,6 +95,53 @@ const NodeApiContext = createContext<NodeApi>({
   remove: () => {},
   duplicate: () => {},
 })
+
+/**
+ * Warning kinds per node id. A context of its own, consumed by a leaf component: the
+ * warnings are re-derived on every edit, and folding them into {@link NodeApi} would
+ * re-render every node — with all its inputs — on every keystroke.
+ */
+const IssuesContext = createContext<Map<string, Warning['kind'][]>>(new Map())
+
+/** Two overlapping sheets. */
+const DuplicateIcon = (
+  <svg viewBox="0 0 16 16" aria-hidden="true">
+    <rect x="5.75" y="5.75" width="8.5" height="8.5" rx="2" />
+    <path d="M11 3.4A2 2 0 0 0 9.1 2H3.9A2 2 0 0 0 2 3.9v5.2A2 2 0 0 0 3.4 11" />
+  </svg>
+)
+
+const TrashIcon = (
+  <svg viewBox="0 0 16 16" aria-hidden="true">
+    <path d="M2.6 4.4h10.8M6.2 4.4V2.8h3.6v1.6M4.2 4.4l.62 8.1a1.1 1.1 0 0 0 1.1 1h4.16a1.1 1.1 0 0 0 1.1-1l.62-8.1" />
+    <path d="M6.7 7v3.6M9.3 7v3.6" />
+  </svg>
+)
+
+const WarningIcon = (
+  <svg viewBox="0 0 16 16" aria-hidden="true">
+    <path d="M6.9 2.4 1.5 12a1.25 1.25 0 0 0 1.1 1.85h10.8A1.25 1.25 0 0 0 14.5 12L9.1 2.4a1.25 1.25 0 0 0-2.2 0Z" />
+    <path d="M8 6v2.9" />
+    <circle cx="8" cy="11.1" r="0.62" fill="currentColor" stroke="none" />
+  </svg>
+)
+
+/**
+ * The corner marker. Hover (or focus, for a keyboard) to read what is wrong — the
+ * panel beside the canvas says how many problems there are, not which node has them.
+ */
+function NodeWarning({ id }: { id: string }) {
+  const { t } = useApp()
+  const kinds = useContext(IssuesContext).get(id)
+  if (!kinds?.length) return null
+  const text = kinds.map((k) => t(`warn.${k}`)).join(' · ')
+  return (
+    <span className="nf-warn" tabIndex={0} role="note" aria-label={text}>
+      {WarningIcon}
+      <span className="nf-warn-tip">{text}</span>
+    </span>
+  )
+}
 
 /** Rough rendered height, used only to stack freshly added nodes without overlap. */
 function estimateHeight(n: RecipeNode): number {
@@ -146,6 +195,7 @@ function FlowNode({ id, selected }: NodeProps) {
         </>
       )}
       <div className="nf-head">
+        <NodeWarning id={id} />
         <span className="type">
           {t(`editor.add${node.type[0].toUpperCase()}${node.type.slice(1)}`)}
         </span>
@@ -164,7 +214,7 @@ function FlowNode({ id, selected }: NodeProps) {
             api.duplicate(id)
           }}
         >
-          ⧉
+          {DuplicateIcon}
         </button>
         <button
           className="nf-icon nf-x nodrag"
@@ -175,7 +225,7 @@ function FlowNode({ id, selected }: NodeProps) {
             api.remove(id)
           }}
         >
-          ×
+          {TrashIcon}
         </button>
       </div>
 
@@ -403,6 +453,7 @@ function Canvas({
   onSpawnConnected,
   onPatchNode,
   onCycleBlocked,
+  warnings,
 }: Props) {
   const positions = useRef(new Map<string, { x: number; y: number }>())
   const wrap = useRef<HTMLDivElement>(null)
@@ -420,6 +471,18 @@ function Canvas({
   const connecting = useStore((s) => !!s.connection.fromHandle)
 
   const layout = useMemo(() => layerColumns(recipe.nodes), [recipe.nodes])
+
+  const issues = useMemo(() => {
+    const out = new Map<string, Warning['kind'][]>()
+    for (const w of warnings) {
+      for (const id of w.nodeIds) {
+        const list = out.get(id)
+        if (list) list.push(w.kind)
+        else out.set(id, [w.kind])
+      }
+    }
+    return out
+  }, [warnings])
 
   /** Park a not-yet-rendered node at a chosen spot, ahead of the effect that places it. */
   const seedPosition = useCallback((id: string | null, x: number, y: number) => {
@@ -585,41 +648,43 @@ function Canvas({
   return (
     <div className={`canvas-wrap${connecting ? ' connecting' : ''}`} ref={wrap}>
       <NodeApiContext.Provider value={api}>
-        <ReactFlow
-          nodes={nodes}
-          edges={edges}
-          nodeTypes={nodeTypes}
-          fitView
-          fitViewOptions={{ maxZoom: 1, padding: 0.15 }}
-          minZoom={0.2}
-          maxZoom={2}
-          connectionRadius={CONNECTION_RADIUS}
-          proOptions={{ hideAttribution: true }}
-          onNodesChange={onNodesChange}
-          onConnect={onConnect}
-          onConnectEnd={onConnectEnd}
-          onNodeClick={(_, n) => {
-            lastPoint.current = n.position
-            onSelect(n.id)
-          }}
-          onPaneClick={(e) => {
-            lastPoint.current = screenToFlowPosition({ x: e.clientX, y: e.clientY })
-            onSelect(null)
-          }}
-          onNodeDragStop={(_, n) => {
-            lastPoint.current = n.position
-            positions.current.set(n.id, n.position)
-          }}
-          onNodesDelete={(deleted) => onDeleteNodes(deleted.map((n) => n.id))}
-          onEdgeClick={onEdgeClick}
-          onEdgesDelete={(deleted) => {
-            for (const e of deleted) onDisconnect(e.source, e.target)
-          }}
-          deleteKeyCode={['Backspace', 'Delete']}
-        >
-          <Background gap={18} size={1} />
-          <Controls showInteractive={false} />
-        </ReactFlow>
+        <IssuesContext.Provider value={issues}>
+          <ReactFlow
+            nodes={nodes}
+            edges={edges}
+            nodeTypes={nodeTypes}
+            fitView
+            fitViewOptions={{ maxZoom: 1, padding: 0.15 }}
+            minZoom={0.2}
+            maxZoom={2}
+            connectionRadius={CONNECTION_RADIUS}
+            proOptions={{ hideAttribution: true }}
+            onNodesChange={onNodesChange}
+            onConnect={onConnect}
+            onConnectEnd={onConnectEnd}
+            onNodeClick={(_, n) => {
+              lastPoint.current = n.position
+              onSelect(n.id)
+            }}
+            onPaneClick={(e) => {
+              lastPoint.current = screenToFlowPosition({ x: e.clientX, y: e.clientY })
+              onSelect(null)
+            }}
+            onNodeDragStop={(_, n) => {
+              lastPoint.current = n.position
+              positions.current.set(n.id, n.position)
+            }}
+            onNodesDelete={(deleted) => onDeleteNodes(deleted.map((n) => n.id))}
+            onEdgeClick={onEdgeClick}
+            onEdgesDelete={(deleted) => {
+              for (const e of deleted) onDisconnect(e.source, e.target)
+            }}
+            deleteKeyCode={['Backspace', 'Delete']}
+          >
+            <Background gap={18} size={1} />
+            <Controls showInteractive={false} />
+          </ReactFlow>
+        </IssuesContext.Provider>
       </NodeApiContext.Provider>
     </div>
   )

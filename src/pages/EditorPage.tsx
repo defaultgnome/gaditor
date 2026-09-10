@@ -243,6 +243,7 @@ export function EditorPage({ id }: { id: string }) {
             onSpawnConnected={spawnConnected}
             onPatchNode={patchNode}
             onCycleBlocked={() => setCycleWarning(true)}
+            warnings={layout.warnings}
           />
 
           <div className="panel" style={{ marginTop: 14 }}>

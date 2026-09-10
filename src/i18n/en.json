@@ -50,6 +50,8 @@
   "share.title": "Share image",
   "share.theme": "Theme",
   "share.rendering": "Rendering…",
+  "share.renderFailed": "The image could not be rendered.",
+  "share.retry": "Try again",
   "share.share": "Share",
   "share.copy": "Copy image",
   "share.download": "Download",

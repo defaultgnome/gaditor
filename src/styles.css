@@ -61,6 +61,19 @@
   color-scheme: dark;
 }
 
+/*
+ * Display cutout insets, resolved once (the viewport is already `viewport-fit=cover`).
+ * They matter most in iPhone landscape, where the notch eats into the left or right
+ * edge and would otherwise sit on top of the controls; in portrait they are the status
+ * bar and the home indicator. `env()` is 0px on every screen without a cutout.
+ */
+:root {
+  --safe-t: env(safe-area-inset-top, 0px);
+  --safe-r: env(safe-area-inset-right, 0px);
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-l: env(safe-area-inset-left, 0px);
+}
+
 * {
   box-sizing: border-box;
 }
@@ -101,7 +114,7 @@ a {
 .shell {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 16px 64px;
+  padding: 0 calc(16px + var(--safe-r)) calc(64px + var(--safe-b)) calc(16px + var(--safe-l));
 }
 
 .topbar {
@@ -111,7 +124,7 @@ a {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 12px 0;
+  padding: calc(12px + var(--safe-t)) 0 12px;
   background: color-mix(in srgb, var(--bg) 92%, transparent);
   backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--line);
@@ -641,17 +654,20 @@ td.done .cell-sub {
   box-shadow: var(--shadow);
   font-size: 12px;
   color: var(--ink);
-  overflow: hidden;
 }
 
 /* Blender-style: a type-coloured title bar, the config living in the node body. */
 .flow-node .nf-head {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 4px 6px 4px 9px;
+  gap: 3px;
+  padding: 3px 5px 3px 8px;
   background: var(--action);
   border-bottom: 1px solid var(--line);
+  /* The node itself no longer clips (a warning tooltip has to escape it), so the two
+     bands round their own outer corners. */
+  border-radius: 8px 8px 0 0;
 }
 
 .flow-node.k-ingredient {
@@ -696,14 +712,30 @@ td.done .cell-sub {
 
 .flow-node .nf-icon {
   flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
   border: 0;
   background: transparent;
   color: var(--ink-faint);
-  font-size: 15px;
-  line-height: 1;
-  padding: 1px 5px;
   border-radius: 5px;
   cursor: pointer;
+}
+
+/* Drawn rather than typed: the ⧉ and × glyphs land on a different baseline and
+   optical weight in every font the fallback stack reaches for. */
+.flow-node .nf-icon svg {
+  display: block;
+  width: 13px;
+  height: 13px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .flow-node .nf-icon:hover {
@@ -716,11 +748,65 @@ td.done .cell-sub {
   background: var(--surface-2);
 }
 
+/*
+ * The warnings panel counts the problems; this says which node each one is about.
+ * Top-left corner of the title bar, ahead of the type label — the right end of the
+ * bar belongs to the buttons, and a marker there would read as a third one.
+ */
+.flow-node .nf-warn {
+  position: relative;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  margin-left: -3px;
+  color: var(--warn);
+  cursor: help;
+}
+
+.flow-node .nf-warn svg {
+  display: block;
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.flow-node .nf-warn-tip {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: -5px;
+  z-index: 6;
+  display: none;
+  width: max-content;
+  max-width: 196px;
+  padding: 5px 8px;
+  border: 1px solid var(--warn);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--warn);
+  font-size: 11px;
+  line-height: 1.35;
+  text-align: left;
+  box-shadow: var(--shadow);
+}
+
+.flow-node .nf-warn:hover .nf-warn-tip,
+.flow-node .nf-warn:focus-visible .nf-warn-tip {
+  display: block;
+}
+
 .flow-node .nf-body {
   display: flex;
   flex-direction: column;
   gap: 7px;
   padding: 8px 9px 9px;
+  border-radius: 0 0 8px 8px;
 }
 
 .flow-node .nf-row {
@@ -846,7 +932,8 @@ td.done .cell-sub {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 16px;
+  padding: calc(16px + var(--safe-t)) calc(16px + var(--safe-r)) calc(16px + var(--safe-b))
+    calc(16px + var(--safe-l));
 }
 
 .dialog {
@@ -865,18 +952,74 @@ td.done .cell-sub {
   font-size: 17px;
 }
 
-.preview-img {
-  width: 100%;
+/* Holds the render, and whatever the render is currently doing. Fixed a minimum
+   height so the dialog does not jump the moment the first image lands. */
+.preview {
+  position: relative;
+  min-height: 130px;
+  margin-top: 12px;
   border: 1px solid var(--line);
   border-radius: 8px;
-  margin-top: 12px;
   background: var(--surface-2);
+  overflow: hidden;
+}
+
+.preview-img {
+  display: block;
+  width: 100%;
+}
+
+/* Sits over the image: a re-render keeps the previous one visible underneath. */
+.preview-state {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 14px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--ink-soft);
+  background: color-mix(in srgb, var(--surface) 84%, transparent);
+}
+
+.preview-state p {
+  margin: 0;
+}
+
+.preview-state.failed {
+  color: var(--warn);
+}
+
+/* The rasteriser reports no progress, so this is a spinner and not a bar. */
+.spinner {
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--line-strong);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.preview-why {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-faint);
+  overflow-wrap: anywhere;
 }
 
 .toast {
   position: fixed;
   left: 50%;
-  bottom: 18px;
+  bottom: calc(18px + var(--safe-b));
   transform: translateX(-50%);
   z-index: 60;
   display: flex;
@@ -929,7 +1072,7 @@ td.done .cell-sub {
     font-size: 22px;
   }
   .shell {
-    padding: 0 12px 56px;
+    padding: 0 calc(12px + var(--safe-r)) calc(56px + var(--safe-b)) calc(12px + var(--safe-l));
   }
 }
 
@@ -1043,6 +1186,11 @@ table.diagram.shake {
   table.diagram.shake {
     animation: none;
     outline: 2px solid var(--warn);
+  }
+
+  /* The word "Rendering…" beside it is doing the work anyway. */
+  .spinner {
+    animation: none;
   }
 }
 

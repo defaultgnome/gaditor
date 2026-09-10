@@ -5,6 +5,7 @@ import { useApp } from '../store/app'
 import { criticalPath, formatDuration } from '../solver/time'
 import { Diagram, type Orientation } from './Diagram'
 import { formatServings } from '../store/format'
+import { rasterScale } from './rasterScale'
 
 type Props = {
   recipe: Recipe
@@ -23,6 +24,9 @@ export function ShareDialog({ recipe, multiplier, servings, orientation, onClose
   const [url, setUrl] = useState<string | null>(null)
   const [status, setStatus] = useState<'rendering' | 'ready' | 'failed'>('rendering')
   const [message, setMessage] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  /** Bumped by Retry — the render is an effect, so this is what re-runs it. */
+  const [attempt, setAttempt] = useState(0)
   const stage = useRef<HTMLDivElement>(null)
 
   const filename = `${recipe.id}.png`
@@ -33,31 +37,43 @@ export function ShareDialog({ recipe, multiplier, servings, orientation, onClose
     let cancelled = false
     setStatus('rendering')
     setBlob(null)
+    setError(null)
+    setMessage(null)
     const node = stage.current
     if (!node) return
+    // A beat of grace: the stage has just been given a new theme class and a new
+    // orientation, and measuring it before the browser has laid that out renders the
+    // previous size.
     const id = window.setTimeout(() => {
-      const scale = Math.min(3, Math.max(2, window.devicePixelRatio || 2))
+      const width = node.scrollWidth
+      const height = node.scrollHeight
       toBlob(node, {
-        pixelRatio: scale,
-        cacheBust: true,
+        pixelRatio: rasterScale(width, height),
+        width,
+        height,
         backgroundColor: shareTheme === 'dark' ? '#12100e' : '#faf7f2',
-        width: node.scrollWidth,
-        height: node.scrollHeight,
+        // Every face in the stack is a system font, so there is no @font-face to
+        // inline. Measured, this saves no time — but left on, the rasteriser walks
+        // the stylesheets looking for one, and a webfont added later would send it to
+        // the network mid-render, which on a cold PWA start is a render that hangs.
+        skipFonts: true,
       })
         .then((result) => {
           if (cancelled) return
           setBlob(result)
           setStatus(result ? 'ready' : 'failed')
         })
-        .catch(() => {
-          if (!cancelled) setStatus('failed')
+        .catch((err: unknown) => {
+          if (cancelled) return
+          setError(err instanceof Error ? err.message : String(err))
+          setStatus('failed')
         })
     }, 60)
     return () => {
       cancelled = true
       window.clearTimeout(id)
     }
-  }, [shareTheme, shareOrientation, recipe, multiplier])
+  }, [shareTheme, shareOrientation, recipe, multiplier, attempt])
 
   useEffect(() => {
     if (!blob) return
@@ -102,7 +118,8 @@ export function ShareDialog({ recipe, multiplier, servings, orientation, onClose
     }
     if (await copy()) return
     download()
-  }, [blob, copy, download, filename, recipe.title])
+    setMessage(t('share.failed'))
+  }, [blob, copy, download, filename, recipe.title, t])
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -168,10 +185,27 @@ export function ShareDialog({ recipe, multiplier, servings, orientation, onClose
         </div>
 
         {message && <p className="hint">{message}</p>}
-        {status === 'rendering' && <p className="hint">{t('share.rendering')}</p>}
-        {status === 'failed' && <p className="hint">{t('share.failed')}</p>}
-        {/* Final fallback: the rendered PNG is on screen, so it can be long-pressed. */}
-        {url && <img className="preview-img" src={url} alt={recipe.title} />}
+
+        {/* Final fallback for delivery: the rendered PNG is on screen the whole time,
+            so it can always be long-pressed or right-clicked out of the page. */}
+        <div className="preview">
+          {url && <img className="preview-img" src={url} alt={recipe.title} />}
+          {status === 'rendering' && (
+            <div className="preview-state" role="status">
+              <span className="spinner" aria-hidden="true" />
+              {t('share.rendering')}
+            </div>
+          )}
+          {status === 'failed' && (
+            <div className="preview-state failed" role="alert">
+              <p>{t('share.renderFailed')}</p>
+              {error && <p className="preview-why">{error}</p>}
+              <button className="btn small" onClick={() => setAttempt((a) => a + 1)}>
+                {t('share.retry')}
+              </button>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Offscreen full-size render. Not a screenshot of the viewport.
