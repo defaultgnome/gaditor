@@ -290,10 +290,16 @@ Two coupled views:
     these come together".
 - **Solved render pane** — the live table. **Row reordering happens here**, on the render
   itself, writing to `rowOrder`:
-  - **Drag a row by its handle** to move it. The order is taken literally and autosaved.
-  - **Tap a step** to pick out its whole **branch** — every row feeding it — and drag
-    those rows as one block. Reordering a merge's inputs one at a time can only pass
-    through arrangements that break contiguity, so the branch is the unit that moves.
+  - **Drag any cell** to move the rows it covers — a merged cell already spans exactly
+    the rows it joins, so grabbing it moves that whole merge. The order is taken
+    literally and autosaved.
+  - **Tap a step** first to pick out its whole **branch** — every row feeding it,
+    including inputs pulled in by reference — and drag those rows as one block.
+    Reordering a merge's inputs one at a time can only pass through arrangements that
+    break contiguity, so the branch is the unit that moves.
+  - Drops land in the **gap** the pointer is nearest, not on a target row, and the table
+    carries padding at both ends: dropping at the very top or bottom of the order is a
+    large target rather than a hairline one.
   - A drag that would **break a merge apart** is refused: the table shakes and names the
     steps. Only a drag that makes things worse is refused, so a recipe whose merges
     already cannot all be contiguous stays rearrangeable.

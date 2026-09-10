@@ -980,45 +980,39 @@ td.done .cell-sub {
 
 /* ---- reordering on the render itself (§3.2) --------------------------- */
 
-table.diagram td.row-grip {
-  min-width: 0;
-  padding: 0 5px;
-  border-color: transparent;
-  background: none;
-  color: var(--ink-faint);
-  font-size: 12px;
-  letter-spacing: -2px;
-  cursor: grab;
-  user-select: none;
-}
-
-table.diagram td.row-grip:hover {
-  color: var(--ink);
-}
-
-table.diagram td.row-grip.sel {
-  color: var(--accent);
-  background: var(--accent-soft);
-  border-color: var(--accent);
-}
-
-table.diagram td.row-grip.lifted {
-  opacity: 0.4;
-}
-
-/* The line the block would land on. */
-table.diagram td.row-grip.over {
-  box-shadow: 0 -2px 0 var(--accent);
-  border-radius: 0;
+/* The cells are the handles — there is nothing beside the table to grab. */
+.diagram-scroll.editable {
+  position: relative;
+  /* Room above the first row and below the last, so the two ends of the order are
+     the easiest places to drop into rather than hairline targets. */
+  padding-block: 14px;
 }
 
 table.diagram.editable td.cell {
-  cursor: pointer;
+  cursor: grab;
+  user-select: none;
 }
 
 table.diagram td.cell.picked {
   outline: 2px solid var(--accent);
   outline-offset: 1px;
+}
+
+table.diagram td.cell.lifted {
+  opacity: 0.4;
+}
+
+/* Where the block would land. */
+.drop-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 3px;
+  margin-top: -3px;
+  border-radius: 2px;
+  background: var(--accent);
+  pointer-events: none;
+  z-index: 1;
 }
 
 /* A refused drop changes nothing on screen, so the table has to say so itself. */

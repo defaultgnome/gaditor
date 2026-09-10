@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState, type DragEvent as ReactDragEvent } from 'react'
 import type { Lang, Recipe, RecipeNode } from '../model/types'
 import { qtyText } from '../store/format'
 import { solveLayout, transpose, type Cell, type Layout } from '../solver/layout'
@@ -20,7 +20,8 @@ export type DiagramEdit = {
   selectedRows: Set<string>
   selectedNodeId: string | null
   onSelectNode: (id: string | null) => void
-  onMoveRows: (rowIds: string[], toIndex: number) => void
+  /** `at` is a gap index into the current order: 0 is above the first row. */
+  onMoveRows: (rowIds: string[], at: number) => void
   /** Timestamp of the last refused drop, bumped to replay the shake. */
   rejectedAt: number
 }
@@ -62,11 +63,13 @@ export function Diagram(props: Props) {
 
   const nodesById = useMemo(() => new Map(recipe.nodes.map((n) => [n.id, n])), [recipe.nodes])
 
+  const scroll = useRef<HTMLDivElement>(null)
   // The block being dragged lives in a ref, not in state: `drop` fires on the same
   // element tree that `dragstart` set up, and reading the payload out of a state
   // closure loses it whenever the two land in one render pass.
   const dragged = useRef<string[] | null>(null)
-  const [drag, setDrag] = useState<{ rows: string[]; over: number | null } | null>(null)
+  const [lifted, setLifted] = useState<string[] | null>(null)
+  const [gap, setGap] = useState<{ at: number; y: number } | null>(null)
 
   // A refused drop announces itself by shaking: there is no new order to apply, so
   // nothing else on screen would change to say the drag was seen at all.
@@ -79,58 +82,87 @@ export function Diagram(props: Props) {
     return () => window.clearTimeout(timer)
   }, [rejectedAt])
 
-  /** Grabbing any row of the selected branch grabs the whole branch. */
-  const rowsUnder = (i: number): string[] => {
+  /**
+   * The gap the pointer is nearest, as an index into the current order — 0 above the
+   * first row, `rowIds.length` below the last. Gaps rather than target rows: it is the
+   * only way to express "put this at the very top", and it makes the two ends the
+   * easiest targets on the table rather than the two impossible ones.
+   */
+  const gapAt = (clientY: number): { at: number; y: number } | null => {
+    const box = scroll.current
+    const body = box?.querySelector('tbody')
+    if (!box || !body) return null
+    const top = box.getBoundingClientRect().top
+    const rows = [...body.rows]
+    for (let i = 0; i < rows.length; i++) {
+      const r = rows[i].getBoundingClientRect()
+      if (clientY < r.top + r.height / 2) return { at: i, y: r.top - top }
+    }
+    const last = rows[rows.length - 1]?.getBoundingClientRect()
+    return { at: rows.length, y: last ? last.bottom - top : 0 }
+  }
+
+  /**
+   * What a cell drags. A merged cell already spans exactly the rows it joins, so
+   * grabbing it moves that whole merge; a selected step brings its full branch, which
+   * is wider whenever an input had to be pulled in by reference.
+   */
+  const rowsOf = (cell: Cell): string[] => {
     if (!edit) return []
-    const id = edit.rowIds[i]
-    return edit.selectedRows.has(id)
-      ? edit.rowIds.filter((r) => edit.selectedRows.has(r))
-      : [id]
+    if (cell.nodeId && cell.nodeId === edit.selectedNodeId) {
+      return edit.rowIds.filter((r) => edit.selectedRows.has(r))
+    }
+    return edit.rowIds.slice(cell.row, cell.row + cell.rowSpan)
+  }
+
+  const onCellDragStart = (cell: Cell) => (e: ReactDragEvent) => {
+    if (!edit) return
+    // Firefox starts no drag at all without a payload.
+    e.dataTransfer.setData('text/plain', cell.doneKey)
+    e.dataTransfer.effectAllowed = 'move'
+    dragged.current = rowsOf(cell)
+    setLifted(dragged.current)
+  }
+
+  const endDrag = () => {
+    dragged.current = null
+    setLifted(null)
+    setGap(null)
   }
 
   return (
-    <div className="diagram-scroll">
+    <div
+      className={`diagram-scroll${edit ? ' editable' : ''}`}
+      ref={scroll}
+      onDragOver={
+        edit
+          ? (e) => {
+              if (!dragged.current) return
+              e.preventDefault()
+              e.dataTransfer.dropEffect = 'move'
+              const next = gapAt(e.clientY)
+              setGap((g) => (g && next && g.at === next.at ? g : next))
+            }
+          : undefined
+      }
+      onDrop={
+        edit
+          ? (e) => {
+              e.preventDefault()
+              const rows = dragged.current
+              const target = gapAt(e.clientY)
+              if (rows && target) edit.onMoveRows(rows, target.at)
+              endDrag()
+            }
+          : undefined
+      }
+      onDragEnd={edit ? endDrag : undefined}
+    >
+      {gap && <div className="drop-line" style={{ top: gap.y }} aria-hidden="true" />}
       <table className={`diagram${edit ? ' editable' : ''}${shake ? ' shake' : ''}`}>
         <tbody>
           {byRow.map((line, i) => (
             <tr key={i}>
-              {edit && (
-                <td
-                  className={[
-                    'row-grip',
-                    edit.selectedRows.has(edit.rowIds[i]) ? 'sel' : '',
-                    drag?.over === i ? 'over' : '',
-                    drag?.rows.includes(edit.rowIds[i]) ? 'lifted' : '',
-                  ]
-                    .filter(Boolean)
-                    .join(' ')}
-                  draggable
-                  aria-label={edit.rowIds[i]}
-                  onDragStart={(e) => {
-                    // Firefox starts no drag at all without a payload.
-                    e.dataTransfer.setData('text/plain', edit.rowIds[i])
-                    dragged.current = rowsUnder(i)
-                    setDrag({ rows: dragged.current, over: null })
-                  }}
-                  onDragEnd={() => {
-                    dragged.current = null
-                    setDrag(null)
-                  }}
-                  onDragOver={(e) => {
-                    if (!dragged.current) return
-                    e.preventDefault()
-                    setDrag((d) => (d && d.over !== i ? { ...d, over: i } : d))
-                  }}
-                  onDrop={(e) => {
-                    e.preventDefault()
-                    if (dragged.current) edit.onMoveRows(dragged.current, i)
-                    dragged.current = null
-                    setDrag(null)
-                  }}
-                >
-                  ⠿
-                </td>
-              )}
               {line.map((cell) => (
                 <CellView
                   key={cell.key}
@@ -138,6 +170,14 @@ export function Diagram(props: Props) {
                   node={nodesById.get(cell.nodeId ?? '')}
                   picked={!!edit && !!cell.nodeId && cell.nodeId === edit.selectedNodeId}
                   onPick={edit ? () => edit.onSelectNode(cell.nodeId ?? null) : undefined}
+                  lifted={
+                    !!lifted &&
+                    !!edit &&
+                    edit.rowIds
+                      .slice(cell.row, cell.row + cell.rowSpan)
+                      .every((r) => lifted.includes(r))
+                  }
+                  onCellDragStart={edit ? onCellDragStart(cell) : undefined}
                   {...props}
                 />
               ))}
@@ -161,7 +201,16 @@ function CellView({
   knownRecipeIds,
   picked,
   onPick,
-}: Props & { cell: Cell; node?: RecipeNode; picked?: boolean; onPick?: () => void }) {
+  lifted,
+  onCellDragStart,
+}: Props & {
+  cell: Cell
+  node?: RecipeNode
+  picked?: boolean
+  onPick?: () => void
+  lifted?: boolean
+  onCellDragStart?: (e: ReactDragEvent) => void
+}) {
   const isDone = !!done?.has(cell.doneKey)
   // §4.3 — tap any node to mark it done, in the viewer. In the editor the same tap
   // picks out the step's branch instead; the two never coexist.
@@ -170,9 +219,13 @@ function CellView({
 
   return (
     <td
-      className={`cell k-${cell.kind}${isDone ? ' done' : ''}${picked ? ' picked' : ''}`}
+      className={`cell k-${cell.kind}${isDone ? ' done' : ''}${picked ? ' picked' : ''}${
+        lifted ? ' lifted' : ''
+      }`}
       rowSpan={cell.rowSpan}
       colSpan={cell.colSpan}
+      draggable={!!onCellDragStart}
+      onDragStart={onCellDragStart}
       onClick={activate}
       tabIndex={clickable ? 0 : undefined}
       role={clickable ? 'button' : undefined}

@@ -143,20 +143,14 @@ export function EditorPage({ id }: { id: string }) {
    * things *worse* is refused — a recipe whose merges already cannot all be contiguous
    * must still be rearrangeable.
    */
-  const moveRows = (rowIds: string[], toIndex: number) => {
+  const moveRows = (rowIds: string[], at: number) => {
+    if (rowIds.length === 0) return
     const order = layout.rows.map((r) => r.id)
     const moving = new Set(rowIds)
-    const rest = order.filter((id) => !moving.has(id))
-    if (rowIds.length === 0) return
-
-    const targetId = order[toIndex]
-    let at = rest.indexOf(targetId)
-    if (at === -1) {
-      at = rest.length // dropped on a row of the block being moved
-    } else if (toIndex > order.indexOf(rowIds[0])) {
-      at += 1 // dropped below where the block came from — land under the target
-    }
-    const next = [...rest.slice(0, at), ...rowIds, ...rest.slice(at)]
+    // `at` is a gap: everything above it stays above, everything below stays below.
+    const above = order.slice(0, at).filter((id) => !moving.has(id))
+    const below = order.slice(at).filter((id) => !moving.has(id))
+    const next = [...above, ...rowIds, ...below]
     if (next.every((id, i) => id === order[i])) return
 
     const before = detachedIn(layout)

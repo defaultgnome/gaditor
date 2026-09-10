@@ -94,7 +94,7 @@
   "editor.rowName": "Nom de la nouvelle ligne",
   "editor.removePortion": "Retirer la portion",
   "editor.cycleBlocked": "Cette liaison créerait une boucle.",
-  "editor.rowOrderHint": "Glissez une ligne par sa poignée pour la déplacer. Touchez une étape d’abord pour emporter toute sa branche.",
+  "editor.rowOrderHint": "Glissez n’importe quelle case pour déplacer ses lignes. Touchez une étape d’abord pour emporter toute sa branche.",
   "editor.orderRefused": "Cet ordre séparerait {steps}. Touchez l’étape pour déplacer toute sa branche d’un coup.",
 
   "warn.cycle": "Boucle dans le graphe",

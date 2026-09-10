@@ -94,7 +94,7 @@
   "editor.rowName": "New row name",
   "editor.removePortion": "Remove portion",
   "editor.cycleBlocked": "That connection would create a loop.",
-  "editor.rowOrderHint": "Drag a row by its handle to reorder. Tap a step first to take its whole branch with it.",
+  "editor.rowOrderHint": "Drag any cell to move its rows. Tap a step first to take its whole branch with it.",
   "editor.orderRefused": "That order would tear {steps} apart. Tap the step to move its whole branch at once.",
 
   "warn.cycle": "Loop in the graph",
