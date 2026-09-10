@@ -3,121 +3,6415 @@
   "recipes": [
     {
       "version": 1,
-      "id": "carbonara",
-      "title": "Carbonara",
-      "lang": "en",
-      "servings": 4,
-      "prepMinutes": 20,
-      "note": "No cream. The sauce is egg, cheese and pasta water, emulsified off the heat.\nA metal bowl over the drained pot gives you the gentlest possible heat if it looks like scrambling.",
-      "tags": ["pasta", "eggs", "quick"],
-      "nodes": [
-        { "id": "i-pasta", "type": "ingredient", "inputs": [], "name": "spaghetti", "qty": 400, "unit": "g" },
-        { "id": "i-guanciale", "type": "ingredient", "inputs": [], "name": "guanciale, cubed", "qty": 150, "unit": "g" },
-        { "id": "i-eggs", "type": "ingredient", "inputs": [], "name": "egg yolks", "qty": 4 },
-        { "id": "i-pecorino", "type": "ingredient", "inputs": [], "name": "pecorino, grated", "qty": 80, "unit": "g" },
-        { "id": "i-pepper", "type": "ingredient", "inputs": [], "name": "black pepper" },
-        { "id": "a-render", "type": "action", "inputs": ["i-guanciale"], "label": "render slowly until crisp" },
-        { "id": "a-whisk", "type": "action", "inputs": ["i-eggs", "i-pecorino", "i-pepper"], "label": "whisk to a paste" },
-        { "id": "a-boil", "type": "action", "inputs": ["i-pasta"], "label": "boil in salted water, al dente" },
-        { "id": "a-toss", "type": "action", "inputs": ["a-boil", "a-render"], "label": "toss in the fat, off the heat" },
-        { "id": "a-emulsify", "type": "action", "inputs": ["a-toss", "a-whisk"], "label": "stir in, loosen with pasta water" }
-      ],
-      "rowOrder": []
-    },
-    {
-      "version": 1,
-      "id": "pizza-dough",
-      "title": "Pizza dough",
-      "lang": "en",
-      "servings": 4,
-      "prepMinutes": 25,
-      "note": "Makes four 250 g balls. Half goes in the freezer — take it out the night before.\nBaker's percentages: 65% water, 2% salt, 0.6% fresh yeast.",
-      "tags": ["dough", "bread", "make-ahead"],
-      "nodes": [
-        { "id": "i-flour", "type": "ingredient", "inputs": [], "name": "00 flour", "qty": 600, "unit": "g" },
-        { "id": "i-water", "type": "ingredient", "inputs": [], "name": "cold water", "qty": 390, "unit": "g" },
-        { "id": "i-salt", "type": "ingredient", "inputs": [], "name": "fine salt", "qty": 12, "unit": "g" },
-        { "id": "i-yeast", "type": "ingredient", "inputs": [], "name": "fresh yeast", "qty": 3.6, "unit": "g" },
-        { "id": "a-shaggy", "type": "action", "inputs": ["i-flour", "i-water"], "label": "mix to a shaggy mass" },
-        { "id": "w-autolyse", "type": "wait", "inputs": ["a-shaggy"], "minutes": 30, "label": "autolyse" },
-        { "id": "a-knead", "type": "action", "inputs": ["w-autolyse", "i-salt", "i-yeast"], "label": "knead 10 min, smooth" },
-        { "id": "w-bulk", "type": "wait", "inputs": ["a-knead"], "minutes": 240, "label": "bulk ferment, room temp" },
-        { "id": "a-ball", "type": "action", "inputs": ["w-bulk"], "label": "divide into 4, ball" },
-        { "id": "s-half", "type": "split", "inputs": ["a-ball"], "portions": [{ "percent": 50, "label": "" }, { "percent": 50, "label": "" }] },
-        { "id": "w-proof", "type": "wait", "inputs": ["s-half"], "minutes": 120, "label": "final proof, covered" },
-        { "id": "a-freeze", "type": "action", "inputs": ["s-half"], "label": "oil, bag and freeze" }
-      ],
-      "rowOrder": []
-    },
-    {
-      "version": 1,
-      "id": "pizza-margherita",
-      "title": "Pizza margherita",
-      "lang": "en",
-      "servings": 2,
+      "id": "crumble",
+      "title": "Crumble",
+      "lang": "fr",
+      "servings": 6,
       "prepMinutes": 15,
-      "note": "Hottest oven you own, a steel or stone preheated for a full hour.\nThe basil goes on after the bake or it turns black.",
-      "tags": ["pizza", "tomato", "cheese"],
+      "note": "Marmiton — Julia.\nLe beurre pas trop mou : c'est ce qui donne le sable plutôt qu'une pâte.\nPréférable dans des ramequins individuels.",
+      "tags": [
+        "dessert",
+        "fruits",
+        "four"
+      ],
       "nodes": [
-        { "id": "i-dough", "type": "ingredient", "inputs": [], "name": "pizza dough", "qty": 2, "unit": "balls", "ref": "pizza-dough" },
-        { "id": "i-tomato", "type": "ingredient", "inputs": [], "name": "San Marzano tomatoes", "qty": 400, "unit": "g" },
-        { "id": "i-mozz", "type": "ingredient", "inputs": [], "name": "fior di latte, torn", "qty": 250, "unit": "g" },
-        { "id": "i-basil", "type": "ingredient", "inputs": [], "name": "basil leaves" },
-        { "id": "i-oil", "type": "ingredient", "inputs": [], "name": "olive oil" },
-        { "id": "a-crush", "type": "action", "inputs": ["i-tomato"], "label": "crush by hand, salt" },
-        { "id": "a-stretch", "type": "action", "inputs": ["i-dough"], "label": "stretch to 30 cm" },
-        { "id": "a-top", "type": "action", "inputs": ["a-stretch", "a-crush", "i-mozz"], "label": "sauce, then cheese" },
-        { "id": "w-bake", "type": "wait", "inputs": ["a-top"], "minutes": 8, "label": "bake, max heat" },
-        { "id": "a-finish", "type": "action", "inputs": ["w-bake", "i-basil", "i-oil"], "label": "basil and oil, off the heat" }
+        {
+          "id": "i-beurre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "beurre pas trop mou, en petits morceaux",
+          "qty": 125,
+          "unit": "g"
+        },
+        {
+          "id": "i-farine",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "farine",
+          "qty": 125,
+          "unit": "g"
+        },
+        {
+          "id": "i-sucre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre",
+          "qty": 100,
+          "unit": "g"
+        },
+        {
+          "id": "i-fruits",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "prunes ou abricots",
+          "qty": 800,
+          "unit": "g"
+        },
+        {
+          "id": "i-vanille",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre vanillé"
+        },
+        {
+          "id": "a-sabler",
+          "type": "action",
+          "inputs": [
+            "i-beurre",
+            "i-farine"
+          ],
+          "label": "travailler pour former un sable"
+        },
+        {
+          "id": "a-sucrer",
+          "type": "action",
+          "inputs": [
+            "a-sabler",
+            "i-sucre"
+          ],
+          "label": "ajouter le sucre, mélanger"
+        },
+        {
+          "id": "a-couper",
+          "type": "action",
+          "inputs": [
+            "i-fruits"
+          ],
+          "label": "couper en 2, côté peau en bas"
+        },
+        {
+          "id": "a-saupoudrer",
+          "type": "action",
+          "inputs": [
+            "a-couper",
+            "i-vanille"
+          ],
+          "label": "saupoudrer si nécessaire"
+        },
+        {
+          "id": "a-monter",
+          "type": "action",
+          "inputs": [
+            "a-saupoudrer",
+            "a-sucrer"
+          ],
+          "label": "répartir le sable sur les fruits"
+        },
+        {
+          "id": "w-cuisson",
+          "type": "wait",
+          "inputs": [
+            "a-monter"
+          ],
+          "minutes": 35,
+          "label": "cuire à 180 °C jusqu'à ce que le dessus soit bien doré"
+        }
       ],
       "rowOrder": []
     },
     {
       "version": 1,
-      "id": "poulet-roti-citron",
-      "title": "Poulet rôti au citron",
+      "id": "bouscoutou",
+      "title": "Bouscoutou",
+      "lang": "fr",
+      "servings": 10,
+      "prepMinutes": 20,
+      "note": "⭐⭐⭐\nVerre = verre plastique, 180 ml.\nTester à la pique avant de sortir du four.",
+      "tags": [
+        "gâteau",
+        "œufs",
+        "orange"
+      ],
+      "nodes": [
+        {
+          "id": "i-blancs",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "blancs d'œufs",
+          "qty": 5
+        },
+        {
+          "id": "i-sucre-blancs",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre, pour les blancs",
+          "qty": 0.5,
+          "unit": "verre",
+          "altQty": 90,
+          "altUnit": "ml"
+        },
+        {
+          "id": "i-jaunes",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "jaunes d'œufs",
+          "qty": 5
+        },
+        {
+          "id": "i-sucre-jaunes",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre, pour les jaunes",
+          "qty": 1,
+          "unit": "verre",
+          "altQty": 180,
+          "altUnit": "ml"
+        },
+        {
+          "id": "i-huile",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "huile de canola",
+          "qty": 0.5,
+          "unit": "verre",
+          "altQty": 90,
+          "altUnit": "ml"
+        },
+        {
+          "id": "i-farine",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "farine tamisée",
+          "qty": 2.25,
+          "unit": "verres"
+        },
+        {
+          "id": "i-levure",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "levure chimique",
+          "qty": 1,
+          "unit": "sachet"
+        },
+        {
+          "id": "i-jus",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "jus d'orange frais",
+          "qty": 1,
+          "unit": "verre",
+          "altQty": 180,
+          "altUnit": "ml"
+        },
+        {
+          "id": "a-neige",
+          "type": "action",
+          "inputs": [
+            "i-blancs"
+          ],
+          "label": "monter en neige ferme"
+        },
+        {
+          "id": "a-blancs-sucre",
+          "type": "action",
+          "inputs": [
+            "a-neige",
+            "i-sucre-blancs"
+          ],
+          "label": "ajouter le sucre, mélanger"
+        },
+        {
+          "id": "a-blanchir",
+          "type": "action",
+          "inputs": [
+            "i-jaunes",
+            "i-sucre-jaunes"
+          ],
+          "label": "blanchir"
+        },
+        {
+          "id": "a-mousser",
+          "type": "action",
+          "inputs": [
+            "a-blanchir",
+            "i-huile"
+          ],
+          "label": "mélanger jusqu'à ce que ça mousse"
+        },
+        {
+          "id": "a-incorporer",
+          "type": "action",
+          "inputs": [
+            "a-mousser",
+            "a-blancs-sucre"
+          ],
+          "label": "incorporer les blancs dans les jaunes, à la spatule"
+        },
+        {
+          "id": "a-farine",
+          "type": "action",
+          "inputs": [
+            "a-incorporer",
+            "i-farine",
+            "i-levure",
+            "i-jus"
+          ],
+          "label": "mélanger doucement"
+        },
+        {
+          "id": "w-cuisson",
+          "type": "wait",
+          "inputs": [
+            "a-farine"
+          ],
+          "minutes": 45,
+          "label": "cuire à 170 °C jusqu'à doré"
+        }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "gateau-marbre-halavi",
+      "title": "Gâteau marbré halavi",
+      "lang": "fr",
+      "servings": 12,
+      "prepMinutes": 30,
+      "note": "Karin Goren.\nFouetter au Kenwood, extension K.\nRivion = petit lait. Shamenet metouka = crème fraîche liquide.",
+      "tags": [
+        "gâteau",
+        "chocolat",
+        "halavi"
+      ],
+      "nodes": [
+        {
+          "id": "i-beurre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "beurre mou",
+          "qty": 200,
+          "unit": "g"
+        },
+        {
+          "id": "i-sucre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre",
+          "qty": 300,
+          "unit": "g",
+          "altQty": 1.5,
+          "altUnit": "verre"
+        },
+        {
+          "id": "i-vanille",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "extrait de vanille",
+          "qty": 1,
+          "unit": "c.à.c"
+        },
+        {
+          "id": "i-oeufs",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "œufs",
+          "qty": 3
+        },
+        {
+          "id": "i-farine",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "farine",
+          "qty": 350,
+          "unit": "g",
+          "altQty": 2.5,
+          "altUnit": "verres"
+        },
+        {
+          "id": "i-levure",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "levure chimique",
+          "qty": 10,
+          "unit": "g",
+          "altQty": 2.5,
+          "altUnit": "c.à.c"
+        },
+        {
+          "id": "i-bicarbonate",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "bicarbonate de soude",
+          "qty": 0.5,
+          "unit": "c.à.c"
+        },
+        {
+          "id": "i-sel",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sel",
+          "qty": 0.5,
+          "unit": "c.à.c"
+        },
+        {
+          "id": "i-rivion",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "petit lait (rivion)",
+          "qty": 240,
+          "unit": "ml"
+        },
+        {
+          "id": "i-chocolat",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "chocolat noir",
+          "qty": 180,
+          "unit": "g"
+        },
+        {
+          "id": "i-nescafe",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "nescafé",
+          "qty": 1,
+          "unit": "c.à.s"
+        },
+        {
+          "id": "i-cacao",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "cacao",
+          "qty": 1,
+          "unit": "c.à.s"
+        },
+        {
+          "id": "i-creme",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "crème fraîche liquide",
+          "qty": 3,
+          "unit": "c.à.s"
+        },
+        {
+          "id": "a-cremer",
+          "type": "action",
+          "inputs": [
+            "i-beurre",
+            "i-sucre"
+          ],
+          "label": "fouetter à vitesse moyenne, consistance crémeuse"
+        },
+        {
+          "id": "a-oeufs",
+          "type": "action",
+          "inputs": [
+            "a-cremer",
+            "i-vanille",
+            "i-oeufs"
+          ],
+          "label": "vanille, puis les œufs un par un"
+        },
+        {
+          "id": "a-secs",
+          "type": "action",
+          "inputs": [
+            "i-farine",
+            "i-levure",
+            "i-bicarbonate",
+            "i-sel"
+          ],
+          "label": "tamiser ensemble"
+        },
+        {
+          "id": "s-secs",
+          "type": "split",
+          "inputs": [
+            "a-secs"
+          ],
+          "portions": [
+            {
+              "percent": 34,
+              "label": ""
+            },
+            {
+              "percent": 33,
+              "label": ""
+            },
+            {
+              "percent": 33,
+              "label": ""
+            }
+          ]
+        },
+        {
+          "id": "a-tiers1",
+          "type": "action",
+          "inputs": [
+            "a-oeufs",
+            "s-secs"
+          ],
+          "label": "incorporer ⅓ à vitesse faible, jusqu'à homogène"
+        },
+        {
+          "id": "a-tiers2",
+          "type": "action",
+          "inputs": [
+            "a-tiers1",
+            "s-secs"
+          ],
+          "label": "ajouter ⅓, mélanger"
+        },
+        {
+          "id": "a-rivion",
+          "type": "action",
+          "inputs": [
+            "a-tiers2",
+            "i-rivion"
+          ],
+          "label": "ajouter le petit lait"
+        },
+        {
+          "id": "a-tiers3",
+          "type": "action",
+          "inputs": [
+            "a-rivion",
+            "s-secs"
+          ],
+          "label": "ajouter le dernier ⅓ jusqu'à homogène"
+        },
+        {
+          "id": "a-chocolat",
+          "type": "action",
+          "inputs": [
+            "i-chocolat",
+            "i-nescafe",
+            "i-cacao",
+            "i-creme"
+          ],
+          "label": "faire fondre et mélanger"
+        },
+        {
+          "id": "s-pate",
+          "type": "split",
+          "inputs": [
+            "a-tiers3"
+          ],
+          "portions": [
+            {
+              "percent": 75,
+              "label": ""
+            },
+            {
+              "percent": 25,
+              "label": ""
+            }
+          ]
+        },
+        {
+          "id": "a-verser",
+          "type": "action",
+          "inputs": [
+            "s-pate",
+            "a-chocolat"
+          ],
+          "label": "pâte claire dans le moule, verser le chocolat"
+        },
+        {
+          "id": "a-recouvrir",
+          "type": "action",
+          "inputs": [
+            "a-verser",
+            "s-pate"
+          ],
+          "label": "recouvrir du reste de pâte claire"
+        },
+        {
+          "id": "a-marbrer",
+          "type": "action",
+          "inputs": [
+            "a-recouvrir"
+          ],
+          "label": "marbrer à la pointe du couteau"
+        },
+        {
+          "id": "w-cuisson",
+          "type": "wait",
+          "inputs": [
+            "a-marbrer"
+          ],
+          "minutes": 50,
+          "label": "cuire à 180 °C"
+        }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "barres-cereales-maison",
+      "title": "Barres de céréales maison",
+      "lang": "fr",
+      "servings": 12,
+      "prepMinutes": 20,
+      "note": "Tehila ⭐⭐⭐\nFlocons d'avoine (shibolet shual) épais si possible.\nOptions : pépites de chocolat, cranberries (חמוציות), amandes…\nHumidifier les mains pour façonner.",
+      "tags": [
+        "goûter",
+        "avoine",
+        "chocolat"
+      ],
+      "nodes": [
+        {
+          "id": "i-avoine",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "flocons d'avoine",
+          "qty": 2,
+          "unit": "verres"
+        },
+        {
+          "id": "i-farine",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "farine complète",
+          "qty": 2,
+          "unit": "c.à.s"
+        },
+        {
+          "id": "i-noix",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "noix en poudre",
+          "qty": 0.67,
+          "unit": "verre"
+        },
+        {
+          "id": "i-sesame",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sésame",
+          "qty": 4,
+          "unit": "c.à.s"
+        },
+        {
+          "id": "i-coco",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "coco râpée",
+          "qty": 4,
+          "unit": "c.à.s"
+        },
+        {
+          "id": "i-amandes",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "amandes hachées",
+          "qty": 0.67,
+          "unit": "verre"
+        },
+        {
+          "id": "i-chocolat",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "chocolat noir haché",
+          "qty": 10,
+          "unit": "cubes"
+        },
+        {
+          "id": "i-cannelle",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "cannelle",
+          "qty": 1,
+          "unit": "c.à.c"
+        },
+        {
+          "id": "i-sucre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre",
+          "qty": 4,
+          "unit": "c.à.s"
+        },
+        {
+          "id": "i-oeufs",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "œufs",
+          "qty": 2
+        },
+        {
+          "id": "i-tehina",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "téhina golmit",
+          "qty": 4,
+          "unit": "c.à.s"
+        },
+        {
+          "id": "i-huile",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "huile de canola",
+          "qty": 0.5,
+          "unit": "verre"
+        },
+        {
+          "id": "i-nappage",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "chocolat fondu, pour napper"
+        },
+        {
+          "id": "a-oeufs-sucre",
+          "type": "action",
+          "inputs": [
+            "i-oeufs",
+            "i-sucre"
+          ],
+          "label": "battre"
+        },
+        {
+          "id": "a-huile",
+          "type": "action",
+          "inputs": [
+            "a-oeufs-sucre",
+            "i-huile"
+          ],
+          "label": "ajouter l'huile, mélanger"
+        },
+        {
+          "id": "a-tehina",
+          "type": "action",
+          "inputs": [
+            "a-huile",
+            "i-tehina"
+          ],
+          "label": "ajouter la téhina, mélanger"
+        },
+        {
+          "id": "a-secs",
+          "type": "action",
+          "inputs": [
+            "i-avoine",
+            "i-farine",
+            "i-noix",
+            "i-sesame",
+            "i-coco",
+            "i-amandes",
+            "i-chocolat",
+            "i-cannelle"
+          ],
+          "label": "mélanger les secs"
+        },
+        {
+          "id": "a-tout",
+          "type": "action",
+          "inputs": [
+            "a-tehina",
+            "a-secs"
+          ],
+          "label": "mélanger le tout"
+        },
+        {
+          "id": "a-former",
+          "type": "action",
+          "inputs": [
+            "a-tout"
+          ],
+          "label": "mains humides, former barres ou boules aplaties"
+        },
+        {
+          "id": "w-cuisson",
+          "type": "wait",
+          "inputs": [
+            "a-former"
+          ],
+          "minutes": 18,
+          "label": "15–20 min à 180 °C, bords dorés"
+        },
+        {
+          "id": "a-refroidir",
+          "type": "action",
+          "inputs": [
+            "w-cuisson"
+          ],
+          "label": "laisser refroidir"
+        },
+        {
+          "id": "a-napper",
+          "type": "action",
+          "inputs": [
+            "a-refroidir",
+            "i-nappage"
+          ],
+          "label": "napper de chocolat fondu"
+        }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "super-donut-tehila",
+      "title": "Super donut de Tehila",
+      "lang": "fr",
+      "servings": 10,
+      "prepMinutes": 45,
+      "note": "⭐⭐⭐\nLe passage au frais est optionnel, mais il tient la pâte au découpage.\nAnneaux de 9 cm de diamètre externe, 2 cm au centre — un bouchon fait l'affaire.",
+      "tags": [
+        "beignets",
+        "friture",
+        "levée"
+      ],
+      "nodes": [
+        {
+          "id": "i-farine",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "farine",
+          "qty": 280,
+          "unit": "g"
+        },
+        {
+          "id": "i-sucre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre",
+          "qty": 30,
+          "unit": "g"
+        },
+        {
+          "id": "i-levure",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "levure sèche",
+          "qty": 1.5,
+          "unit": "c.à.c"
+        },
+        {
+          "id": "i-sel",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sel rase",
+          "qty": 1,
+          "unit": "c.à.c"
+        },
+        {
+          "id": "i-lait",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "lait tiède",
+          "qty": 60,
+          "unit": "ml"
+        },
+        {
+          "id": "i-eau",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "eau tiède",
+          "qty": 60,
+          "unit": "ml"
+        },
+        {
+          "id": "i-oeuf",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "œuf",
+          "qty": 1
+        },
+        {
+          "id": "i-creme",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "crème épaisse (rich)",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "id": "i-vanille",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "extrait de vanille",
+          "qty": 0.5,
+          "unit": "c.à.c"
+        },
+        {
+          "id": "i-farine2",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "farine, en plus au pétrissage",
+          "qty": 70,
+          "unit": "g"
+        },
+        {
+          "id": "i-beurre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "beurre mou",
+          "qty": 47,
+          "unit": "g"
+        },
+        {
+          "id": "i-bain",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "huile de friture"
+        },
+        {
+          "id": "i-g-chocolat",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "chocolat noir, glaçage",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "id": "i-g-creme",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "crème liquide, glaçage",
+          "qty": 90,
+          "unit": "g"
+        },
+        {
+          "id": "i-g-sucre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre, glaçage",
+          "qty": 30,
+          "unit": "g"
+        },
+        {
+          "id": "i-g-beurre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "beurre mou, glaçage",
+          "qty": 25,
+          "unit": "g"
+        },
+        {
+          "id": "i-g-vanille",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "extrait de vanille, glaçage"
+        },
+        {
+          "id": "i-g-sel",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sel, 1 pincée, glaçage"
+        },
+        {
+          "id": "a-secs",
+          "type": "action",
+          "inputs": [
+            "i-farine",
+            "i-sucre",
+            "i-levure",
+            "i-sel"
+          ],
+          "label": "mélanger les secs"
+        },
+        {
+          "id": "a-liquides",
+          "type": "action",
+          "inputs": [
+            "a-secs",
+            "i-lait",
+            "i-eau",
+            "i-oeuf",
+            "i-creme",
+            "i-vanille"
+          ],
+          "label": "ajouter les liquides tièdes et l'œuf"
+        },
+        {
+          "id": "a-petrir",
+          "type": "action",
+          "inputs": [
+            "a-liquides",
+            "i-farine2"
+          ],
+          "label": "pétrir, incorporer la farine restante"
+        },
+        {
+          "id": "a-beurre",
+          "type": "action",
+          "inputs": [
+            "a-petrir",
+            "i-beurre"
+          ],
+          "label": "beurre peu à peu, pâte douce, lisse, légèrement collante"
+        },
+        {
+          "id": "w-pousse",
+          "type": "wait",
+          "inputs": [
+            "a-beurre"
+          ],
+          "minutes": 120,
+          "label": "lever en saladier huilé et couvert, jusqu'au double"
+        },
+        {
+          "id": "a-degazer",
+          "type": "action",
+          "inputs": [
+            "w-pousse"
+          ],
+          "label": "dégazer"
+        },
+        {
+          "id": "w-frais",
+          "type": "wait",
+          "inputs": [
+            "a-degazer"
+          ],
+          "minutes": 120,
+          "label": "au frais, 2 h minimum ou toute la nuit"
+        },
+        {
+          "id": "a-etaler",
+          "type": "action",
+          "inputs": [
+            "w-frais"
+          ],
+          "label": "étaler sur 8–9 mm, sans dégazer"
+        },
+        {
+          "id": "a-decouper",
+          "type": "action",
+          "inputs": [
+            "a-etaler"
+          ],
+          "label": "découper des anneaux"
+        },
+        {
+          "id": "w-pousse2",
+          "type": "wait",
+          "inputs": [
+            "a-decouper"
+          ],
+          "minutes": 20,
+          "label": "sur plateau huilé, couvert"
+        },
+        {
+          "id": "a-frire",
+          "type": "action",
+          "inputs": [
+            "w-pousse2",
+            "i-bain"
+          ],
+          "label": "frire à 175 °C, ~1 min par face"
+        },
+        {
+          "id": "a-glacage",
+          "type": "action",
+          "inputs": [
+            "i-g-chocolat",
+            "i-g-creme",
+            "i-g-sucre",
+            "i-g-beurre",
+            "i-g-vanille",
+            "i-g-sel"
+          ],
+          "label": "faire fondre et mélanger le glaçage"
+        },
+        {
+          "id": "a-glacer",
+          "type": "action",
+          "inputs": [
+            "a-frire",
+            "a-glacage"
+          ],
+          "label": "plonger les donuts, décorer à volonté"
+        }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "creme-patissiere",
+      "title": "Crème pâtissière",
+      "lang": "fr",
+      "servings": 8,
+      "prepMinutes": 20,
+      "note": "Daniel.\n4 jaunes, ou 2 jaunes + 2 œufs entiers.\nUn demi-verre plastique de lait chaud (90 ml) détend l'appareil avant de le reverser.",
+      "tags": [
+        "crème",
+        "base",
+        "parve"
+      ],
+      "nodes": [
+        {
+          "id": "i-lait",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "lait de soja vanille",
+          "qty": 1,
+          "unit": "L"
+        },
+        {
+          "id": "i-sucre1",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre, pour le lait",
+          "qty": 70,
+          "unit": "g"
+        },
+        {
+          "id": "i-oeufs",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "jaunes d'œufs",
+          "qty": 4
+        },
+        {
+          "id": "i-sucre2",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre",
+          "qty": 150,
+          "unit": "g"
+        },
+        {
+          "id": "i-farine",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "farine",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "id": "i-fecule",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "fécule de maïs",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "id": "i-rhum",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "rhum, 1 bouchon (optionnel)"
+        },
+        {
+          "id": "a-chauffer",
+          "type": "action",
+          "inputs": [
+            "i-lait",
+            "i-sucre1"
+          ],
+          "label": "chauffer en casserole"
+        },
+        {
+          "id": "s-lait",
+          "type": "split",
+          "inputs": [
+            "a-chauffer"
+          ],
+          "portions": [
+            {
+              "percent": 91,
+              "label": ""
+            },
+            {
+              "percent": 9,
+              "label": ""
+            }
+          ]
+        },
+        {
+          "id": "a-fouetter",
+          "type": "action",
+          "inputs": [
+            "i-oeufs",
+            "i-sucre2",
+            "i-farine",
+            "i-fecule",
+            "s-lait"
+          ],
+          "label": "fouetter au mixeur avec un peu de lait chaud"
+        },
+        {
+          "id": "a-cuire",
+          "type": "action",
+          "inputs": [
+            "s-lait",
+            "a-fouetter"
+          ],
+          "label": "reverser en casserole, fouetter 3 min jusqu'à épaississement"
+        },
+        {
+          "id": "a-rhum",
+          "type": "action",
+          "inputs": [
+            "a-cuire",
+            "i-rhum"
+          ],
+          "label": "parfumer, optionnel"
+        }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "gateau-pommes-pepites",
+      "title": "Gâteau pommes et pépites de chocolat",
+      "lang": "fr",
+      "servings": 10,
+      "prepMinutes": 20,
+      "note": "Naomie.\nOn peut faire fondre du chocolat au-dessus après cuisson.",
+      "tags": [
+        "gâteau",
+        "pommes",
+        "chocolat"
+      ],
+      "nodes": [
+        {
+          "id": "i-pommes",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "pommes",
+          "qty": 4
+        },
+        {
+          "id": "i-sucre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre",
+          "qty": 1,
+          "unit": "verre"
+        },
+        {
+          "id": "i-huile",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "huile",
+          "qty": 0.5,
+          "unit": "verre"
+        },
+        {
+          "id": "i-farine",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "farine",
+          "qty": 1.5,
+          "unit": "verre"
+        },
+        {
+          "id": "i-levure",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "levure chimique",
+          "qty": 1,
+          "unit": "sachet"
+        },
+        {
+          "id": "i-pepites",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "pépites de chocolat"
+        },
+        {
+          "id": "i-coco",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "coco râpée",
+          "qty": 3,
+          "unit": "c.à.s"
+        },
+        {
+          "id": "i-cannelle",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "cannelle",
+          "qty": 0.5,
+          "unit": "c.à.c"
+        },
+        {
+          "id": "i-oeufs",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "œufs",
+          "qty": 3
+        },
+        {
+          "id": "i-noix",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "noix hachées"
+        },
+        {
+          "id": "i-nappage",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "chocolat à fondre (optionnel)"
+        },
+        {
+          "id": "a-des",
+          "type": "action",
+          "inputs": [
+            "i-pommes"
+          ],
+          "label": "couper en dés"
+        },
+        {
+          "id": "a-melanger",
+          "type": "action",
+          "inputs": [
+            "a-des",
+            "i-sucre",
+            "i-huile",
+            "i-farine",
+            "i-levure",
+            "i-pepites",
+            "i-coco",
+            "i-cannelle",
+            "i-oeufs",
+            "i-noix"
+          ],
+          "label": "mélanger"
+        },
+        {
+          "id": "w-cuisson",
+          "type": "wait",
+          "inputs": [
+            "a-melanger"
+          ],
+          "minutes": 40,
+          "label": "cuire à 170 °C"
+        },
+        {
+          "id": "a-napper",
+          "type": "action",
+          "inputs": [
+            "w-cuisson",
+            "i-nappage"
+          ],
+          "label": "chocolat fondu par-dessus, optionnel"
+        }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "bouscoutou-florence",
+      "title": "Bouscoutou de folie",
+      "lang": "fr",
+      "servings": 10,
+      "prepMinutes": 25,
+      "note": "Florence ⭐⭐⭐\nVerre en plastique.\nMélanger à chaque fois qu'on ajoute un ingrédient — c'est tout le secret.\nLe demi-citron complété d'eau jusqu'à un demi-verre passe 15 secondes au micro-ondes.",
+      "tags": [
+        "gâteau",
+        "citron",
+        "œufs"
+      ],
+      "nodes": [
+        {
+          "id": "i-jaunes",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "jaunes de gros œufs",
+          "qty": 6
+        },
+        {
+          "id": "i-blancs",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "blancs de gros œufs",
+          "qty": 6
+        },
+        {
+          "id": "i-sucre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre",
+          "qty": 1,
+          "unit": "verre"
+        },
+        {
+          "id": "i-farine",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "farine tamisée",
+          "qty": 2,
+          "unit": "verres"
+        },
+        {
+          "id": "i-levure",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "levure chimique",
+          "qty": 1,
+          "unit": "sachet"
+        },
+        {
+          "id": "i-vanille",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre vanillé",
+          "qty": 1,
+          "unit": "sachet"
+        },
+        {
+          "id": "i-citron",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "citron",
+          "qty": 0.5
+        },
+        {
+          "id": "i-eau",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "eau, pour compléter à un demi-verre"
+        },
+        {
+          "id": "i-amande",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "amande amère, quelques gouttes"
+        },
+        {
+          "id": "i-huile",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "huile",
+          "qty": 2,
+          "unit": "c.à.s"
+        },
+        {
+          "id": "s-sucre",
+          "type": "split",
+          "inputs": [
+            "i-sucre"
+          ],
+          "portions": [
+            {
+              "percent": 50,
+              "label": ""
+            },
+            {
+              "percent": 50,
+              "label": ""
+            }
+          ]
+        },
+        {
+          "id": "s-farine",
+          "type": "split",
+          "inputs": [
+            "i-farine"
+          ],
+          "portions": [
+            {
+              "percent": 50,
+              "label": ""
+            },
+            {
+              "percent": 50,
+              "label": ""
+            }
+          ]
+        },
+        {
+          "id": "a-citron",
+          "type": "action",
+          "inputs": [
+            "i-citron",
+            "i-eau"
+          ],
+          "label": "presser, compléter à un demi-verre, 15 s au micro-ondes"
+        },
+        {
+          "id": "a-jaunes",
+          "type": "action",
+          "inputs": [
+            "i-jaunes",
+            "s-sucre"
+          ],
+          "label": "mélanger avec la moitié du sucre"
+        },
+        {
+          "id": "a-ajouts",
+          "type": "action",
+          "inputs": [
+            "a-jaunes",
+            "i-vanille",
+            "s-farine",
+            "i-huile",
+            "i-levure",
+            "a-citron",
+            "i-amande"
+          ],
+          "label": "un ingrédient à la fois, mélanger à chaque fois"
+        },
+        {
+          "id": "a-farine2",
+          "type": "action",
+          "inputs": [
+            "a-ajouts",
+            "s-farine"
+          ],
+          "label": "ajouter le second verre de farine"
+        },
+        {
+          "id": "a-blancs",
+          "type": "action",
+          "inputs": [
+            "i-blancs",
+            "s-sucre"
+          ],
+          "label": "monter avec l'autre moitié du sucre"
+        },
+        {
+          "id": "a-melange",
+          "type": "action",
+          "inputs": [
+            "a-farine2",
+            "a-blancs"
+          ],
+          "label": "mélanger les jaunes et les blancs, doucement"
+        },
+        {
+          "id": "w-cuisson",
+          "type": "wait",
+          "inputs": [
+            "a-melange"
+          ],
+          "minutes": 60,
+          "label": "cuire 1 h à 150 °C"
+        }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "pancakes-tehila",
+      "title": "Pancakes",
+      "lang": "fr",
+      "servings": 8,
+      "prepMinutes": 15,
+      "note": "Tehila.\nFaire un puits dans les secs avant de verser les liquides.\nMélanger à la main après les 2 premiers verres de lait, puis ajouter le reste.",
+      "tags": [
+        "petit-déjeuner",
+        "poêle",
+        "lait"
+      ],
+      "nodes": [
+        {
+          "id": "i-farine",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "farine",
+          "qty": 5,
+          "unit": "verres"
+        },
+        {
+          "id": "i-levure",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "levure chimique",
+          "qty": 4,
+          "unit": "sachets"
+        },
+        {
+          "id": "i-bicarbonate",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "bicarbonate",
+          "qty": 3,
+          "unit": "c.à.c"
+        },
+        {
+          "id": "i-sucre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre",
+          "qty": 1,
+          "unit": "verre"
+        },
+        {
+          "id": "i-sel",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sel, 1 pincée"
+        },
+        {
+          "id": "i-beurre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "beurre fondu",
+          "qty": 100,
+          "unit": "g"
+        },
+        {
+          "id": "i-oeufs",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "œufs battus",
+          "qty": 5
+        },
+        {
+          "id": "i-vanille",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "extrait de vanille",
+          "qty": 2,
+          "unit": "c.à.c"
+        },
+        {
+          "id": "i-lait",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "lait",
+          "qty": 3.5,
+          "unit": "verres"
+        },
+        {
+          "id": "i-beurre-poele",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "beurre, pour la poêle"
+        },
+        {
+          "id": "a-secs",
+          "type": "action",
+          "inputs": [
+            "i-farine",
+            "i-levure",
+            "i-bicarbonate",
+            "i-sucre",
+            "i-sel",
+            "i-beurre"
+          ],
+          "label": "mélanger et faire un puits"
+        },
+        {
+          "id": "s-lait",
+          "type": "split",
+          "inputs": [
+            "i-lait"
+          ],
+          "portions": [
+            {
+              "percent": 57,
+              "label": ""
+            },
+            {
+              "percent": 43,
+              "label": ""
+            }
+          ]
+        },
+        {
+          "id": "a-puits",
+          "type": "action",
+          "inputs": [
+            "a-secs",
+            "i-oeufs",
+            "i-vanille",
+            "s-lait"
+          ],
+          "label": "verser dans le puits, mélanger à la main"
+        },
+        {
+          "id": "a-reste",
+          "type": "action",
+          "inputs": [
+            "a-puits",
+            "s-lait"
+          ],
+          "label": "ajouter le reste du lait"
+        },
+        {
+          "id": "a-cuire",
+          "type": "action",
+          "inputs": [
+            "a-reste",
+            "i-beurre-poele"
+          ],
+          "label": "cuire à la poêle, des deux côtés"
+        }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "croquants-amandes",
+      "title": "Croquants aux amandes",
+      "lang": "fr",
+      "servings": 8,
+      "prepMinutes": 25,
+      "note": "Juste un kiff.\nPréchauffer le four à 210 °C.\nLa fleur d'oranger Mazar est optionnelle.",
+      "tags": [
+        "biscuits",
+        "amandes",
+        "orange"
+      ],
+      "nodes": [
+        {
+          "id": "i-farine",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "farine",
+          "qty": 300,
+          "unit": "g"
+        },
+        {
+          "id": "i-sucre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre en poudre",
+          "qty": 150,
+          "unit": "g"
+        },
+        {
+          "id": "i-vanille",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre vanillé",
+          "qty": 1,
+          "unit": "sachet"
+        },
+        {
+          "id": "i-amandes",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "amandes",
+          "qty": 100,
+          "unit": "g"
+        },
+        {
+          "id": "i-huile",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "huile",
+          "qty": 10,
+          "unit": "cl"
+        },
+        {
+          "id": "i-mazar",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "fleur d'oranger Mazar (optionnel)",
+          "qty": 10,
+          "unit": "cl"
+        },
+        {
+          "id": "i-levure",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "levure chimique",
+          "qty": 1,
+          "unit": "sachet"
+        },
+        {
+          "id": "i-zeste",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "zeste d'orange"
+        },
+        {
+          "id": "i-oeufs",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "œufs",
+          "qty": 2
+        },
+        {
+          "id": "a-blanchir",
+          "type": "action",
+          "inputs": [
+            "i-oeufs",
+            "i-sucre",
+            "i-vanille"
+          ],
+          "label": "blanchir"
+        },
+        {
+          "id": "a-huile",
+          "type": "action",
+          "inputs": [
+            "a-blanchir",
+            "i-huile",
+            "i-mazar",
+            "i-levure",
+            "i-zeste"
+          ],
+          "label": "ajouter et mélanger"
+        },
+        {
+          "id": "a-farine",
+          "type": "action",
+          "inputs": [
+            "a-huile",
+            "i-farine"
+          ],
+          "label": "farine petit à petit, jusqu'à pouvoir former un boudin"
+        },
+        {
+          "id": "a-amandes",
+          "type": "action",
+          "inputs": [
+            "a-farine",
+            "i-amandes"
+          ],
+          "label": "incorporer les amandes"
+        },
+        {
+          "id": "a-boudins",
+          "type": "action",
+          "inputs": [
+            "a-amandes"
+          ],
+          "label": "mains huilées, former 2 boudins"
+        },
+        {
+          "id": "w-cuisson",
+          "type": "wait",
+          "inputs": [
+            "a-boudins"
+          ],
+          "minutes": 10,
+          "label": "10 min à 210 °C, couleur beige jaune"
+        },
+        {
+          "id": "a-trancher",
+          "type": "action",
+          "inputs": [
+            "w-cuisson"
+          ],
+          "label": "laisser refroidir, couper en tranches"
+        },
+        {
+          "id": "w-cuisson2",
+          "type": "wait",
+          "inputs": [
+            "a-trancher"
+          ],
+          "minutes": 10,
+          "label": "repasser au four de chaque côté"
+        }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "cakes-mme-sayada",
+      "title": "Cakes de Mme Sayada",
+      "lang": "fr",
+      "servings": 20,
+      "prepMinutes": 25,
+      "note": "⭐⭐⭐\nBatteur en K.\nCakes d'environ 12 cm de long sur 3 cm de large.",
+      "tags": [
+        "biscuits",
+        "parve",
+        "four"
+      ],
+      "nodes": [
+        {
+          "id": "i-farine",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "farine",
+          "qty": 1,
+          "unit": "kg"
+        },
+        {
+          "id": "i-sucre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre",
+          "qty": 250,
+          "unit": "g"
+        },
+        {
+          "id": "i-huile",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "huile",
+          "qty": 0.25,
+          "unit": "verre"
+        },
+        {
+          "id": "i-oeufs",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "œufs",
+          "qty": 6
+        },
+        {
+          "id": "i-levure",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "levure chimique",
+          "qty": 2,
+          "unit": "sachets"
+        },
+        {
+          "id": "i-vanille",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre vanillé",
+          "qty": 2,
+          "unit": "sachets"
+        },
+        {
+          "id": "a-battre",
+          "type": "action",
+          "inputs": [
+            "i-oeufs",
+            "i-sucre"
+          ],
+          "label": "battre jusqu'à ce que le volume double"
+        },
+        {
+          "id": "a-huile",
+          "type": "action",
+          "inputs": [
+            "a-battre",
+            "i-huile"
+          ],
+          "label": "battre jusqu'à une mousse jaunâtre"
+        },
+        {
+          "id": "a-farine",
+          "type": "action",
+          "inputs": [
+            "a-huile",
+            "i-levure",
+            "i-vanille",
+            "i-farine"
+          ],
+          "label": "mélanger au batteur K jusqu'à pâte molle"
+        },
+        {
+          "id": "a-former",
+          "type": "action",
+          "inputs": [
+            "a-farine"
+          ],
+          "label": "former les cakes"
+        },
+        {
+          "id": "w-cuisson",
+          "type": "wait",
+          "inputs": [
+            "a-former"
+          ],
+          "minutes": 20,
+          "label": "cuire à 180 °C jusqu'à doré"
+        }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "crepes-pessah",
+      "title": "Crêpes de Pessah",
+      "lang": "fr",
+      "servings": 8,
+      "prepMinutes": 15,
+      "note": "Sabine.\nSans farine : fécule de pomme de terre et fécule de maïs.",
+      "tags": [
+        "crêpes",
+        "pessah",
+        "poêle"
+      ],
+      "nodes": [
+        {
+          "id": "i-sucre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre",
+          "qty": 0.5,
+          "unit": "verre"
+        },
+        {
+          "id": "i-fecule-pdt",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "fécule de pomme de terre",
+          "qty": 175,
+          "unit": "g"
+        },
+        {
+          "id": "i-fecule-mais",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "fécule de maïs",
+          "qty": 175,
+          "unit": "g"
+        },
+        {
+          "id": "i-levure",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "levure chimique",
+          "qty": 2,
+          "unit": "sachets"
+        },
+        {
+          "id": "i-beurre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "beurre fondu",
+          "qty": 100,
+          "unit": "g"
+        },
+        {
+          "id": "i-oeufs",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "œufs",
+          "qty": 8
+        },
+        {
+          "id": "i-sel",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sel, 1 pincée"
+        },
+        {
+          "id": "i-lait",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "lait",
+          "qty": 1,
+          "unit": "L"
+        },
+        {
+          "id": "a-mixer",
+          "type": "action",
+          "inputs": [
+            "i-sucre",
+            "i-fecule-pdt",
+            "i-fecule-mais",
+            "i-levure",
+            "i-beurre",
+            "i-oeufs",
+            "i-sel",
+            "i-lait"
+          ],
+          "label": "mixer pour éliminer les grumeaux"
+        },
+        {
+          "id": "a-cuire",
+          "type": "action",
+          "inputs": [
+            "a-mixer"
+          ],
+          "label": "cuire à la poêle"
+        }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "macarons-inratables",
+      "title": "Macarons inratables",
+      "lang": "fr",
+      "servings": 30,
+      "prepMinutes": 40,
+      "note": "Le sucre en 2 fois, c'est ce qui fixe la meringue.\nLaisser croûter avant d'enfourner.",
+      "tags": [
+        "macarons",
+        "amandes",
+        "meringue"
+      ],
+      "nodes": [
+        {
+          "id": "i-blancs",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "blancs d'œufs",
+          "qty": 140,
+          "unit": "g"
+        },
+        {
+          "id": "i-sucre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre",
+          "qty": 90,
+          "unit": "g"
+        },
+        {
+          "id": "i-amandes",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "amandes en poudre",
+          "qty": 160,
+          "unit": "g"
+        },
+        {
+          "id": "i-glace",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre glace",
+          "qty": 160,
+          "unit": "g"
+        },
+        {
+          "id": "a-monter",
+          "type": "action",
+          "inputs": [
+            "i-blancs"
+          ],
+          "label": "monter au robot"
+        },
+        {
+          "id": "a-meringue",
+          "type": "action",
+          "inputs": [
+            "a-monter",
+            "i-sucre"
+          ],
+          "label": "ajouter le sucre en 2 fois, fixer la meringue"
+        },
+        {
+          "id": "a-tamiser",
+          "type": "action",
+          "inputs": [
+            "i-amandes",
+            "i-glace"
+          ],
+          "label": "tamiser ensemble"
+        },
+        {
+          "id": "a-macaroner",
+          "type": "action",
+          "inputs": [
+            "a-meringue",
+            "a-tamiser"
+          ],
+          "label": "macaroner délicatement"
+        },
+        {
+          "id": "a-pocher",
+          "type": "action",
+          "inputs": [
+            "a-macaroner"
+          ],
+          "label": "pocher"
+        },
+        {
+          "id": "w-crouter",
+          "type": "wait",
+          "inputs": [
+            "a-pocher"
+          ],
+          "minutes": 30,
+          "label": "laisser croûter"
+        },
+        {
+          "id": "w-cuisson",
+          "type": "wait",
+          "inputs": [
+            "w-crouter"
+          ],
+          "minutes": 13,
+          "label": "12–14 min à 160 °C"
+        }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "financiers-amandes",
+      "title": "Financiers aux amandes",
+      "lang": "fr",
+      "servings": 12,
+      "prepMinutes": 15,
+      "note": "Audrey.\n⚠️ Note de transcription / doute : la méthode originale comporte une note confuse « jaunes et sucre », biffée au profit des blancs montés en neige.",
+      "tags": [
+        "amandes",
+        "beurre",
+        "four"
+      ],
+      "nodes": [
+        {
+          "id": "i-beurre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "beurre fondu",
+          "qty": 75,
+          "unit": "g"
+        },
+        {
+          "id": "i-sucre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre",
+          "qty": 75,
+          "unit": "g"
+        },
+        {
+          "id": "i-fecule",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "fécule",
+          "qty": 20,
+          "unit": "g"
+        },
+        {
+          "id": "i-amandes",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "poudre d'amandes",
+          "qty": 125,
+          "unit": "g"
+        },
+        {
+          "id": "i-extrait",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "extrait d'amande amère"
+        },
+        {
+          "id": "i-blancs",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "blancs d'œufs",
+          "qty": 4
+        },
+        {
+          "id": "a-monter",
+          "type": "action",
+          "inputs": [
+            "i-blancs"
+          ],
+          "label": "monter en neige"
+        },
+        {
+          "id": "a-secs",
+          "type": "action",
+          "inputs": [
+            "i-sucre",
+            "i-fecule",
+            "i-amandes"
+          ],
+          "label": "mélanger les secs"
+        },
+        {
+          "id": "a-beurre",
+          "type": "action",
+          "inputs": [
+            "a-secs",
+            "i-beurre",
+            "i-extrait"
+          ],
+          "label": "ajouter le beurre fondu et l'extrait"
+        },
+        {
+          "id": "a-incorporer",
+          "type": "action",
+          "inputs": [
+            "a-beurre",
+            "a-monter"
+          ],
+          "label": "incorporer délicatement"
+        },
+        {
+          "id": "w-cuisson",
+          "type": "wait",
+          "inputs": [
+            "a-incorporer"
+          ],
+          "minutes": 10,
+          "label": "10 min à 180 °C"
+        }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "sables-beurre",
+      "title": "Sablés au beurre",
+      "lang": "fr",
+      "servings": 24,
+      "prepMinutes": 20,
+      "note": "Naomie.\nBeurre froid, et repos au frigo avant d'étaler.",
+      "tags": [
+        "biscuits",
+        "beurre",
+        "frigo"
+      ],
+      "nodes": [
+        {
+          "id": "i-beurre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "beurre froid",
+          "qty": 200,
+          "unit": "g"
+        },
+        {
+          "id": "i-sucre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre",
+          "qty": 180,
+          "unit": "g"
+        },
+        {
+          "id": "i-glace",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre glace",
+          "qty": 40,
+          "unit": "g"
+        },
+        {
+          "id": "i-vanille",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre vanillé",
+          "qty": 1,
+          "unit": "sachet"
+        },
+        {
+          "id": "i-oeuf",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "œuf",
+          "qty": 1
+        },
+        {
+          "id": "i-jaune",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "jaune d'œuf",
+          "qty": 1
+        },
+        {
+          "id": "i-farine",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "farine",
+          "qty": 320,
+          "unit": "g"
+        },
+        {
+          "id": "a-sabler",
+          "type": "action",
+          "inputs": [
+            "i-beurre",
+            "i-sucre",
+            "i-glace",
+            "i-vanille",
+            "i-oeuf",
+            "i-jaune",
+            "i-farine"
+          ],
+          "label": "sabler au robot"
+        },
+        {
+          "id": "w-repos",
+          "type": "wait",
+          "inputs": [
+            "a-sabler"
+          ],
+          "minutes": 180,
+          "label": "repos au frigo"
+        },
+        {
+          "id": "a-etaler",
+          "type": "action",
+          "inputs": [
+            "w-repos"
+          ],
+          "label": "étaler et découper"
+        },
+        {
+          "id": "w-cuisson",
+          "type": "wait",
+          "inputs": [
+            "a-etaler"
+          ],
+          "minutes": 10,
+          "label": "10 min à 180 °C"
+        }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "biscuits-noix-coco",
+      "title": "Biscuits noix de coco",
+      "lang": "fr",
+      "servings": 20,
+      "prepMinutes": 30,
+      "note": "Brown.\nCuire sans dorer : ils doivent rester clairs.\nDeux biscuits soudés à la confiture, les bords roulés dans la coco.",
+      "tags": [
+        "biscuits",
+        "coco",
+        "confiture"
+      ],
+      "nodes": [
+        {
+          "id": "i-oeufs",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "œufs",
+          "qty": 3
+        },
+        {
+          "id": "i-sucre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre",
+          "qty": 100,
+          "unit": "g"
+        },
+        {
+          "id": "i-maizena",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "Maïzena",
+          "qty": 50,
+          "unit": "g"
+        },
+        {
+          "id": "i-coco",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "coco râpée",
+          "qty": 30,
+          "unit": "g"
+        },
+        {
+          "id": "i-vanille",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre vanillé",
+          "qty": 1,
+          "unit": "sachet"
+        },
+        {
+          "id": "i-levure",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "levure chimique",
+          "qty": 1,
+          "unit": "sachet"
+        },
+        {
+          "id": "i-huile",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "huile",
+          "qty": 50,
+          "unit": "ml"
+        },
+        {
+          "id": "i-farine",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "farine",
+          "qty": 335,
+          "unit": "g"
+        },
+        {
+          "id": "i-confiture",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "confiture"
+        },
+        {
+          "id": "i-coco-bords",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "coco râpée, pour les bords"
+        },
+        {
+          "id": "a-pate",
+          "type": "action",
+          "inputs": [
+            "i-oeufs",
+            "i-sucre",
+            "i-maizena",
+            "i-coco",
+            "i-vanille",
+            "i-levure",
+            "i-huile",
+            "i-farine"
+          ],
+          "label": "mélanger en pâte"
+        },
+        {
+          "id": "a-etaler",
+          "type": "action",
+          "inputs": [
+            "a-pate"
+          ],
+          "label": "étaler et découper"
+        },
+        {
+          "id": "w-cuisson",
+          "type": "wait",
+          "inputs": [
+            "a-etaler"
+          ],
+          "minutes": 12,
+          "label": "cuire sans dorer"
+        },
+        {
+          "id": "a-souder",
+          "type": "action",
+          "inputs": [
+            "w-cuisson",
+            "i-confiture"
+          ],
+          "label": "souder deux biscuits à la confiture"
+        },
+        {
+          "id": "a-enrober",
+          "type": "action",
+          "inputs": [
+            "a-souder",
+            "i-coco-bords"
+          ],
+          "label": "enrober les bords de coco"
+        }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "madeleines",
+      "title": "Madeleines",
+      "lang": "fr",
+      "servings": 24,
+      "prepMinutes": 20,
+      "note": "Recette Leparc.\nLe repos au frais fait la bosse : 2 h à 12 h.\nSaisir à 230 °C puis baisser à 180 °C, 6 à 8 min au total.",
+      "tags": [
+        "madeleines",
+        "citron",
+        "miel"
+      ],
+      "nodes": [
+        {
+          "id": "i-oeufs",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "œufs",
+          "qty": 3
+        },
+        {
+          "id": "i-sucre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre",
+          "qty": 110,
+          "unit": "g"
+        },
+        {
+          "id": "i-vanille",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre vanillé",
+          "qty": 2,
+          "unit": "sachets"
+        },
+        {
+          "id": "i-miel",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "miel",
+          "qty": 20,
+          "unit": "g"
+        },
+        {
+          "id": "i-farine",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "farine",
+          "qty": 150,
+          "unit": "g"
+        },
+        {
+          "id": "i-beurre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "beurre pommade",
+          "qty": 125,
+          "unit": "g"
+        },
+        {
+          "id": "i-sel",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sel, 1 pincée"
+        },
+        {
+          "id": "i-levure",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "levure chimique",
+          "qty": 5,
+          "unit": "g"
+        },
+        {
+          "id": "i-zestes",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "zestes de citron"
+        },
+        {
+          "id": "a-blanchir",
+          "type": "action",
+          "inputs": [
+            "i-oeufs",
+            "i-sucre",
+            "i-miel",
+            "i-vanille"
+          ],
+          "label": "blanchir"
+        },
+        {
+          "id": "a-farine",
+          "type": "action",
+          "inputs": [
+            "a-blanchir",
+            "i-farine",
+            "i-levure",
+            "i-sel",
+            "i-zestes"
+          ],
+          "label": "incorporer la farine et la levure"
+        },
+        {
+          "id": "a-beurre",
+          "type": "action",
+          "inputs": [
+            "a-farine",
+            "i-beurre"
+          ],
+          "label": "incorporer le beurre"
+        },
+        {
+          "id": "w-repos",
+          "type": "wait",
+          "inputs": [
+            "a-beurre"
+          ],
+          "minutes": 120,
+          "label": "repos au frais, 2 h à 12 h"
+        },
+        {
+          "id": "w-saisir",
+          "type": "wait",
+          "inputs": [
+            "w-repos"
+          ],
+          "minutes": 3,
+          "label": "saisir à 230 °C"
+        },
+        {
+          "id": "w-finir",
+          "type": "wait",
+          "inputs": [
+            "w-saisir"
+          ],
+          "minutes": 5,
+          "label": "baisser à 180 °C"
+        }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "cookies-chocolat-hillel",
+      "title": "Cookies au chocolat",
+      "lang": "fr",
+      "servings": 20,
+      "prepMinutes": 15,
+      "note": "Hillel.",
+      "tags": [
+        "cookies",
+        "chocolat",
+        "rapide"
+      ],
+      "nodes": [
+        {
+          "id": "i-beurre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "beurre",
+          "qty": 100,
+          "unit": "g"
+        },
+        {
+          "id": "i-sucre-blanc",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre blanc",
+          "qty": 0.5,
+          "unit": "verre"
+        },
+        {
+          "id": "i-sucre-brun",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre brun",
+          "qty": 0.5,
+          "unit": "verre"
+        },
+        {
+          "id": "i-oeuf",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "œuf",
+          "qty": 1
+        },
+        {
+          "id": "i-vanille",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "extrait de vanille",
+          "qty": 1,
+          "unit": "c.à.c"
+        },
+        {
+          "id": "i-farine",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "farine",
+          "qty": 2.25,
+          "unit": "verres"
+        },
+        {
+          "id": "i-sel",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sel",
+          "qty": 0.5,
+          "unit": "c.à.c"
+        },
+        {
+          "id": "i-bicarbonate",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "bicarbonate",
+          "qty": 1,
+          "unit": "c.à.c"
+        },
+        {
+          "id": "i-pepites",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "pépites de chocolat",
+          "qty": 200,
+          "unit": "g"
+        },
+        {
+          "id": "a-cremer",
+          "type": "action",
+          "inputs": [
+            "i-beurre",
+            "i-sucre-blanc",
+            "i-sucre-brun"
+          ],
+          "label": "crémer"
+        },
+        {
+          "id": "a-oeuf",
+          "type": "action",
+          "inputs": [
+            "a-cremer",
+            "i-oeuf",
+            "i-vanille"
+          ],
+          "label": "ajouter l'œuf et la vanille"
+        },
+        {
+          "id": "a-secs",
+          "type": "action",
+          "inputs": [
+            "i-farine",
+            "i-sel",
+            "i-bicarbonate"
+          ],
+          "label": "mélanger les secs"
+        },
+        {
+          "id": "a-pate",
+          "type": "action",
+          "inputs": [
+            "a-oeuf",
+            "a-secs"
+          ],
+          "label": "réunir en pâte"
+        },
+        {
+          "id": "a-pepites",
+          "type": "action",
+          "inputs": [
+            "a-pate",
+            "i-pepites"
+          ],
+          "label": "ajouter les pépites"
+        },
+        {
+          "id": "w-cuisson",
+          "type": "wait",
+          "inputs": [
+            "a-pepites"
+          ],
+          "minutes": 10,
+          "label": "10 min à 180 °C"
+        }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "petits-carres-chocolat-sale",
+      "title": "Petits carrés au chocolat salé",
+      "lang": "fr",
+      "servings": 16,
+      "prepMinutes": 15,
+      "note": "Tehila.",
+      "tags": [
+        "chocolat",
+        "brownie",
+        "sel"
+      ],
+      "nodes": [
+        {
+          "id": "i-beurre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "beurre",
+          "qty": 130,
+          "unit": "g"
+        },
+        {
+          "id": "i-chocolat",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "chocolat noir",
+          "qty": 210,
+          "unit": "g"
+        },
+        {
+          "id": "i-oeufs",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "œufs",
+          "qty": 2
+        },
+        {
+          "id": "i-sucre-blanc",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre blanc",
+          "qty": 100,
+          "unit": "g"
+        },
+        {
+          "id": "i-sucre-brun",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre brun",
+          "qty": 100,
+          "unit": "g"
+        },
+        {
+          "id": "i-sel",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sel",
+          "qty": 0.25,
+          "unit": "c.à.c"
+        },
+        {
+          "id": "i-cacao",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "cacao",
+          "qty": 2,
+          "unit": "c.à.s"
+        },
+        {
+          "id": "i-levure",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "levure chimique",
+          "qty": 0.5,
+          "unit": "c.à.c"
+        },
+        {
+          "id": "a-fondre",
+          "type": "action",
+          "inputs": [
+            "i-beurre",
+            "i-chocolat"
+          ],
+          "label": "faire fondre"
+        },
+        {
+          "id": "a-battre",
+          "type": "action",
+          "inputs": [
+            "i-oeufs",
+            "i-sucre-blanc",
+            "i-sucre-brun",
+            "i-sel"
+          ],
+          "label": "battre"
+        },
+        {
+          "id": "a-melange",
+          "type": "action",
+          "inputs": [
+            "a-fondre",
+            "a-battre"
+          ],
+          "label": "mélanger"
+        },
+        {
+          "id": "a-cacao",
+          "type": "action",
+          "inputs": [
+            "a-melange",
+            "i-cacao",
+            "i-levure"
+          ],
+          "label": "ajouter le cacao et la levure"
+        },
+        {
+          "id": "w-cuisson",
+          "type": "wait",
+          "inputs": [
+            "a-cacao"
+          ],
+          "minutes": 25,
+          "label": "enfourner"
+        }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "cookies-parfait",
+      "title": "Cookies parfait",
+      "lang": "fr",
+      "servings": 24,
+      "prepMinutes": 15,
+      "note": "joyfoodshine.com\n⚠️ Note de transcription / doute : incohérence entre « ¾ de verre » et « 130 g » de farine. 130 g correspond davantage à 1 verre rempli — la quantité retenue ici est 130 g.",
+      "tags": [
+        "cookies",
+        "chocolat",
+        "beurre salé"
+      ],
+      "nodes": [
+        {
+          "id": "i-beurre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "beurre salé",
+          "qty": 1,
+          "unit": "verre"
+        },
+        {
+          "id": "i-sucre-blanc",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre blanc",
+          "qty": 1,
+          "unit": "verre"
+        },
+        {
+          "id": "i-sucre-brun",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre brun",
+          "qty": 1,
+          "unit": "verre"
+        },
+        {
+          "id": "i-vanille",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "extrait de vanille",
+          "qty": 2,
+          "unit": "c.à.c"
+        },
+        {
+          "id": "i-oeufs",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "gros œufs",
+          "qty": 2
+        },
+        {
+          "id": "i-bicarbonate",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "bicarbonate",
+          "qty": 1,
+          "unit": "c.à.c"
+        },
+        {
+          "id": "i-levure",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "levure chimique",
+          "qty": 0.5,
+          "unit": "c.à.c"
+        },
+        {
+          "id": "i-sel",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sel",
+          "qty": 1,
+          "unit": "c.à.c"
+        },
+        {
+          "id": "i-farine",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "farine",
+          "qty": 130,
+          "unit": "g"
+        },
+        {
+          "id": "i-pepites",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "pépites de chocolat",
+          "qty": 2,
+          "unit": "verres"
+        },
+        {
+          "id": "a-cremer",
+          "type": "action",
+          "inputs": [
+            "i-beurre",
+            "i-sucre-blanc",
+            "i-sucre-brun"
+          ],
+          "label": "crémer"
+        },
+        {
+          "id": "a-oeufs",
+          "type": "action",
+          "inputs": [
+            "a-cremer",
+            "i-oeufs",
+            "i-vanille"
+          ],
+          "label": "ajouter les œufs et la vanille"
+        },
+        {
+          "id": "a-secs",
+          "type": "action",
+          "inputs": [
+            "i-farine",
+            "i-bicarbonate",
+            "i-levure",
+            "i-sel"
+          ],
+          "label": "mélanger les secs"
+        },
+        {
+          "id": "a-pate",
+          "type": "action",
+          "inputs": [
+            "a-oeufs",
+            "a-secs"
+          ],
+          "label": "réunir en pâte"
+        },
+        {
+          "id": "a-pepites",
+          "type": "action",
+          "inputs": [
+            "a-pate",
+            "i-pepites"
+          ],
+          "label": "ajouter les pépites"
+        },
+        {
+          "id": "w-cuisson",
+          "type": "wait",
+          "inputs": [
+            "a-pepites"
+          ],
+          "minutes": 9,
+          "label": "8–10 min à 190 °C"
+        }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "crepes-classiques",
+      "title": "Crêpes classiques",
+      "lang": "fr",
+      "servings": 8,
+      "prepMinutes": 10,
+      "note": "",
+      "tags": [
+        "crêpes",
+        "poêle",
+        "rapide"
+      ],
+      "nodes": [
+        {
+          "id": "i-farine",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "farine",
+          "qty": 300,
+          "unit": "g"
+        },
+        {
+          "id": "i-sucre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre",
+          "qty": 30,
+          "unit": "g"
+        },
+        {
+          "id": "i-oeufs",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "œufs",
+          "qty": 3
+        },
+        {
+          "id": "i-beurre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "beurre fondu",
+          "qty": 40,
+          "unit": "g"
+        },
+        {
+          "id": "i-sel",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sel, 1 pincée"
+        },
+        {
+          "id": "i-lait",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "lait",
+          "qty": 1,
+          "unit": "L"
+        },
+        {
+          "id": "a-pate",
+          "type": "action",
+          "inputs": [
+            "i-farine",
+            "i-sucre",
+            "i-oeufs",
+            "i-beurre",
+            "i-sel",
+            "i-lait"
+          ],
+          "label": "mélanger en pâte lisse"
+        },
+        {
+          "id": "a-cuire",
+          "type": "action",
+          "inputs": [
+            "a-pate"
+          ],
+          "label": "cuire à la poêle"
+        }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "petits-gateaux-marocains",
+      "title": "Petits gâteaux marocains pour le thé",
+      "lang": "fr",
+      "servings": 24,
+      "prepMinutes": 20,
+      "note": "Sylvia.\nUne dose = un verre jetable : autant d'œufs que de sucre et d'huile.\nLa farine se met selon l'absorption, jusqu'à une pâte non collante.",
+      "tags": [
+        "biscuits",
+        "thé",
+        "marocain"
+      ],
+      "nodes": [
+        {
+          "id": "i-oeufs",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "œufs",
+          "qty": 1,
+          "unit": "dose"
+        },
+        {
+          "id": "i-sucre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre",
+          "qty": 1,
+          "unit": "dose"
+        },
+        {
+          "id": "i-huile",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "huile",
+          "qty": 1,
+          "unit": "dose"
+        },
+        {
+          "id": "i-vanille",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre vanillé",
+          "qty": 1,
+          "unit": "sachet"
+        },
+        {
+          "id": "i-levure",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "levure chimique",
+          "qty": 1,
+          "unit": "sachet"
+        },
+        {
+          "id": "i-farine",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "farine, selon absorption"
+        },
+        {
+          "id": "i-sucre-rouler",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre, pour rouler"
+        },
+        {
+          "id": "a-melanger",
+          "type": "action",
+          "inputs": [
+            "i-oeufs",
+            "i-sucre",
+            "i-huile",
+            "i-vanille",
+            "i-levure"
+          ],
+          "label": "mélanger"
+        },
+        {
+          "id": "a-farine",
+          "type": "action",
+          "inputs": [
+            "a-melanger",
+            "i-farine"
+          ],
+          "label": "farine jusqu'à pâte non collante"
+        },
+        {
+          "id": "w-repos",
+          "type": "wait",
+          "inputs": [
+            "a-farine"
+          ],
+          "minutes": 40,
+          "label": "repos au frigo"
+        },
+        {
+          "id": "a-former",
+          "type": "action",
+          "inputs": [
+            "w-repos",
+            "i-sucre-rouler"
+          ],
+          "label": "former des petits boudins, rouler dans le sucre"
+        },
+        {
+          "id": "w-cuisson",
+          "type": "wait",
+          "inputs": [
+            "a-former"
+          ],
+          "minutes": 18,
+          "label": "18 min à 160 °C"
+        }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "nougat-amande",
+      "title": "Nougat d'amande",
+      "lang": "fr",
+      "servings": 6,
+      "prepMinutes": 15,
+      "note": "Sylvia.\nTout se joue à la poêle : le sucre doit enrober les amandes en caramélisant.",
+      "tags": [
+        "confiserie",
+        "amandes",
+        "caramel"
+      ],
+      "nodes": [
+        {
+          "id": "i-amandes",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "amandes",
+          "qty": 250,
+          "unit": "g"
+        },
+        {
+          "id": "i-sucre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre",
+          "qty": 200,
+          "unit": "g"
+        },
+        {
+          "id": "a-torrefier",
+          "type": "action",
+          "inputs": [
+            "i-amandes"
+          ],
+          "label": "torréfier à la poêle"
+        },
+        {
+          "id": "a-carameliser",
+          "type": "action",
+          "inputs": [
+            "a-torrefier",
+            "i-sucre"
+          ],
+          "label": "ajouter le sucre, caraméliser en enrobant"
+        },
+        {
+          "id": "a-verser",
+          "type": "action",
+          "inputs": [
+            "a-carameliser"
+          ],
+          "label": "verser sur papier cuisson"
+        }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "baguette-tradition",
+      "title": "Baguette tradition",
+      "lang": "fr",
+      "servings": 2,
+      "prepMinutes": 20,
+      "note": "Sarah Peticou.\nQuantités pour 2 baguettes. Pour 4 : 20 g levure, 400 ml eau, 750 g farine, 15 g sel.\nMélanger sans trop pétrir, à la cuillère en bois. Façonnage délicat.\nCoup de buée au moment d'enfourner.",
+      "tags": [
+        "pain",
+        "levure",
+        "four"
+      ],
+      "nodes": [
+        {
+          "id": "i-levure",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "levure",
+          "qty": 10,
+          "unit": "g"
+        },
+        {
+          "id": "i-eau",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "eau tiède (42 °C)",
+          "qty": 200,
+          "unit": "g"
+        },
+        {
+          "id": "i-farine",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "farine",
+          "qty": 375,
+          "unit": "g"
+        },
+        {
+          "id": "i-sel",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sel",
+          "qty": 7.5,
+          "unit": "g"
+        },
+        {
+          "id": "a-melanger",
+          "type": "action",
+          "inputs": [
+            "i-levure",
+            "i-eau",
+            "i-farine",
+            "i-sel"
+          ],
+          "label": "mélanger sans trop pétrir, à la cuillère en bois"
+        },
+        {
+          "id": "w-pousse",
+          "type": "wait",
+          "inputs": [
+            "a-melanger"
+          ],
+          "minutes": 90,
+          "label": "première pousse"
+        },
+        {
+          "id": "a-faconner",
+          "type": "action",
+          "inputs": [
+            "w-pousse"
+          ],
+          "label": "façonnage délicat"
+        },
+        {
+          "id": "w-pousse2",
+          "type": "wait",
+          "inputs": [
+            "a-faconner"
+          ],
+          "minutes": 30,
+          "label": "seconde pousse"
+        },
+        {
+          "id": "w-cuisson",
+          "type": "wait",
+          "inputs": [
+            "w-pousse2"
+          ],
+          "minutes": 25,
+          "label": "220 °C avec coup de buée"
+        }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "brioche-rapide-parve",
+      "title": "Brioche rapide ultra moelleuse",
+      "lang": "fr",
+      "servings": 12,
+      "prepMinutes": 20,
+      "note": "Parve.\nDonne 12 boules.",
+      "tags": [
+        "brioche",
+        "parve",
+        "rapide"
+      ],
+      "nodes": [
+        {
+          "id": "i-farine",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "farine",
+          "qty": 500,
+          "unit": "g"
+        },
+        {
+          "id": "i-huile",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "huile",
+          "qty": 80,
+          "unit": "ml"
+        },
+        {
+          "id": "i-sel",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sel",
+          "qty": 1,
+          "unit": "c.à.c"
+        },
+        {
+          "id": "i-levure",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "levure sèche",
+          "qty": 20,
+          "unit": "g"
+        },
+        {
+          "id": "i-eau",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "eau tiède",
+          "qty": 270,
+          "unit": "ml"
+        },
+        {
+          "id": "i-sucre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "id": "i-vanille",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre vanillé",
+          "qty": 2,
+          "unit": "sachets"
+        },
+        {
+          "id": "i-fleur",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "fleur d'oranger",
+          "qty": 1,
+          "unit": "c.à.c"
+        },
+        {
+          "id": "a-diluer",
+          "type": "action",
+          "inputs": [
+            "i-levure",
+            "i-eau",
+            "i-sucre",
+            "i-huile"
+          ],
+          "label": "diluer, laisser 10 min"
+        },
+        {
+          "id": "a-petrir",
+          "type": "action",
+          "inputs": [
+            "a-diluer",
+            "i-farine",
+            "i-sel",
+            "i-vanille",
+            "i-fleur"
+          ],
+          "label": "ajouter la farine et le sel, pétrir"
+        },
+        {
+          "id": "a-boules",
+          "type": "action",
+          "inputs": [
+            "a-petrir"
+          ],
+          "label": "former 12 boules"
+        },
+        {
+          "id": "w-pousse",
+          "type": "wait",
+          "inputs": [
+            "a-boules"
+          ],
+          "minutes": 40,
+          "label": "pousse"
+        },
+        {
+          "id": "w-cuisson",
+          "type": "wait",
+          "inputs": [
+            "w-pousse"
+          ],
+          "minutes": 10,
+          "label": "9–10 min à 210 °C"
+        }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "brioche-japonais-milk-bread",
+      "title": "Brioche japonaise milk bread",
+      "lang": "fr",
+      "servings": 8,
+      "prepMinutes": 30,
+      "note": "Tangzhong — Fru.\nLe tangzhong (farine + eau + lait chauffés) se prépare en premier et refroidit pendant qu'on rassemble le reste.",
+      "tags": [
+        "brioche",
+        "tangzhong",
+        "lait"
+      ],
+      "nodes": [
+        {
+          "id": "i-t-farine",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "farine, tangzhong",
+          "qty": 45,
+          "unit": "g"
+        },
+        {
+          "id": "i-t-eau",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "eau, tangzhong",
+          "qty": 120,
+          "unit": "g"
+        },
+        {
+          "id": "i-t-lait",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "lait, tangzhong",
+          "qty": 120,
+          "unit": "g"
+        },
+        {
+          "id": "i-farine",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "farine",
+          "qty": 350,
+          "unit": "g"
+        },
+        {
+          "id": "i-sucre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre",
+          "qty": 100,
+          "unit": "g"
+        },
+        {
+          "id": "i-levure",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "levure",
+          "qty": 14,
+          "unit": "g"
+        },
+        {
+          "id": "i-sel",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sel",
+          "qty": 1,
+          "unit": "c.à.c"
+        },
+        {
+          "id": "i-lait",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "lait tiède",
+          "qty": 1,
+          "unit": "verre"
+        },
+        {
+          "id": "i-oeufs",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "œufs",
+          "qty": 2
+        },
+        {
+          "id": "i-beurre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "beurre mou",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "id": "a-tangzhong",
+          "type": "action",
+          "inputs": [
+            "i-t-farine",
+            "i-t-eau",
+            "i-t-lait"
+          ],
+          "label": "chauffer jusqu'à épaississement"
+        },
+        {
+          "id": "a-petrir",
+          "type": "action",
+          "inputs": [
+            "a-tangzhong",
+            "i-farine",
+            "i-sucre",
+            "i-levure",
+            "i-sel",
+            "i-lait",
+            "i-oeufs",
+            "i-beurre"
+          ],
+          "label": "pétrir"
+        },
+        {
+          "id": "w-pousse",
+          "type": "wait",
+          "inputs": [
+            "a-petrir"
+          ],
+          "minutes": 60,
+          "label": "pousse"
+        },
+        {
+          "id": "a-bouler",
+          "type": "action",
+          "inputs": [
+            "w-pousse"
+          ],
+          "label": "diviser en 8 boules, rouler, placer en moule"
+        },
+        {
+          "id": "w-pousse2",
+          "type": "wait",
+          "inputs": [
+            "a-bouler"
+          ],
+          "minutes": 45,
+          "label": "repousse"
+        },
+        {
+          "id": "w-cuisson",
+          "type": "wait",
+          "inputs": [
+            "w-pousse2"
+          ],
+          "minutes": 30,
+          "label": "cuisson à 180 °C"
+        }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "brioche-feilder",
+      "title": "Brioche Feilder au beurre",
+      "lang": "fr",
+      "servings": 12,
+      "prepMinutes": 30,
+      "note": "La nuit au frigo est ce qui rend le façonnage possible.\nDernière pousse à 30 °C.",
+      "tags": [
+        "brioche",
+        "beurre",
+        "make-ahead"
+      ],
+      "nodes": [
+        {
+          "id": "i-farine",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "farine",
+          "qty": 500,
+          "unit": "g"
+        },
+        {
+          "id": "i-levure",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "levure sèche",
+          "qty": 1,
+          "unit": "sachet"
+        },
+        {
+          "id": "i-sucre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre",
+          "qty": 120,
+          "unit": "g"
+        },
+        {
+          "id": "i-sel",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sel"
+        },
+        {
+          "id": "i-lait",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "lait tiède",
+          "qty": 220,
+          "unit": "ml"
+        },
+        {
+          "id": "i-beurre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "beurre",
+          "qty": 200,
+          "unit": "g"
+        },
+        {
+          "id": "i-oeufs",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "œufs",
+          "qty": 3
+        },
+        {
+          "id": "a-petrir",
+          "type": "action",
+          "inputs": [
+            "i-farine",
+            "i-levure",
+            "i-sucre",
+            "i-sel",
+            "i-lait",
+            "i-beurre",
+            "i-oeufs"
+          ],
+          "label": "pétrir au robot"
+        },
+        {
+          "id": "w-pousse",
+          "type": "wait",
+          "inputs": [
+            "a-petrir"
+          ],
+          "minutes": 60,
+          "label": "pousse à température ambiante"
+        },
+        {
+          "id": "w-nuit",
+          "type": "wait",
+          "inputs": [
+            "w-pousse"
+          ],
+          "minutes": 600,
+          "label": "nuit au frigo"
+        },
+        {
+          "id": "a-faconner",
+          "type": "action",
+          "inputs": [
+            "w-nuit"
+          ],
+          "label": "façonner 3 boules"
+        },
+        {
+          "id": "w-pousse2",
+          "type": "wait",
+          "inputs": [
+            "a-faconner"
+          ],
+          "minutes": 120,
+          "label": "pousse à 30 °C"
+        },
+        {
+          "id": "w-cuisson",
+          "type": "wait",
+          "inputs": [
+            "w-pousse2"
+          ],
+          "minutes": 35,
+          "label": "cuisson à 150 °C"
+        }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "pain-italien",
+      "title": "Pain italien",
+      "lang": "fr",
+      "servings": 8,
+      "prepMinutes": 25,
+      "note": "Sophie Smadja.\nDonne 8 bâtons roulés.",
+      "tags": [
+        "pain",
+        "huile d'olive",
+        "four"
+      ],
+      "nodes": [
+        {
+          "id": "i-farine",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "farine",
+          "qty": 1,
+          "unit": "kg"
+        },
+        {
+          "id": "i-eau",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "eau tiède",
+          "qty": 500,
+          "unit": "ml"
+        },
+        {
+          "id": "i-sucre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre",
+          "qty": 1,
+          "unit": "c.à.s"
+        },
+        {
+          "id": "i-levure",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "levure"
+        },
+        {
+          "id": "i-sel",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sel",
+          "qty": 1,
+          "unit": "c.à.s"
+        },
+        {
+          "id": "i-huile",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "huile d'olive",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "id": "a-levain",
+          "type": "action",
+          "inputs": [
+            "i-levure",
+            "i-eau",
+            "i-sucre"
+          ],
+          "label": "levain, 10 min"
+        },
+        {
+          "id": "a-petrir",
+          "type": "action",
+          "inputs": [
+            "a-levain",
+            "i-farine",
+            "i-sel",
+            "i-huile"
+          ],
+          "label": "pétrir 5 min"
+        },
+        {
+          "id": "w-pousse",
+          "type": "wait",
+          "inputs": [
+            "a-petrir"
+          ],
+          "minutes": 60,
+          "label": "pousse"
+        },
+        {
+          "id": "a-batons",
+          "type": "action",
+          "inputs": [
+            "w-pousse"
+          ],
+          "label": "découper en 8 bâtons roulés"
+        },
+        {
+          "id": "w-pousse2",
+          "type": "wait",
+          "inputs": [
+            "a-batons"
+          ],
+          "minutes": 15,
+          "label": "pousse"
+        },
+        {
+          "id": "w-cuisson",
+          "type": "wait",
+          "inputs": [
+            "w-pousse2"
+          ],
+          "minutes": 25,
+          "label": "25 min à 200 °C"
+        }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "pitote",
+      "title": "Pitote (pita)",
+      "lang": "fr",
+      "servings": 12,
+      "prepMinutes": 25,
+      "note": "Achote Amram.\nPâte très souple : 10 à 12 min de pétrissage.\nPoêle très chaude, cuisson rapide.",
+      "tags": [
+        "pain",
+        "poêle",
+        "pita"
+      ],
+      "nodes": [
+        {
+          "id": "i-farine",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "farine",
+          "qty": 1,
+          "unit": "kg"
+        },
+        {
+          "id": "i-levure",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "levure sèche",
+          "qty": 2,
+          "unit": "c.à.s"
+        },
+        {
+          "id": "i-levure-chimique",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "levure chimique",
+          "qty": 1,
+          "unit": "c.à.c"
+        },
+        {
+          "id": "i-sucre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre",
+          "qty": 2,
+          "unit": "c.à.s"
+        },
+        {
+          "id": "i-huile",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "huile",
+          "qty": 0.33,
+          "unit": "verre"
+        },
+        {
+          "id": "i-sel",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sel",
+          "qty": 1,
+          "unit": "c.à.s"
+        },
+        {
+          "id": "i-eau",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "eau tiède",
+          "qty": 700,
+          "unit": "ml"
+        },
+        {
+          "id": "a-petrir",
+          "type": "action",
+          "inputs": [
+            "i-farine",
+            "i-levure",
+            "i-levure-chimique",
+            "i-sucre",
+            "i-huile",
+            "i-sel",
+            "i-eau"
+          ],
+          "label": "pétrir 10–12 min, pâte très souple"
+        },
+        {
+          "id": "w-pousse",
+          "type": "wait",
+          "inputs": [
+            "a-petrir"
+          ],
+          "minutes": 90,
+          "label": "pousse"
+        },
+        {
+          "id": "a-aplatir",
+          "type": "action",
+          "inputs": [
+            "w-pousse"
+          ],
+          "label": "aplatir en galettes épaisses"
+        },
+        {
+          "id": "a-cuire",
+          "type": "action",
+          "inputs": [
+            "a-aplatir"
+          ],
+          "label": "cuisson rapide à la poêle très chaude"
+        }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "pain-complet-graines-cocotte",
+      "title": "Pain complet aux graines et fruits secs",
+      "lang": "fr",
+      "servings": 10,
+      "prepMinutes": 20,
+      "note": "En cocotte pyrex avec papier cuisson.\nDépart FOUR FROID — c'est le point de la recette.",
+      "tags": [
+        "pain",
+        "complet",
+        "cocotte"
+      ],
+      "nodes": [
+        {
+          "id": "i-eau",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "eau",
+          "qty": 200,
+          "unit": "ml"
+        },
+        {
+          "id": "i-huile",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "huile",
+          "qty": 1,
+          "unit": "c.à.s"
+        },
+        {
+          "id": "i-sel",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sel",
+          "qty": 1.5,
+          "unit": "c.à.c"
+        },
+        {
+          "id": "i-sucre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre",
+          "qty": 3,
+          "unit": "c.à.s"
+        },
+        {
+          "id": "i-lait",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "lait en poudre",
+          "qty": 1,
+          "unit": "c.à.s"
+        },
+        {
+          "id": "i-farine-blanche",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "farine blanche",
+          "qty": 240,
+          "unit": "g"
+        },
+        {
+          "id": "i-farine-complete",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "farine complète",
+          "qty": 460,
+          "unit": "g"
+        },
+        {
+          "id": "i-levure",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "levure"
+        },
+        {
+          "id": "i-graines",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "mélange de graines"
+        },
+        {
+          "id": "a-petrir",
+          "type": "action",
+          "inputs": [
+            "i-eau",
+            "i-huile",
+            "i-sel",
+            "i-sucre",
+            "i-lait",
+            "i-farine-blanche",
+            "i-farine-complete",
+            "i-levure",
+            "i-graines"
+          ],
+          "label": "pétrir"
+        },
+        {
+          "id": "w-pousse",
+          "type": "wait",
+          "inputs": [
+            "a-petrir"
+          ],
+          "minutes": 90,
+          "label": "pousse"
+        },
+        {
+          "id": "a-cocotte",
+          "type": "action",
+          "inputs": [
+            "w-pousse"
+          ],
+          "label": "placer en cocotte pyrex, papier cuisson"
+        },
+        {
+          "id": "w-cuisson",
+          "type": "wait",
+          "inputs": [
+            "a-cocotte"
+          ],
+          "minutes": 45,
+          "label": "45 min à 200 °C, départ four froid"
+        }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "pain-halla-sans-oeufs",
+      "title": "Pain halla sans œufs",
+      "lang": "fr",
+      "servings": 12,
+      "prepMinutes": 30,
+      "note": "Audrey.",
+      "tags": [
+        "halla",
+        "parve",
+        "tresse"
+      ],
+      "nodes": [
+        {
+          "id": "i-farine",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "farine",
+          "qty": 1,
+          "unit": "kg"
+        },
+        {
+          "id": "i-levure",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "levure",
+          "qty": 2,
+          "unit": "c.à.s"
+        },
+        {
+          "id": "i-sucre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre",
+          "qty": 6,
+          "unit": "c.à.s"
+        },
+        {
+          "id": "i-huile",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "huile",
+          "qty": 0.75,
+          "unit": "verre"
+        },
+        {
+          "id": "i-eau",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "eau tiède",
+          "qty": 3,
+          "unit": "verres"
+        },
+        {
+          "id": "i-sel",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sel",
+          "qty": 1,
+          "unit": "c.à.s"
+        },
+        {
+          "id": "i-dorure",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "dorure"
+        },
+        {
+          "id": "a-premelange",
+          "type": "action",
+          "inputs": [
+            "i-levure",
+            "i-eau",
+            "i-sucre",
+            "i-huile"
+          ],
+          "label": "pré-mélanger"
+        },
+        {
+          "id": "a-petrir",
+          "type": "action",
+          "inputs": [
+            "a-premelange",
+            "i-farine",
+            "i-sel"
+          ],
+          "label": "pétrir"
+        },
+        {
+          "id": "w-pousse",
+          "type": "wait",
+          "inputs": [
+            "a-petrir"
+          ],
+          "minutes": 90,
+          "label": "pousse"
+        },
+        {
+          "id": "a-tresser",
+          "type": "action",
+          "inputs": [
+            "w-pousse",
+            "i-dorure"
+          ],
+          "label": "tresser, dorer"
+        },
+        {
+          "id": "w-cuisson",
+          "type": "wait",
+          "inputs": [
+            "a-tresser"
+          ],
+          "minutes": 30,
+          "label": "cuire à 210 °C"
+        }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "pain-complet-dominique",
+      "title": "Pain complet",
+      "lang": "fr",
+      "servings": 12,
+      "prepMinutes": 30,
+      "note": "Dominique.\nFarine 70 %, ou un tiers blanche, un tiers épeautre, un tiers complète.\n⚠️ Note de transcription / doute : « cousmine », rédigé en hébraïsme/français, désigne la farine d'épeautre (Kousmin).",
+      "tags": [
+        "pain",
+        "complet",
+        "tresse"
+      ],
+      "nodes": [
+        {
+          "id": "i-farine",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "farine 70 % (ou ⅓ blanche, ⅓ épeautre, ⅓ complète)",
+          "qty": 1,
+          "unit": "kg"
+        },
+        {
+          "id": "i-levure",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "levure sèche",
+          "qty": 4,
+          "unit": "sachets"
+        },
+        {
+          "id": "i-oeufs",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "œufs",
+          "qty": 3
+        },
+        {
+          "id": "i-sucre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre",
+          "qty": 2,
+          "unit": "verres"
+        },
+        {
+          "id": "i-sel",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sel",
+          "qty": 1,
+          "unit": "c.à.s"
+        },
+        {
+          "id": "i-huile",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "huile",
+          "qty": 1,
+          "unit": "verre"
+        },
+        {
+          "id": "i-eau",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "eau tiède"
+        },
+        {
+          "id": "a-petrir",
+          "type": "action",
+          "inputs": [
+            "i-farine",
+            "i-levure",
+            "i-oeufs",
+            "i-sucre",
+            "i-sel",
+            "i-huile",
+            "i-eau"
+          ],
+          "label": "pétrir"
+        },
+        {
+          "id": "w-pousse",
+          "type": "wait",
+          "inputs": [
+            "a-petrir"
+          ],
+          "minutes": 90,
+          "label": "laisser monter"
+        },
+        {
+          "id": "a-tresser",
+          "type": "action",
+          "inputs": [
+            "w-pousse"
+          ],
+          "label": "tresser"
+        },
+        {
+          "id": "w-cuisson",
+          "type": "wait",
+          "inputs": [
+            "a-tresser"
+          ],
+          "minutes": 30,
+          "label": "cuire"
+        }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "pate-a-pizza-naomie",
+      "title": "Pâte à pizza",
+      "lang": "fr",
+      "servings": 4,
+      "prepMinutes": 15,
+      "note": "Naomie.\nÉtaler directement sur la plaque huilée — pas de repos après pétrissage.",
+      "tags": [
+        "pizza",
+        "pâte",
+        "rapide"
+      ],
+      "nodes": [
+        {
+          "id": "i-farine",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "farine",
+          "qty": 2,
+          "unit": "verres"
+        },
+        {
+          "id": "i-levure",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "levure",
+          "qty": 1,
+          "unit": "c.à.s"
+        },
+        {
+          "id": "i-sucre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sucre",
+          "qty": 1,
+          "unit": "c.à.c"
+        },
+        {
+          "id": "i-sel",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sel",
+          "qty": 0.25,
+          "unit": "c.à.c"
+        },
+        {
+          "id": "i-huile",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "huile d'olive",
+          "qty": 1,
+          "unit": "c.à.s"
+        },
+        {
+          "id": "i-eau",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "eau tiède",
+          "qty": 1.5,
+          "unit": "verre"
+        },
+        {
+          "id": "a-petrir",
+          "type": "action",
+          "inputs": [
+            "i-farine",
+            "i-levure",
+            "i-sucre",
+            "i-sel",
+            "i-huile",
+            "i-eau"
+          ],
+          "label": "pétrir 10 min"
+        },
+        {
+          "id": "a-etaler",
+          "type": "action",
+          "inputs": [
+            "a-petrir"
+          ],
+          "label": "étaler sur plaque huilée"
+        },
+        {
+          "id": "w-cuisson",
+          "type": "wait",
+          "inputs": [
+            "a-etaler"
+          ],
+          "minutes": 12,
+          "label": "12 min à 200 °C"
+        }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "focaccia-ptite-talia",
+      "title": "Focaccia P'tite Talia",
+      "lang": "fr",
+      "servings": 8,
+      "prepMinutes": 20,
+      "note": "Talia Ben Harouch.\nEau glacée, très peu de levure, repos une nuit au frigo.\nMélange de graines : sésame, tournesol, courge, lin.",
+      "tags": [
+        "focaccia",
+        "graines",
+        "make-ahead"
+      ],
+      "nodes": [
+        {
+          "id": "i-farine",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "farine",
+          "qty": 500,
+          "unit": "g"
+        },
+        {
+          "id": "i-eau",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "eau glacée",
+          "qty": 425,
+          "unit": "ml"
+        },
+        {
+          "id": "i-levure",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "levure sèche",
+          "qty": 0.5,
+          "unit": "c.à.c"
+        },
+        {
+          "id": "i-sel",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sel",
+          "qty": 2,
+          "unit": "c.à.c"
+        },
+        {
+          "id": "i-huile",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "huile d'olive",
+          "qty": 2,
+          "unit": "c.à.s"
+        },
+        {
+          "id": "i-graines",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "graines : sésame, tournesol, courge, lin"
+        },
+        {
+          "id": "a-melanger",
+          "type": "action",
+          "inputs": [
+            "i-farine",
+            "i-eau",
+            "i-levure",
+            "i-sel",
+            "i-huile"
+          ],
+          "label": "mélanger"
+        },
+        {
+          "id": "w-nuit",
+          "type": "wait",
+          "inputs": [
+            "a-melanger"
+          ],
+          "minutes": 720,
+          "label": "repos une nuit au frigo"
+        },
+        {
+          "id": "a-enrober",
+          "type": "action",
+          "inputs": [
+            "w-nuit",
+            "i-graines"
+          ],
+          "label": "enrober de graines"
+        },
+        {
+          "id": "w-cuisson",
+          "type": "wait",
+          "inputs": [
+            "a-enrober"
+          ],
+          "minutes": 25,
+          "label": "cuire à 230 °C"
+        }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "epaule-agneau-four",
+      "title": "Épaule d'agneau au four",
+      "lang": "fr",
+      "servings": 8,
+      "prepMinutes": 30,
+      "note": "Anat Elisha.\nCuisson couverte : papier cuisson mouillé, puis alu.\n30 min à 250 °C pour saisir, puis 3 h à 160 °C.",
+      "tags": [
+        "agneau",
+        "four",
+        "shabbat"
+      ],
+      "nodes": [
+        {
+          "id": "i-agneau",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "épaule d'agneau",
+          "qty": 2.5,
+          "unit": "kg"
+        },
+        {
+          "id": "i-pdt",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "pommes de terre"
+        },
+        {
+          "id": "i-topinambours",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "topinambours"
+        },
+        {
+          "id": "i-oignons",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "oignons"
+        },
+        {
+          "id": "i-ail",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "tête d'ail",
+          "qty": 1
+        },
+        {
+          "id": "i-sel",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sel"
+        },
+        {
+          "id": "i-poivre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "poivre concassé"
+        },
+        {
+          "id": "i-curcuma",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "curcuma"
+        },
+        {
+          "id": "i-huile",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "huile d'olive"
+        },
+        {
+          "id": "i-miel",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "miel"
+        },
+        {
+          "id": "i-coriandre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "coriandre"
+        },
+        {
+          "id": "i-eau",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "eau bouillante",
+          "qty": 2,
+          "unit": "verres"
+        },
+        {
+          "id": "a-sauce",
+          "type": "action",
+          "inputs": [
+            "i-sel",
+            "i-poivre",
+            "i-curcuma",
+            "i-huile",
+            "i-miel",
+            "i-coriandre",
+            "i-eau"
+          ],
+          "label": "mélanger la sauce"
+        },
+        {
+          "id": "a-legumes",
+          "type": "action",
+          "inputs": [
+            "i-pdt",
+            "i-topinambours",
+            "i-oignons",
+            "i-ail"
+          ],
+          "label": "disposer les légumes au fond du plat"
+        },
+        {
+          "id": "a-monter",
+          "type": "action",
+          "inputs": [
+            "a-legumes",
+            "i-agneau",
+            "a-sauce"
+          ],
+          "label": "poser l'épaule, arroser de sauce"
+        },
+        {
+          "id": "a-couvrir",
+          "type": "action",
+          "inputs": [
+            "a-monter"
+          ],
+          "label": "couvrir : papier cuisson mouillé + alu"
+        },
+        {
+          "id": "w-saisir",
+          "type": "wait",
+          "inputs": [
+            "a-couvrir"
+          ],
+          "minutes": 30,
+          "label": "30 min à 250 °C"
+        },
+        {
+          "id": "w-cuisson",
+          "type": "wait",
+          "inputs": [
+            "w-saisir"
+          ],
+          "minutes": 180,
+          "label": "3 h à 160 °C"
+        }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "tortillas-poulet-legumes",
+      "title": "Tortillas au poulet et légumes",
+      "lang": "fr",
+      "servings": 6,
+      "prepMinutes": 40,
+      "note": "Trois préparations en parallèle : les légumes rôtis, le poulet mariné, la sauce mexicaine. On assemble au moment de servir.",
+      "tags": [
+        "poulet",
+        "tortillas",
+        "mexicain"
+      ],
+      "nodes": [
+        {
+          "id": "i-patates",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "patates douces"
+        },
+        {
+          "id": "i-poivrons",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "poivrons"
+        },
+        {
+          "id": "i-courgettes",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "courgettes"
+        },
+        {
+          "id": "i-aubergines",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "aubergines"
+        },
+        {
+          "id": "i-huile",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "huile d'olive"
+        },
+        {
+          "id": "i-poulet",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "poulet émincé"
+        },
+        {
+          "id": "i-soja",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sauce soja"
+        },
+        {
+          "id": "i-miel",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "miel"
+        },
+        {
+          "id": "i-fecule",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "fécule"
+        },
+        {
+          "id": "i-sel",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sel"
+        },
+        {
+          "id": "i-oignons",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "oignons"
+        },
+        {
+          "id": "i-ail",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "ail"
+        },
+        {
+          "id": "i-poivrons2",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "poivrons, pour la sauce"
+        },
+        {
+          "id": "i-tomates",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "tomates"
+        },
+        {
+          "id": "i-haricots",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "haricots rouges"
+        },
+        {
+          "id": "i-citron",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "citron"
+        },
+        {
+          "id": "i-epices",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "épices"
+        },
+        {
+          "id": "i-tortillas",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "tortillas"
+        },
+        {
+          "id": "a-legumes",
+          "type": "action",
+          "inputs": [
+            "i-patates",
+            "i-poivrons",
+            "i-courgettes",
+            "i-aubergines",
+            "i-huile"
+          ],
+          "label": "rôtir au four"
+        },
+        {
+          "id": "a-mariner",
+          "type": "action",
+          "inputs": [
+            "i-poulet",
+            "i-soja",
+            "i-miel",
+            "i-fecule",
+            "i-sel"
+          ],
+          "label": "mariner"
+        },
+        {
+          "id": "a-saisir",
+          "type": "action",
+          "inputs": [
+            "a-mariner"
+          ],
+          "label": "saisir à la poêle"
+        },
+        {
+          "id": "a-sauce",
+          "type": "action",
+          "inputs": [
+            "i-oignons",
+            "i-ail",
+            "i-poivrons2",
+            "i-tomates",
+            "i-haricots",
+            "i-citron",
+            "i-epices"
+          ],
+          "label": "mijoter la sauce mexicaine"
+        },
+        {
+          "id": "a-garnir",
+          "type": "action",
+          "inputs": [
+            "i-tortillas",
+            "a-legumes",
+            "a-saisir",
+            "a-sauce"
+          ],
+          "label": "garnir les tortillas"
+        }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "soupe-poulet-orge-perle",
+      "title": "Soupe de poulet, légumes et orge perlé",
+      "lang": "fr",
+      "servings": 6,
+      "prepMinutes": 25,
+      "note": "Laver l'orge perlé avant de l'ajouter.",
+      "tags": [
+        "soupe",
+        "poulet",
+        "orge"
+      ],
+      "nodes": [
+        {
+          "id": "i-oignons",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "oignons"
+        },
+        {
+          "id": "i-poulet",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "morceaux de poulet"
+        },
+        {
+          "id": "i-celeri",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "céleri"
+        },
+        {
+          "id": "i-carottes",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "carottes"
+        },
+        {
+          "id": "i-tomate",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "tomate"
+        },
+        {
+          "id": "i-orge",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "orge perlé"
+        },
+        {
+          "id": "i-concentre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "concentré de tomate"
+        },
+        {
+          "id": "i-curcuma",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "curcuma"
+        },
+        {
+          "id": "i-paprika",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "paprika"
+        },
+        {
+          "id": "i-sel",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sel"
+        },
+        {
+          "id": "i-eau",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "eau bouillante"
+        },
+        {
+          "id": "a-laver",
+          "type": "action",
+          "inputs": [
+            "i-orge"
+          ],
+          "label": "laver"
+        },
+        {
+          "id": "a-rissoler",
+          "type": "action",
+          "inputs": [
+            "i-oignons",
+            "i-poulet"
+          ],
+          "label": "rissoler"
+        },
+        {
+          "id": "a-ajouter",
+          "type": "action",
+          "inputs": [
+            "a-rissoler",
+            "i-celeri",
+            "i-carottes",
+            "i-tomate",
+            "a-laver",
+            "i-concentre",
+            "i-curcuma",
+            "i-paprika",
+            "i-sel",
+            "i-eau"
+          ],
+          "label": "ajouter le reste"
+        },
+        {
+          "id": "w-mijoter",
+          "type": "wait",
+          "inputs": [
+            "a-ajouter"
+          ],
+          "minutes": 60,
+          "label": "mijoter"
+        }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "roti-viande-cocotte",
+      "title": "Rôti de viande en cocotte",
+      "lang": "fr",
+      "servings": 6,
+      "prepMinutes": 20,
+      "note": "Gomen.\nViande n° 5 (jumeau).\n2 h à couvert dans son jus, puis 2 h de plus avec un appoint d'eau.",
+      "tags": [
+        "viande",
+        "cocotte",
+        "mijoté"
+      ],
+      "nodes": [
+        {
+          "id": "i-viande",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "viande n° 5 (jumeau)"
+        },
+        {
+          "id": "i-moutarde",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "moutarde"
+        },
+        {
+          "id": "i-huile",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "huile"
+        },
+        {
+          "id": "i-herbes",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "herbes"
+        },
+        {
+          "id": "i-ail",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "ail"
+        },
+        {
+          "id": "i-sel",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sel"
+        },
+        {
+          "id": "i-poivre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "poivre"
+        },
+        {
+          "id": "i-eau",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "eau, en appoint"
+        },
+        {
+          "id": "a-enduire",
+          "type": "action",
+          "inputs": [
+            "i-viande",
+            "i-moutarde",
+            "i-huile",
+            "i-herbes",
+            "i-ail",
+            "i-sel",
+            "i-poivre"
+          ],
+          "label": "enduire la viande"
+        },
+        {
+          "id": "a-saisir",
+          "type": "action",
+          "inputs": [
+            "a-enduire"
+          ],
+          "label": "saisir à feu fort sur chaque face"
+        },
+        {
+          "id": "w-cuisson",
+          "type": "wait",
+          "inputs": [
+            "a-saisir"
+          ],
+          "minutes": 120,
+          "label": "2 h à couvert dans son jus"
+        },
+        {
+          "id": "a-mouiller",
+          "type": "action",
+          "inputs": [
+            "w-cuisson",
+            "i-eau"
+          ],
+          "label": "ajouter l'appoint d'eau"
+        },
+        {
+          "id": "w-cuisson2",
+          "type": "wait",
+          "inputs": [
+            "a-mouiller"
+          ],
+          "minutes": 120,
+          "label": "2 h complémentaires"
+        }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "langue-sauce-champignons",
+      "title": "Langue sauce champignons",
+      "lang": "fr",
+      "servings": 6,
+      "prepMinutes": 25,
+      "note": "Cookeo : 40 min sous pression.\nLe jus des champignons va dans la sauce.",
+      "tags": [
+        "viande",
+        "champignons",
+        "cookeo"
+      ],
+      "nodes": [
+        {
+          "id": "i-langue",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "langue de bœuf",
+          "qty": 1
+        },
+        {
+          "id": "i-oignons",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "oignons"
+        },
+        {
+          "id": "i-champignons",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "champignons"
+        },
+        {
+          "id": "i-farine",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "farine",
+          "qty": 1,
+          "unit": "c.à.s"
+        },
+        {
+          "id": "i-assaisonnement",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "assaisonnement"
+        },
+        {
+          "id": "i-coco",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "crème de coco",
+          "qty": 0.5,
+          "unit": "brique"
+        },
+        {
+          "id": "w-pression",
+          "type": "wait",
+          "inputs": [
+            "i-langue"
+          ],
+          "minutes": 40,
+          "label": "cuire sous pression"
+        },
+        {
+          "id": "a-eplucher",
+          "type": "action",
+          "inputs": [
+            "w-pression"
+          ],
+          "label": "éplucher et trancher"
+        },
+        {
+          "id": "a-revenir",
+          "type": "action",
+          "inputs": [
+            "i-oignons",
+            "i-champignons"
+          ],
+          "label": "faire revenir"
+        },
+        {
+          "id": "a-sauce",
+          "type": "action",
+          "inputs": [
+            "a-revenir",
+            "i-farine",
+            "i-assaisonnement",
+            "i-coco"
+          ],
+          "label": "lier la sauce avec le jus des champignons"
+        },
+        {
+          "id": "a-servir",
+          "type": "action",
+          "inputs": [
+            "a-eplucher",
+            "a-sauce"
+          ],
+          "label": "napper les tranches"
+        }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "boulettes-poisson-sauce-marocaine",
+      "title": "Boulettes de poisson sauce marocaine",
+      "lang": "fr",
+      "servings": 6,
+      "prepMinutes": 35,
+      "note": "Passer les boulettes dans la fécule avant de les saisir : elles tiennent ensuite dans la sauce.",
+      "tags": [
+        "poisson",
+        "marocain",
+        "mijoté"
+      ],
+      "nodes": [
+        {
+          "id": "i-perche",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "perche du Nil hachée",
+          "qty": 1,
+          "unit": "kg"
+        },
+        {
+          "id": "i-oignons",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "oignons"
+        },
+        {
+          "id": "i-ail",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "ail"
+        },
+        {
+          "id": "i-herbes",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "herbes"
+        },
+        {
+          "id": "i-cumin",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "cumin"
+        },
+        {
+          "id": "i-fecule",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "fécule"
+        },
+        {
+          "id": "i-oignons2",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "oignons, pour la sauce"
+        },
+        {
+          "id": "i-ail2",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "ail, pour la sauce"
+        },
+        {
+          "id": "i-poivron",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "poivron rouge"
+        },
+        {
+          "id": "i-concentre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "concentré de tomate"
+        },
+        {
+          "id": "i-paprika",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "paprika"
+        },
+        {
+          "id": "a-melanger",
+          "type": "action",
+          "inputs": [
+            "i-perche",
+            "i-oignons",
+            "i-ail",
+            "i-herbes",
+            "i-cumin"
+          ],
+          "label": "mélanger l'appareil à boulettes"
+        },
+        {
+          "id": "a-faconner",
+          "type": "action",
+          "inputs": [
+            "a-melanger",
+            "i-fecule"
+          ],
+          "label": "façonner, passer dans la fécule"
+        },
+        {
+          "id": "a-saisir",
+          "type": "action",
+          "inputs": [
+            "a-faconner"
+          ],
+          "label": "saisir"
+        },
+        {
+          "id": "a-sauce",
+          "type": "action",
+          "inputs": [
+            "i-oignons2",
+            "i-ail2",
+            "i-poivron",
+            "i-concentre",
+            "i-paprika"
+          ],
+          "label": "préparer la sauce"
+        },
+        {
+          "id": "a-plonger",
+          "type": "action",
+          "inputs": [
+            "a-saisir",
+            "a-sauce"
+          ],
+          "label": "plonger les boulettes dans la sauce"
+        },
+        {
+          "id": "w-mijoter",
+          "type": "wait",
+          "inputs": [
+            "a-plonger"
+          ],
+          "minutes": 30,
+          "label": "mijoter"
+        }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "ailes-poulet-marinees",
+      "title": "Ailes de poulet marinées",
+      "lang": "fr",
+      "servings": 4,
+      "prepMinutes": 15,
+      "note": "Silan = sirop de datte.",
+      "tags": [
+        "poulet",
+        "four",
+        "marinade"
+      ],
+      "nodes": [
+        {
+          "id": "i-ailes",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "ailes de poulet",
+          "qty": 1,
+          "unit": "kg"
+        },
+        {
+          "id": "i-ketchup",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "ketchup"
+        },
+        {
+          "id": "i-huile",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "huile d'olive"
+        },
+        {
+          "id": "i-piment",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "piment doux"
+        },
+        {
+          "id": "i-silan",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "silan (sirop de datte)"
+        },
+        {
+          "id": "i-paprika",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "paprika"
+        },
+        {
+          "id": "i-ail",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "ail"
+        },
+        {
+          "id": "i-bouillon",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "bouillon en poudre"
+        },
+        {
+          "id": "a-marinade",
+          "type": "action",
+          "inputs": [
+            "i-ketchup",
+            "i-huile",
+            "i-piment",
+            "i-silan",
+            "i-paprika",
+            "i-ail",
+            "i-bouillon"
+          ],
+          "label": "mélanger la marinade"
+        },
+        {
+          "id": "a-enrober",
+          "type": "action",
+          "inputs": [
+            "i-ailes",
+            "a-marinade"
+          ],
+          "label": "enrober les ailes"
+        },
+        {
+          "id": "w-cuisson",
+          "type": "wait",
+          "inputs": [
+            "a-enrober"
+          ],
+          "minutes": 45,
+          "label": "45 min à 180 °C"
+        }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "poulet-curry-elsa",
+      "title": "Poulet au curry",
       "lang": "fr",
       "servings": 4,
       "prepMinutes": 25,
-      "note": "Le salage la veille change tout : la peau sèche et croustille.\nSortir le poulet du froid une heure avant d'enfourner.",
-      "tags": ["poulet", "citron", "four"],
+      "note": "Elsa.\nLaisser épaissir à feu doux à la fin.",
+      "tags": [
+        "poulet",
+        "curry",
+        "coco"
+      ],
       "nodes": [
-        { "id": "i-poulet", "type": "ingredient", "inputs": [], "name": "poulet fermier", "qty": 1.5, "unit": "kg" },
-        { "id": "i-sel", "type": "ingredient", "inputs": [], "name": "gros sel" },
-        { "id": "i-citron", "type": "ingredient", "inputs": [], "name": "citrons", "qty": 2 },
-        { "id": "i-thym", "type": "ingredient", "inputs": [], "name": "thym" },
-        { "id": "i-ail", "type": "ingredient", "inputs": [], "name": "tête d'ail", "qty": 1 },
-        { "id": "i-beurre", "type": "ingredient", "inputs": [], "name": "beurre mou", "qty": 40, "unit": "g" },
-        { "id": "a-saler", "type": "action", "inputs": ["i-poulet", "i-sel"], "label": "saler partout" },
-        { "id": "w-repos", "type": "wait", "inputs": ["a-saler"], "minutes": 720, "label": "repos au frais, à découvert" },
-        { "id": "a-piquer", "type": "action", "inputs": ["i-citron"], "label": "piquer à la fourchette" },
-        { "id": "a-farcir", "type": "action", "inputs": ["w-repos", "a-piquer", "i-ail", "i-thym"], "label": "farcir la cavité" },
-        { "id": "a-beurrer", "type": "action", "inputs": ["a-farcir", "i-beurre"], "label": "beurrer la peau" },
-        { "id": "w-rotir", "type": "wait", "inputs": ["a-beurrer"], "minutes": 75, "label": "rôtir à 200 °C" },
-        { "id": "w-detendre", "type": "wait", "inputs": ["w-rotir"], "minutes": 15, "label": "laisser reposer" },
-        { "id": "a-decouper", "type": "action", "inputs": ["w-detendre"], "label": "découper, arroser du jus" }
+        {
+          "id": "i-oignons",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "oignons"
+        },
+        {
+          "id": "i-poireaux",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "poireaux"
+        },
+        {
+          "id": "i-champignons",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "champignons"
+        },
+        {
+          "id": "i-poulet",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "poulet en dés"
+        },
+        {
+          "id": "i-ail",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "ail"
+        },
+        {
+          "id": "i-gingembre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "gingembre"
+        },
+        {
+          "id": "i-sel",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sel"
+        },
+        {
+          "id": "i-poivre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "poivre"
+        },
+        {
+          "id": "i-coco",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "crème de coco"
+        },
+        {
+          "id": "i-curry",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "curry"
+        },
+        {
+          "id": "i-fecule",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "fécule"
+        },
+        {
+          "id": "a-revenir",
+          "type": "action",
+          "inputs": [
+            "i-oignons",
+            "i-poireaux",
+            "i-champignons"
+          ],
+          "label": "faire revenir"
+        },
+        {
+          "id": "a-sauter",
+          "type": "action",
+          "inputs": [
+            "i-poulet",
+            "i-ail",
+            "i-gingembre",
+            "i-sel",
+            "i-poivre"
+          ],
+          "label": "faire sauter"
+        },
+        {
+          "id": "a-reunir",
+          "type": "action",
+          "inputs": [
+            "a-revenir",
+            "a-sauter",
+            "i-coco",
+            "i-curry",
+            "i-fecule"
+          ],
+          "label": "réunir, ajouter coco, curry et fécule"
+        },
+        {
+          "id": "w-epaissir",
+          "type": "wait",
+          "inputs": [
+            "a-reunir"
+          ],
+          "minutes": 15,
+          "label": "laisser épaissir à feu doux"
+        }
       ],
       "rowOrder": []
     },
     {
       "version": 1,
-      "id": "sauteed-spinach",
-      "title": "Sautéed spinach",
-      "lang": "en",
-      "servings": 2,
-      "prepMinutes": 10,
-      "note": "The garlic goes into cold oil, not hot — it should turn translucent, never brown.\nDrain the spinach hard; water in the pan steams instead of sautés.",
-      "tags": ["vegetable", "side", "quick"],
+      "id": "blanquette-poulet-veau",
+      "title": "Blanquette de poulet ou veau",
+      "lang": "fr",
+      "servings": 4,
+      "prepMinutes": 20,
+      "note": "Blanchir la viande 5 min avant tout le reste.\nCrème parve.",
+      "tags": [
+        "blanquette",
+        "parve",
+        "mijoté"
+      ],
       "nodes": [
-        { "id": "i-spinach", "type": "ingredient", "inputs": [], "name": "spinach", "qty": 225, "unit": "g" },
-        { "id": "i-garlic", "type": "ingredient", "inputs": [], "name": "garlic", "qty": 1, "unit": "clove" },
-        { "id": "i-oil", "type": "ingredient", "inputs": [], "name": "canola oil", "qty": 1, "unit": "Tbs" },
-        { "id": "i-salt", "type": "ingredient", "inputs": [], "name": "salt" },
-        { "id": "a-wash", "type": "action", "inputs": ["i-spinach"], "label": "wash & drain" },
-        { "id": "a-mince", "type": "action", "inputs": ["i-garlic"], "label": "mince" },
-        { "id": "a-heat", "type": "action", "inputs": ["a-mince", "i-oil"], "label": "heat until translucent" },
-        { "id": "a-saute", "type": "action", "inputs": ["a-wash", "a-heat"], "label": "sauté" },
-        { "id": "a-season", "type": "action", "inputs": ["a-saute", "i-salt"], "label": "season to taste" }
+        {
+          "id": "i-viande",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "poulet ou veau"
+        },
+        {
+          "id": "i-oignons",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "oignons"
+        },
+        {
+          "id": "i-champignons",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "champignons"
+        },
+        {
+          "id": "i-creme",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "crème parve"
+        },
+        {
+          "id": "i-assaisonnement",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "assaisonnement"
+        },
+        {
+          "id": "a-blanchir",
+          "type": "action",
+          "inputs": [
+            "i-viande"
+          ],
+          "label": "blanchir 5 min"
+        },
+        {
+          "id": "a-revenir",
+          "type": "action",
+          "inputs": [
+            "i-oignons",
+            "i-champignons"
+          ],
+          "label": "faire revenir"
+        },
+        {
+          "id": "a-reunir",
+          "type": "action",
+          "inputs": [
+            "a-blanchir",
+            "a-revenir",
+            "i-creme",
+            "i-assaisonnement"
+          ],
+          "label": "réunir et assaisonner"
+        },
+        {
+          "id": "w-mijoter",
+          "type": "wait",
+          "inputs": [
+            "a-reunir"
+          ],
+          "minutes": 45,
+          "label": "mijoter à couvert"
+        }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "chakchouka",
+      "title": "Chakchouka",
+      "lang": "fr",
+      "servings": 4,
+      "prepMinutes": 15,
+      "note": "Les œufs se cassent en fin de cuisson, dans la sauce déjà réduite.",
+      "tags": [
+        "œufs",
+        "tomate",
+        "poêle"
+      ],
+      "nodes": [
+        {
+          "id": "i-oignons",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "oignons"
+        },
+        {
+          "id": "i-ail",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "ail"
+        },
+        {
+          "id": "i-poivrons",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "poivrons rouges"
+        },
+        {
+          "id": "i-tomates",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "tomates",
+          "qty": 1,
+          "unit": "kg"
+        },
+        {
+          "id": "i-concentre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "concentré de tomate"
+        },
+        {
+          "id": "i-paprika",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "paprika"
+        },
+        {
+          "id": "i-oeufs",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "œufs",
+          "qty": 4
+        },
+        {
+          "id": "a-revenir",
+          "type": "action",
+          "inputs": [
+            "i-oignons",
+            "i-ail",
+            "i-poivrons"
+          ],
+          "label": "faire revenir"
+        },
+        {
+          "id": "a-tomates",
+          "type": "action",
+          "inputs": [
+            "a-revenir",
+            "i-tomates",
+            "i-concentre",
+            "i-paprika"
+          ],
+          "label": "ajouter les tomates"
+        },
+        {
+          "id": "w-reduire",
+          "type": "wait",
+          "inputs": [
+            "a-tomates"
+          ],
+          "minutes": 30,
+          "label": "faire réduire"
+        },
+        {
+          "id": "a-oeufs",
+          "type": "action",
+          "inputs": [
+            "w-reduire",
+            "i-oeufs"
+          ],
+          "label": "casser les œufs en fin de cuisson"
+        }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "choux-fleurs-four",
+      "title": "Choux-fleurs au four",
+      "lang": "fr",
+      "servings": 4,
+      "prepMinutes": 10,
+      "note": "",
+      "tags": [
+        "légume",
+        "four",
+        "rapide"
+      ],
+      "nodes": [
+        {
+          "id": "i-chou",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "chou-fleur",
+          "qty": 1
+        },
+        {
+          "id": "i-huile",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "huile d'olive"
+        },
+        {
+          "id": "i-sel",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "gros sel"
+        },
+        {
+          "id": "a-bouquets",
+          "type": "action",
+          "inputs": [
+            "i-chou"
+          ],
+          "label": "détailler en bouquets"
+        },
+        {
+          "id": "a-badigeonner",
+          "type": "action",
+          "inputs": [
+            "a-bouquets",
+            "i-huile",
+            "i-sel"
+          ],
+          "label": "badigeonner"
+        },
+        {
+          "id": "w-rotir",
+          "type": "wait",
+          "inputs": [
+            "a-badigeonner"
+          ],
+          "minutes": 30,
+          "label": "rôtir jusqu'à dorure"
+        }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "champignons-farcis",
+      "title": "Champignons farcis",
+      "lang": "fr",
+      "servings": 4,
+      "prepMinutes": 25,
+      "note": "Halavi / Tehila.\nLes pieds des champignons partent dans la farce, les chapeaux se garnissent.",
+      "tags": [
+        "champignons",
+        "halavi",
+        "four"
+      ],
+      "nodes": [
+        {
+          "id": "i-champignons",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "gros champignons"
+        },
+        {
+          "id": "i-oignons",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "oignons"
+        },
+        {
+          "id": "i-ail",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "ail"
+        },
+        {
+          "id": "i-mozzarella",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "mozzarella"
+        },
+        {
+          "id": "i-pesto",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "pesto"
+        },
+        {
+          "id": "i-creme",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "crème"
+        },
+        {
+          "id": "a-equeuter",
+          "type": "action",
+          "inputs": [
+            "i-champignons"
+          ],
+          "label": "équeuter"
+        },
+        {
+          "id": "s-champignons",
+          "type": "split",
+          "inputs": [
+            "a-equeuter"
+          ],
+          "portions": [
+            {
+              "percent": 30,
+              "label": ""
+            },
+            {
+              "percent": 70,
+              "label": ""
+            }
+          ]
+        },
+        {
+          "id": "a-hacher",
+          "type": "action",
+          "inputs": [
+            "s-champignons"
+          ],
+          "label": "hacher les pieds"
+        },
+        {
+          "id": "a-revenir",
+          "type": "action",
+          "inputs": [
+            "a-hacher",
+            "i-oignons",
+            "i-ail"
+          ],
+          "label": "faire revenir"
+        },
+        {
+          "id": "a-farce",
+          "type": "action",
+          "inputs": [
+            "a-revenir",
+            "i-mozzarella",
+            "i-pesto",
+            "i-creme"
+          ],
+          "label": "mélanger la farce"
+        },
+        {
+          "id": "a-garnir",
+          "type": "action",
+          "inputs": [
+            "s-champignons",
+            "a-farce"
+          ],
+          "label": "garnir les chapeaux"
+        },
+        {
+          "id": "w-cuisson",
+          "type": "wait",
+          "inputs": [
+            "a-garnir"
+          ],
+          "minutes": 25,
+          "label": "cuire à 180 °C"
+        }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "salade-lentilles-patates-douces",
+      "title": "Salade de lentilles et pommes de terre douces",
+      "lang": "fr",
+      "servings": 4,
+      "prepMinutes": 25,
+      "note": "Elsa.\nServir avec les patates douces rôties, encore tièdes.",
+      "tags": [
+        "salade",
+        "lentilles",
+        "pécan"
+      ],
+      "nodes": [
+        {
+          "id": "i-lentilles",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "lentilles"
+        },
+        {
+          "id": "i-oignon",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "oignon nouveau"
+        },
+        {
+          "id": "i-tomates",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "tomates"
+        },
+        {
+          "id": "i-concombre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "concombre"
+        },
+        {
+          "id": "i-herbes",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "herbes"
+        },
+        {
+          "id": "i-pecan",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "noix de pécan caramélisées"
+        },
+        {
+          "id": "i-patates",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "patates douces"
+        },
+        {
+          "id": "w-cuire",
+          "type": "wait",
+          "inputs": [
+            "i-lentilles"
+          ],
+          "minutes": 10,
+          "label": "cuire les lentilles"
+        },
+        {
+          "id": "w-rotir",
+          "type": "wait",
+          "inputs": [
+            "i-patates"
+          ],
+          "minutes": 35,
+          "label": "rôtir au four"
+        },
+        {
+          "id": "a-melanger",
+          "type": "action",
+          "inputs": [
+            "w-cuire",
+            "i-oignon",
+            "i-tomates",
+            "i-concombre",
+            "i-herbes",
+            "i-pecan"
+          ],
+          "label": "mélanger la salade"
+        },
+        {
+          "id": "a-servir",
+          "type": "action",
+          "inputs": [
+            "a-melanger",
+            "w-rotir"
+          ],
+          "label": "servir ensemble"
+        }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "salade-asiatique",
+      "title": "Salade asiatique",
+      "lang": "fr",
+      "servings": 4,
+      "prepMinutes": 20,
+      "note": "Style McDonald's.\nLe poulet pané se pose chaud sur la salade froide.",
+      "tags": [
+        "salade",
+        "poulet",
+        "teriyaki"
+      ],
+      "nodes": [
+        {
+          "id": "i-salade",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "salade"
+        },
+        {
+          "id": "i-pousses",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "pousses"
+        },
+        {
+          "id": "i-carottes",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "carottes râpées"
+        },
+        {
+          "id": "i-chou",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "chou râpé"
+        },
+        {
+          "id": "i-tomates",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "tomates"
+        },
+        {
+          "id": "i-poulet",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "émincé de poulet pané"
+        },
+        {
+          "id": "i-teriyaki",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sauce teriyaki"
+        },
+        {
+          "id": "i-citron",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "citron"
+        },
+        {
+          "id": "i-huile",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "huile d'olive"
+        },
+        {
+          "id": "a-base",
+          "type": "action",
+          "inputs": [
+            "i-salade",
+            "i-pousses",
+            "i-carottes",
+            "i-chou",
+            "i-tomates"
+          ],
+          "label": "mélanger la base"
+        },
+        {
+          "id": "a-poulet",
+          "type": "action",
+          "inputs": [
+            "i-poulet"
+          ],
+          "label": "cuire, garder chaud"
+        },
+        {
+          "id": "a-sauce",
+          "type": "action",
+          "inputs": [
+            "i-teriyaki",
+            "i-citron",
+            "i-huile"
+          ],
+          "label": "mélanger la sauce"
+        },
+        {
+          "id": "a-dresser",
+          "type": "action",
+          "inputs": [
+            "a-base",
+            "a-poulet",
+            "a-sauce"
+          ],
+          "label": "dresser"
+        }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "tapenade-olives",
+      "title": "Tapenade d'olives",
+      "lang": "fr",
+      "servings": 6,
+      "prepMinutes": 10,
+      "note": "Notée dans le carnet à côté de la tapenade d'artichauts.",
+      "tags": [
+        "tapenade",
+        "olives",
+        "mixeur"
+      ],
+      "nodes": [
+        {
+          "id": "i-olives",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "olives noires ou vertes"
+        },
+        {
+          "id": "i-ail",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "ail"
+        },
+        {
+          "id": "i-coriandre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "coriandre"
+        },
+        {
+          "id": "i-huile",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "huile d'olive"
+        },
+        {
+          "id": "a-mixer",
+          "type": "action",
+          "inputs": [
+            "i-olives",
+            "i-ail",
+            "i-coriandre",
+            "i-huile"
+          ],
+          "label": "mixer"
+        }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "tapenade-artichauts",
+      "title": "Tapenade d'artichauts",
+      "lang": "fr",
+      "servings": 6,
+      "prepMinutes": 15,
+      "note": "Notée dans le carnet à côté de la tapenade d'olives.",
+      "tags": [
+        "tapenade",
+        "artichauts",
+        "mixeur"
+      ],
+      "nodes": [
+        {
+          "id": "i-artichauts",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "fonds d'artichauts"
+        },
+        {
+          "id": "i-citron",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "jus de citron"
+        },
+        {
+          "id": "i-ail",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "ail"
+        },
+        {
+          "id": "i-coriandre",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "coriandre"
+        },
+        {
+          "id": "i-huile",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "huile d'olive"
+        },
+        {
+          "id": "a-bouillir",
+          "type": "action",
+          "inputs": [
+            "i-artichauts"
+          ],
+          "label": "faire bouillir"
+        },
+        {
+          "id": "a-mixer",
+          "type": "action",
+          "inputs": [
+            "a-bouillir",
+            "i-citron",
+            "i-ail",
+            "i-coriandre",
+            "i-huile"
+          ],
+          "label": "mixer"
+        }
+      ],
+      "rowOrder": []
+    },
+    {
+      "version": 1,
+      "id": "tehina-choulamite",
+      "title": "Tehina Choulamite",
+      "lang": "fr",
+      "servings": 8,
+      "prepMinutes": 10,
+      "note": "Téhina Ahava.\nLes proportions se comptent en pots : ¾ de pot d'eau, ¾ de tête d'ail.",
+      "tags": [
+        "tehina",
+        "sauce",
+        "mixeur"
+      ],
+      "nodes": [
+        {
+          "id": "i-tehina",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "téhina Ahava",
+          "qty": 1,
+          "unit": "pot"
+        },
+        {
+          "id": "i-citron",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "jus de citron",
+          "qty": 1,
+          "unit": "citron"
+        },
+        {
+          "id": "i-eau",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "eau",
+          "qty": 0.75,
+          "unit": "pot"
+        },
+        {
+          "id": "i-ail",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "ail",
+          "qty": 0.75,
+          "unit": "tête"
+        },
+        {
+          "id": "i-sel",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "sel"
+        },
+        {
+          "id": "i-herbes",
+          "type": "ingredient",
+          "inputs": [],
+          "name": "coriandre ou persil"
+        },
+        {
+          "id": "a-mixer",
+          "type": "action",
+          "inputs": [
+            "i-tehina",
+            "i-citron",
+            "i-eau",
+            "i-ail",
+            "i-sel",
+            "i-herbes"
+          ],
+          "label": "mixer"
+        }
       ],
       "rowOrder": []
     }
