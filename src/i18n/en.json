@@ -1,6 +1,6 @@
 {
   "app.title": "gaditor",
-  "app.tagline": "Recipes as flow tables",
+  "app.tagline": "miam miam",
   "app.loading": "Loading recipes…",
   "app.loadError": "Could not load the recipe bundle.",
   "app.retry": "Retry",

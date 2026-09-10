@@ -12,8 +12,17 @@ export function TopBar({ back, children }: { back?: string; children?: ReactNode
         </button>
       ) : (
         <button className="brand" onClick={() => navigate('/')}>
-          gaditor
-          <small>{t('app.tagline')}</small>
+          <svg className="brand-mark" viewBox="0 0 64 64" aria-hidden="true">
+            <g fill="none" strokeWidth="4" strokeLinejoin="round">
+              <rect x="10" y="12" width="18" height="14" rx="3" />
+              <rect x="10" y="30" width="18" height="22" rx="3" />
+              <rect x="32" y="12" width="22" height="40" rx="3" />
+            </g>
+          </svg>
+          <span className="brand-text">
+            gaditor
+            <small>{t('app.tagline')}</small>
+          </span>
         </button>
       )}
       <div className="spacer" />

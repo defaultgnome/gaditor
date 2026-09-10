@@ -120,6 +120,10 @@ a {
 }
 
 .brand {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+  text-align: left;
   font-family: var(--mono);
   font-weight: 700;
   letter-spacing: -0.02em;
@@ -128,6 +132,18 @@ a {
   border: 0;
   padding: 0;
   color: var(--ink);
+}
+
+.brand-mark {
+  width: 41px;
+  height: 41px;
+  flex: none;
+  stroke: var(--accent);
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
 }
 
 .brand small {

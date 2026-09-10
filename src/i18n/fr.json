@@ -1,6 +1,6 @@
 {
   "app.title": "gaditor",
-  "app.tagline": "Des recettes en tableaux de flux",
+  "app.tagline": "miam miam",
   "app.loading": "Chargement des recettes…",
   "app.loadError": "Impossible de charger le fichier de recettes.",
   "app.retry": "Réessayer",
